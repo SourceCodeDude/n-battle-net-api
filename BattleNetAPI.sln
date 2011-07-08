@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleNetApi", "BattleNetAPI\BattleNetApi.csproj", "{E4697D43-4D45-40A5-9C6B-9EFB84C2CFDF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{E081E5BE-7C0E-4135-B1C3-EE8BE0CE92DF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E4697D43-4D45-40A5-9C6B-9EFB84C2CFDF}.Debug|x86.ActiveCfg = Debug|x86
+		{E4697D43-4D45-40A5-9C6B-9EFB84C2CFDF}.Debug|x86.Build.0 = Debug|x86
+		{E4697D43-4D45-40A5-9C6B-9EFB84C2CFDF}.Release|x86.ActiveCfg = Release|x86
+		{E4697D43-4D45-40A5-9C6B-9EFB84C2CFDF}.Release|x86.Build.0 = Release|x86
+		{E081E5BE-7C0E-4135-B1C3-EE8BE0CE92DF}.Debug|x86.ActiveCfg = Debug|x86
+		{E081E5BE-7C0E-4135-B1C3-EE8BE0CE92DF}.Debug|x86.Build.0 = Debug|x86
+		{E081E5BE-7C0E-4135-B1C3-EE8BE0CE92DF}.Release|x86.ActiveCfg = Release|x86
+		{E081E5BE-7C0E-4135-B1C3-EE8BE0CE92DF}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

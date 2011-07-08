@@ -1,0 +1,406 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="char1" xml:space="preserve">
+    <value>{"realm": "Medivh", "name": "Uther", "level": 85, "lastModified": 1307596000000, "thumbnail": "medivh/1/1-avatar.jpg",
+"race": 1, "achievementPoints": 9745, "gender": 0, "class": 2}</value>
+  </data>
+  <data name="charGuild" xml:space="preserve">
+    <value>{"realm": "Medivh", "name": "Uther", "level": 85, "lastModified": 1307596000000, "thumbnail": "medivh/1/1-avatar.jpg",
+"race": 1, "achievementPoints": 9745, "gender": 0, "class": 2,  
+ "guild":{
+    "name":"Chaos Theory",
+    "realm":"Thunderhorn",
+    "level":25,
+    "members":310,
+    "achievementPoints":850,
+    "emblem":{
+      "icon":166,
+      "iconColor":"ffffff00",
+      "border":-1,
+      "borderColor":"ffffff00",
+      "backgroundColor":"ffffff64"
+    }
+  }}</value>
+  </data>
+  <data name="charTitle" xml:space="preserve">
+    <value>{"realm": "Medivh", "name": "Uther", "level": 85, "lastModified": 1307596000000, "thumbnail": "medivh/1/1-avatar.jpg",
+"race": 1, "achievementPoints": 9745, "gender": 0, "class": 2,  
+ "titles":[
+    {
+      "id":81,
+      "name":"%s the Seeker"
+    },
+    {
+      "id":74,
+      "name":"Elder %s"
+    }
+  ]
+}</value>
+  </data>
+  <data name="classes" xml:space="preserve">
+    <value>{
+  "classes":[
+    {
+      "id":3,
+      "mask":4,
+      "powerType":"focus",
+      "name":"Hunter"
+    },
+    {
+      "id":1,
+      "mask":1,
+      "powerType":"rage",
+      "name":"Warrior"
+    },
+    {
+      "id":5,
+      "mask":16,
+      "powerType":"mana",
+      "name":"Priest"
+    },
+    {
+      "id":9,
+      "mask":256,
+      "powerType":"mana",
+      "name":"Warlock"
+    },
+    {
+      "id":7,
+      "mask":64,
+      "powerType":"mana",
+      "name":"Shaman"
+    },
+    {
+      "id":2,
+      "mask":2,
+      "powerType":"mana",
+      "name":"Paladin"
+    },
+    {
+      "id":4,
+      "mask":8,
+      "powerType":"energy",
+      "name":"Rogue"
+    },
+    {
+      "id":6,
+      "mask":32,
+      "powerType":"runic-power",
+      "name":"Death Knight"
+    },
+    {
+      "id":11,
+      "mask":1024,
+      "powerType":"mana",
+      "name":"Druid"
+    },
+    {
+      "id":8,
+      "mask":128,
+      "powerType":"mana",
+      "name":"Mage"
+    }
+  ]
+}</value>
+  </data>
+  <data name="guildrewards" xml:space="preserve">
+    <value>{
+  "rewards":[
+    {
+      "minGuildLevel":0,
+      "minGuildRepLevel":6,
+      "races":[6,5,2,8,9,10],
+      "achievement":{
+        "id":5035,
+        "title":"Master Crafter",
+        "points":10,
+        "description":"Craft 500 Epic items with an item level of at least 359.",
+        "reward":"Reward: Cloak of Coordination",
+        "rewardItem":{
+          "id":65360,
+          "name":"Cloak of Coordination",
+          "icon":"inv_guild_cloak_alliance_c",
+          "quality":4,
+          "tooltipParams":{}
+        }
+      },
+      "item":{
+        "id":65274,
+        "name":"Cloak of Coordination",
+        "icon":"inv_guild_cloak_horde_c",
+        "quality":4,
+        "tooltipParams":{}
+      }
+    },
+    {
+      "minGuildLevel":0,
+      "minGuildRepLevel":6,
+      "races":[3,7,11,22,1,4],
+      "achievement":{
+        "id":5035,
+        "title":"Master Crafter",
+        "points":10,
+        "description":"Craft 500 Epic items with an item level of at least 359.",
+        "reward":"Reward: Cloak of Coordination",
+        "rewardItem":{
+          "id":65360,
+          "name":"Cloak of Coordination",
+          "icon":"inv_guild_cloak_alliance_c",
+          "quality":4,
+          "tooltipParams":{}
+        }
+      },
+      "item":{
+        "id":65360,
+        "name":"Cloak of Coordination",
+        "icon":"inv_guild_cloak_alliance_c",
+        "quality":4,
+        "tooltipParams":{}
+      }
+    },
+  ]
+}</value>
+  </data>
+  <data name="perks" xml:space="preserve">
+    <value>{
+  "perks":[
+    {
+      "guildLevel":2,
+      "spell":{
+        "id":78631,
+        "name":"Fast Track",
+        "subtext":"Rank 1",
+        "icon":"achievement_guildperk_fasttrack",
+        "description":"Experience gained from killing monsters and completing quests increased by 5%."
+      }
+    },
+    {
+      "guildLevel":3,
+      "spell":{
+        "id":78633,
+        "name":"Mount Up",
+        "icon":"achievement_guildperk_mountup",
+        "description":"Increases speed while mounted by 10%.  Not active in Battlegrounds or Arenas."
+      }
+    }
+  ]
+}</value>
+  </data>
+  <data name="race1" xml:space="preserve">
+    <value>{
+  "races":[
+    {
+      "id":3,
+      "mask":4,
+      "side":"alliance",
+      "name":"Dwarf"
+    },
+    {
+      "id":6,
+      "mask":32,
+      "side":"horde",
+      "name":"Tauren"
+    },
+    {
+      "id":5,
+      "mask":16,
+      "side":"horde",
+      "name":"Undead"
+    },
+    {
+      "id":2,
+      "mask":2,
+      "side":"horde",
+      "name":"Orc"
+    },
+    {
+      "id":7,
+      "mask":64,
+      "side":"alliance",
+      "name":"Gnome"
+    },
+    {
+      "id":8,
+      "mask":128,
+      "side":"horde",
+      "name":"Troll"
+    },
+    {
+      "id":9,
+      "mask":256,
+      "side":"horde",
+      "name":"Goblin"
+    },
+    {
+      "id":11,
+      "mask":1024,
+      "side":"alliance",
+      "name":"Draenei"
+    },
+    {
+      "id":22,
+      "mask":2097152,
+      "side":"alliance",
+      "name":"Worgen"
+    },
+    {
+      "id":10,
+      "mask":512,
+      "side":"horde",
+      "name":"Blood Elf"
+    },
+    {
+      "id":1,
+      "mask":1,
+      "side":"alliance",
+      "name":"Human"
+    },
+    {
+      "id":4,
+      "mask":8,
+      "side":"alliance",
+      "name":"Night Elf"
+    }
+  ]
+}</value>
+  </data>
+  <data name="realm1" xml:space="preserve">
+    <value>{
+  "realms":[
+    {
+      "type":"pvp",
+      "queue":false,
+      "status":true,
+      "population":"low",
+      "name":"Aegwynn",
+      "slug":"aegwynn"
+    },
+    {
+      "type":"pve",
+      "queue":false,
+      "status":true,
+      "population":"high",
+      "name":"Aerie Peak",
+      "slug":"aerie-peak"
+    }
+]
+}</value>
+  </data>
+</root>

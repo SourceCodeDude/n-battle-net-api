@@ -43,13 +43,16 @@ namespace BattleNet.API.WoW
             Mounts,
             Pets,
             Achievements,
-            Progression
+            Progression,
+            Guild,
         }
 
         public ulong lastModified { get; set; }
         public string name { get; set; }
         public string realm { get; set; }
-        public int @class { get; set; }
+
+        [XmlElement("class")]
+        public int Class { get; set; }
         public int race { get; set; }
         public int gender { get; set; }
         public int level { get; set; }
@@ -113,7 +116,37 @@ namespace BattleNet.API.WoW
         [XmlElement("progression", IsNullable = true)]
         public Progression progression { get; set; }
 
+        [XmlElement("guild")]
+        public GuildInfo Guild { get; set; }
+
     }
+
+    /// <summary>
+    /// We need this 'extra' guild class because 'members' is an array
+    /// in the real one, and only a number in the Character one
+    /// </summary>
+    public class GuildInfo
+    {        
+        public string name { get; set; }
+        public string realm { get; set; }
+        public int level { get; set; }
+        public int members { get; set; }
+        public int achievementPoints { get; set; }
+
+        [XmlElement("emblem")]
+        public Emblem Emblem { get; set; }
+
+    }
+
+    public class Emblem
+    {
+        public int icon { get; set; }
+        public string iconColor { get; set; }
+        public int border { get; set; }
+        public string borderColor { get; set; }
+        public string backgroundColor { get; set; }
+    }
+
     /*
      * Base stats = stats
 Equipped Items = items

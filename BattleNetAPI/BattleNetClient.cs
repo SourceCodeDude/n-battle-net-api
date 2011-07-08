@@ -20,6 +20,8 @@ namespace BattleNet.API.WoW
         US,
         EU,
         KR,
+        TW,
+        CN,        
     }
     public class BattleNetClient : IDisposable
     {
@@ -55,8 +57,20 @@ namespace BattleNet.API.WoW
             cache = new FailoverCache("battlenet.cache");
             switch (r)
             {
+                case Region.EU:
+                    baseUri = new Uri("http://eu.battle.net/api/wow/"); 
+                    break;
+                case Region.KR:
+                    baseUri = new Uri("http://kr.battle.net/api/wow/");
+                    break;
+                case Region.TW:
+                    baseUri = new Uri("http://tw.battle.net/api/wow/");
+                    break;
+                case Region.CN:
+                    baseUri = new Uri("http://cn.battle.net/api/wow/");
+                    break;
                 case Region.US:
-                default:                
+                default:    // fallback to the US region
                     baseUri = new Uri("http://us.battle.net/api/wow/");
                     break;
             }
@@ -87,16 +101,9 @@ namespace BattleNet.API.WoW
         }
 
         private T GetObject<T>(string url)
-        {
-            Type t = typeof(T);
-            string st = GetUrl(url);
-            byte[] b = ASCIIEncoding.ASCII.GetBytes(st);
-            {
-                XmlReader rd = JsonReaderWriterFactory.CreateJsonReader(b , new XmlDictionaryReaderQuotas());
-                XmlSerializer s = new XmlSerializer(t, new XmlRootAttribute("root"));
-                T o = (T)s.Deserialize(rd);
-                return o;
-            }
+        {            
+            string json = GetUrl(url);
+            return JsonParser.Parse<T>(json);            
         }
 
         
@@ -220,6 +227,7 @@ namespace BattleNet.API.WoW
             if ((fields & Character.Fields.Stats) == Character.Fields.Stats) args.Add("stats");
             if ((fields & Character.Fields.Talents) == Character.Fields.Talents) args.Add("talents");
             if ((fields & Character.Fields.Titles) == Character.Fields.Titles) args.Add("titles");
+            if ((fields & Character.Fields.Guild) == Character.Fields.Guild) args.Add("guild");
 
             string _f = string.Join(",", args.ToArray() );
 

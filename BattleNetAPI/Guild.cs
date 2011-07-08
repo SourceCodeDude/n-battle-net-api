@@ -34,6 +34,8 @@ namespace BattleNet.API.WoW
         ////////////////////////////////////////////////
 
         #region optional fields
+
+       
         [XmlArray("members")]
         [XmlArrayItem("item")]
         public List<Member> Members { get; set; }
@@ -48,4 +50,5 @@ namespace BattleNet.API.WoW
         public Character charcater { get; set; }
         public int rank { get; set; }
     }
+
 }

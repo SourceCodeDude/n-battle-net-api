@@ -18,7 +18,7 @@ namespace BattleNet.API.WoW
     public class ClassCollection
     {
         [XmlArray("classes")]
-        [XmlArrayItem("items")]                
+        [XmlArrayItem("item")]                
         public List<Class> Classes { get; set; }
 
     }

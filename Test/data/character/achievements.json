@@ -1,0 +1,11 @@
+﻿{"realm": "Medivh", "name": "Uther", "level": 85, "lastModified": 1307596000000, "thumbnail": "medivh/1/1-avatar.jpg",
+  "race": 1, "achievementPoints": 9745, "gender": 0, "class": 2,  
+  "achievements":{
+    "achievementsCompleted":[6,7,8,9,10],
+    "achievementsCompletedTimestamp":[1224283700000,1224283700000,1224283700000,1224283700000,1224283700000],
+    "criteria":[34,35,36,37,38],
+    "criteriaQuantity":[85,85,85,85,85],
+    "criteriaTimestamp":[1309580447000,1309580447000,1309580447000,1309580447000,1309580447000],
+    "criteriaCreated":[1309580447000,1309580447000,1309580447000,1309580447000,1309580447000]
+  }
+}

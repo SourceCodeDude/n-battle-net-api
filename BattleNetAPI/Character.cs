@@ -47,7 +47,7 @@ namespace BattleNet.API.WoW
             Guild,
         }
 
-        public ulong lastModified { get; set; }
+        public UnixTimestamp lastModified { get; set; }
         public string name { get; set; }
         public string realm { get; set; }
 
@@ -168,33 +168,6 @@ Achievements = achievements
 PvP:
 Roster = members
      */
-    // TODO: need to rename this
-    public class Achievements
-    {
-        [XmlArray("achievementsCompleted")]
-        [XmlArrayItem("item")]
-        public List<int> achievementsCompleted { get; set; }
-
-        [XmlArray("achievementsCompletedTimestamp")]
-        [XmlArrayItem("item")]
-        public List<long> achievementsCompletedTimestamp { get; set; }
-
-        [XmlArray("criteria")]
-        [XmlArrayItem("item")]
-        public List<int> criteria { get; set; }
-
-        [XmlArray("criteriaQuantity")]
-        [XmlArrayItem("item")]
-        public List<long> criteriaQuantity { get; set; }
-
-        [XmlArray("criteriaTimestamp")]
-        [XmlArrayItem("item")]
-        public List<long> criteriaTimestamp { get; set; }
-
-        [XmlArray("criteriaCreated")]
-        [XmlArrayItem("item")]
-        public List<long> criteriaCreated { get; set; }
-    }
 
     public enum Standing
     {
@@ -508,6 +481,7 @@ Roster = members
         public Item head { get; set; }
         public Item neck { get; set; }
         public Item shoulder { get; set; }
+        public Item shirt { get; set; }
         public Item back { get; set; }
         public Item chest { get; set; }
         public Item tabard { get; set; }

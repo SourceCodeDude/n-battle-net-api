@@ -17,7 +17,7 @@ namespace BattleNet.API.WoW
         }
 
         #region Basic Fields
-        public ulong lastModified { get; set; }
+        public UnixTimestamp lastModified { get; set; }
         public string name { get; set; }
         public string realm { get; set; }
         public int level { get; set; }

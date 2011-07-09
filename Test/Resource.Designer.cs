@@ -71,51 +71,6 @@ namespace Test {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {&quot;realm&quot;: &quot;Medivh&quot;, &quot;name&quot;: &quot;Uther&quot;, &quot;level&quot;: 85, &quot;lastModified&quot;: 1307596000000, &quot;thumbnail&quot;: &quot;medivh/1/1-avatar.jpg&quot;,
-        ///&quot;race&quot;: 1, &quot;achievementPoints&quot;: 9745, &quot;gender&quot;: 0, &quot;class&quot;: 2,  
-        /// &quot;guild&quot;:{
-        ///    &quot;name&quot;:&quot;Chaos Theory&quot;,
-        ///    &quot;realm&quot;:&quot;Thunderhorn&quot;,
-        ///    &quot;level&quot;:25,
-        ///    &quot;members&quot;:310,
-        ///    &quot;achievementPoints&quot;:850,
-        ///    &quot;emblem&quot;:{
-        ///      &quot;icon&quot;:166,
-        ///      &quot;iconColor&quot;:&quot;ffffff00&quot;,
-        ///      &quot;border&quot;:-1,
-        ///      &quot;borderColor&quot;:&quot;ffffff00&quot;,
-        ///      &quot;backgroundColor&quot;:&quot;ffffff64&quot;
-        ///    }
-        ///  }}.
-        /// </summary>
-        internal static string charGuild {
-            get {
-                return ResourceManager.GetString("charGuild", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {&quot;realm&quot;: &quot;Medivh&quot;, &quot;name&quot;: &quot;Uther&quot;, &quot;level&quot;: 85, &quot;lastModified&quot;: 1307596000000, &quot;thumbnail&quot;: &quot;medivh/1/1-avatar.jpg&quot;,
-        ///&quot;race&quot;: 1, &quot;achievementPoints&quot;: 9745, &quot;gender&quot;: 0, &quot;class&quot;: 2,  
-        /// &quot;titles&quot;:[
-        ///    {
-        ///      &quot;id&quot;:81,
-        ///      &quot;name&quot;:&quot;%s the Seeker&quot;
-        ///    },
-        ///    {
-        ///      &quot;id&quot;:74,
-        ///      &quot;name&quot;:&quot;Elder %s&quot;
-        ///    }
-        ///  ]
-        ///}.
-        /// </summary>
-        internal static string charTitle {
-            get {
-                return ResourceManager.GetString("charTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to {
         ///  &quot;classes&quot;:[
         ///    {

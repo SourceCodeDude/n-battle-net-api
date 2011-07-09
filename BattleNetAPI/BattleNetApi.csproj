@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Achievements.cs" />
     <Compile Include="BattleNetClient.cs" />
     <Compile Include="Character.cs" />
     <Compile Include="Class.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="Guild.cs" />
     <Compile Include="GuildPerk.cs" />
     <Compile Include="GuildReward.cs" />
+    <Compile Include="HelperClasses.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="JsonParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

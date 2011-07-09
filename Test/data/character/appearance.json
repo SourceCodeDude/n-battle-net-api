@@ -1,0 +1,13 @@
+﻿{"realm": "Medivh", "name": "Uther", "level": 85, "lastModified": 1307596000000, "thumbnail": "medivh/1/1-avatar.jpg",
+"race": 1, "achievementPoints": 9745, "gender": 0, "class": 2,  
+
+  "appearance":{
+    "faceVariation":2,
+    "skinColor":0,
+    "hairVariation":1,
+    "hairColor":8,
+    "featureVariation":2,
+    "showHelm":true,
+    "showCloak":true
+  }
+}

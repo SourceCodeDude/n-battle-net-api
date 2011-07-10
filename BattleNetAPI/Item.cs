@@ -6,8 +6,8 @@ using System.Text;
 using System.Xml.Serialization;
 
 namespace BattleNet.API.WoW
-{    
-    public class Item
+{
+    public class Item : ResponseRoot
     {
         public int id { get; set; }
         public string name { get; set; }

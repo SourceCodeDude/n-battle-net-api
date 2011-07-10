@@ -17,14 +17,14 @@ namespace Test
         private void VerifyBasicData(Character rc)
         {
             Assert.IsNotNull(rc);
-            Assert.AreEqual("Medivh", rc.realm);
-            Assert.AreEqual("Uther", rc.name);
-            Assert.AreEqual(85, rc.level);
-            Assert.AreEqual( new UnixTimestamp(1307596000000), rc.lastModified);
-            Assert.AreEqual("medivh/1/1-avatar.jpg", rc.thumbnail);
-            Assert.AreEqual(1, rc.race);
-            Assert.AreEqual(9745, rc.achievementPoints);
-            Assert.AreEqual(0, rc.gender);
+            Assert.AreEqual("Medivh", rc.Realm);
+            Assert.AreEqual("Uther", rc.Name);
+            Assert.AreEqual(85, rc.Level);
+            Assert.AreEqual( new UnixTimestamp(1307596000000), rc.LastModified);
+            Assert.AreEqual("medivh/1/1-avatar.jpg", rc.Thumbnail);
+            Assert.AreEqual(1, rc.Race);
+            Assert.AreEqual(9745, rc.AchievementPoints);
+            Assert.AreEqual(0, rc.Gender);
             Assert.AreEqual(2, rc.Class);
         }
 
@@ -54,17 +54,17 @@ namespace Test
 
             // test guild
             Assert.IsNotNull(rc.Guild);
-            Assert.AreEqual("Chaos Theory", rc.Guild.name);
-            Assert.AreEqual("Thunderhorn", rc.Guild.realm);
-            Assert.AreEqual(25, rc.Guild.level);
-            Assert.AreEqual(310, rc.Guild.members);
-            Assert.AreEqual(850, rc.Guild.achievementPoints);
+            Assert.AreEqual("Chaos Theory", rc.Guild.Name);
+            Assert.AreEqual("Thunderhorn", rc.Guild.Realm);
+            Assert.AreEqual(25, rc.Guild.Level);
+            Assert.AreEqual(310, rc.Guild.Members);
+            Assert.AreEqual(850, rc.Guild.AchievementPoints);
             Assert.IsNotNull(rc.Guild.Emblem);
-            Assert.AreEqual(166,rc.Guild.Emblem.icon);
-            Assert.AreEqual("ffffff00", rc.Guild.Emblem.iconColor);
-            Assert.AreEqual(-1, rc.Guild.Emblem.border);
-            Assert.AreEqual("ffffff00", rc.Guild.Emblem.borderColor);
-            Assert.AreEqual("ffffff64", rc.Guild.Emblem.backgroundColor);
+            Assert.AreEqual(166,rc.Guild.Emblem.Icon);
+            Assert.AreEqual("ffffff00", rc.Guild.Emblem.IconColor);
+            Assert.AreEqual(-1, rc.Guild.Emblem.Border);
+            Assert.AreEqual("ffffff00", rc.Guild.Emblem.BorderColor);
+            Assert.AreEqual("ffffff64", rc.Guild.Emblem.BackgroundColor);
         }
 
         [Test]
@@ -118,13 +118,13 @@ namespace Test
             Appearance a = rc.Appearance;
             // test Appearance
             Assert.IsNotNull(a);
-            Assert.AreEqual(2, a.faceVariation);
-            Assert.AreEqual(0, a.skinColor);
-            Assert.AreEqual(1, a.hairVariation);
-            Assert.AreEqual(8, a.hairColor);
-            Assert.AreEqual(2, a.featureVariation);
-            Assert.AreEqual(true, a.showHelm);
-            Assert.AreEqual(true, a.showCloak);
+            Assert.AreEqual(2, a.FaceVariation);
+            Assert.AreEqual(0, a.SkinColor);
+            Assert.AreEqual(1, a.HairVariation);
+            Assert.AreEqual(8, a.HairColor);
+            Assert.AreEqual(2, a.FeatureVariation);
+            Assert.AreEqual(true, a.ShowHelm);
+            Assert.AreEqual(true, a.ShowCloak);
         }
 
         [Test]
@@ -139,25 +139,25 @@ namespace Test
             CharacterItems a = rc.Items;
             // test Appearance
             Assert.IsNotNull(a);
-            Assert.AreEqual(353, a.averageItemLevel);
+            Assert.AreEqual(353, a.AverageItemLevel);
             Assert.AreEqual(335, a.averageItemLevelEquipped);
-            Assert.IsNotNull(a.back);
-            Assert.IsNotNull(a.chest);
-            Assert.IsNotNull(a.feet);
-            Assert.IsNotNull(a.finger1);
-            Assert.IsNotNull(a.finger2);
-            Assert.IsNotNull(a.hands);
-            Assert.IsNotNull(a.head);
-            Assert.IsNotNull(a.legs);
-            Assert.IsNotNull(a.mainHand);
-            Assert.IsNotNull(a.neck);
-            Assert.IsNotNull(a.ranged);
-            Assert.IsNotNull(a.shirt);
-            Assert.IsNotNull(a.shoulder);
-            Assert.IsNotNull(a.tabard);
-            Assert.IsNotNull(a.trinket1);
-            Assert.IsNotNull(a.trinket2);
-            Assert.IsNotNull(a.waist);
+            Assert.IsNotNull(a.Back);
+            Assert.IsNotNull(a.Chest);
+            Assert.IsNotNull(a.Feet);
+            Assert.IsNotNull(a.Finger1);
+            Assert.IsNotNull(a.Finger2);
+            Assert.IsNotNull(a.Hands);
+            Assert.IsNotNull(a.Head);
+            Assert.IsNotNull(a.Legs);
+            Assert.IsNotNull(a.MainHand);
+            Assert.IsNotNull(a.Neck);
+            Assert.IsNotNull(a.Ranged);
+            Assert.IsNotNull(a.Shirt);
+            Assert.IsNotNull(a.Shoulder);
+            Assert.IsNotNull(a.Tabard);
+            Assert.IsNotNull(a.Trinket1);
+            Assert.IsNotNull(a.Trinket2);
+            Assert.IsNotNull(a.Waist);
         }
     }
 }

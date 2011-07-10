@@ -6,7 +6,7 @@ using System.Text;
 using System.Xml.Serialization;
 namespace BattleNet.API.WoW
 {
-    public class Guild
+    public class Guild : ResponseRoot
     {
         [Flags]
         public enum Fields

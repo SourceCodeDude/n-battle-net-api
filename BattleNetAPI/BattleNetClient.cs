@@ -169,11 +169,17 @@ namespace BattleNet.API.WoW
             slug = HttpUtility.UrlEncode(slug);
             RealmCollection rc = GetObject<RealmCollection>("realm/status?realms=" + slug);
 
-            if(rc.Realms.Count==1)
-            return rc.Realms[0];
+            if (rc.Status == Status.Ok)
+            {
+                if (rc.Realms.Count == 1)
+                    return rc.Realms[0];
+                else
+                {
+                    throw new RealmNotFoundException(slug + " not found");
+                }
+            }
 
-            // TODO: throw exception Not found
-            return null;
+            throw new ResponseException(rc.Status, rc.Reason);
         }
 
         /// <summary>
@@ -202,7 +208,15 @@ namespace BattleNet.API.WoW
 
             string url = "guild/" + realm + "/" + name;
             if (_f != "") url += "?fields=" + _f;            
-            return GetObject<Guild>(url);
+            Guild g = GetObject<Guild>(url);
+            if (g.Status == Status.Ok)
+            {
+                return g;
+            }
+            else
+            {
+                throw new ResponseException(g.Status, g.Reason);
+            }
         }
 
         /// <summary>
@@ -234,15 +248,15 @@ namespace BattleNet.API.WoW
             string url = "character/" + realm + "/" + name;
             if (_f != "") url += "?fields=" + _f;
 
-            CharacterRoot r = GetObject<CharacterRoot>(url);
+            Character r = GetObject<Character>(url);
             // ?fields=achievements
-            if (r.status == Status.Ok)
+            if (r.Status == Status.Ok)
             {
                 return r;
             }
             else
             {
-                return null;
+                throw new ResponseException(r.Status, r.Reason);               
             }
         }
 

@@ -21,7 +21,7 @@ namespace BattleNet.API.WoW
      * </root>
      * 
      */    
-    public class RealmCollection
+    public class RealmCollection : ResponseRoot
     {
         [XmlArray("realms")]
         [XmlArrayItem("item")]

@@ -24,6 +24,14 @@ namespace BattleNet.API.WoW
             LoadIndex(File.Open(file+".idx", FileMode.OpenOrCreate));
             fileBacking = File.Open(file, FileMode.OpenOrCreate);
         }
+        ~FailoverCache()
+        {
+            Close();
+        }
+        public void Close()
+        {
+            fileBacking.Close();
+        }
 
         private void LoadIndex(Stream st)
         {

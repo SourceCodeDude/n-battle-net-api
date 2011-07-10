@@ -11,6 +11,7 @@ using System.Web;
 using System.Net;
 using System.Net.Cache;
 
+using System.Drawing;
 using System.Security.Cryptography;
 
 namespace BattleNet.API.WoW
@@ -28,6 +29,8 @@ namespace BattleNet.API.WoW
         
         FailoverCache cache;
         Uri baseUri;
+        Uri iconUri;
+        Uri thumbnailUri;
 
         byte[] privateKey = null;
         public string PrivateKey
@@ -58,51 +61,96 @@ namespace BattleNet.API.WoW
             switch (r)
             {
                 case Region.EU:
-                    baseUri = new Uri("http://eu.battle.net/api/wow/"); 
+                    baseUri = new Uri("http://eu.battle.net/api/wow/");
+                    iconUri = new Uri("http://eu.media.blizzard.com/wow/icons/");
+                    thumbnailUri = new Uri("http://eu.battle.net/static-render/eu/");
                     break;
                 case Region.KR:
                     baseUri = new Uri("http://kr.battle.net/api/wow/");
+                    iconUri = new Uri("http://kr.media.blizzard.com/wow/icons/");
+                    thumbnailUri = new Uri("http://kr.battle.net/static-render/kr/");
                     break;
                 case Region.TW:
                     baseUri = new Uri("http://tw.battle.net/api/wow/");
+                    iconUri = new Uri("http://tw.media.blizzard.com/wow/icons/");
+                    thumbnailUri = new Uri("http://tw.battle.net/static-render/tw/");
                     break;
                 case Region.CN:
                     baseUri = new Uri("http://cn.battle.net/api/wow/");
+                    // FIXME: what is the path for this.. this isnt correct..
+                    iconUri = new Uri("http://cn.media.battle.net/wow/icons/");
+                    thumbnailUri = new Uri("http://us.battle.net/static-render/us/");
                     break;
                 case Region.US:
                 default:    // fallback to the US region
                     baseUri = new Uri("http://us.battle.net/api/wow/");
+                    iconUri = new Uri("http://us.media.blizzard.com/wow/icons/");
+                    thumbnailUri = new Uri("http://us.battle.net/static-render/us/");
                     break;
             }
         }
 
-        private string GetUrl(string url)
+        ~BattleNetClient()
+        {
+            Dispose();
+            cache = null;
+        }
+
+        #region IDisposable Members
+
+        public void Dispose()
+        {
+            cache.SaveIndex();
+            cache.Close();
+        }
+
+        #endregion
+        public Image GetThumbnail(string path)
+        {
+            // "http://us.battle.net/static-render/us/" + "medivh/66/3930434-avatar.jpg"
+            Uri fullPath = new Uri(thumbnailUri,path);            
+            Stream st = GetUrl(fullPath);
+
+            Image img = new Bitmap(st);
+            return img;
+        }
+
+        /// <summary>
+        /// Download the icon for a item
+        /// </summary>
+        /// <param name="path">path to icon, ie inv_misc_necklacea9.jpg</param>
+        /// <param name="large">Image size</param>
+        /// <returns></returns>
+        public Image GetIcon(string path, bool large=true)
+        {
+            string size = large ? "56/" : "18/";
+
+            Uri fullPath = new Uri(iconUri, size + path);
+            // baseUri + "static-render/us"
+            Stream st = GetUrl(fullPath);
+
+            Image img = new Bitmap(st);            
+            return img;
+        }
+
+        private Stream GetUrl(string url)
         {
             return GetUrl(new Uri(baseUri, url));
         }
-        private string GetUrl(Uri url)
+        private Stream GetUrl(Uri url)
         {
-            string txt = null;
-             //cache[url.AbsolutePath];
-            if (txt == null)
-            {
-                HttpWebRequest req = (HttpWebRequest) WebRequest.Create(url);
-                Authenticate(req);
-                req.CachePolicy = new HttpRequestCachePolicy(HttpRequestCacheLevel.NoCacheNoStore);
-                WebResponse res = req.GetResponse();
+            HttpWebRequest req = (HttpWebRequest) WebRequest.Create(url);
+            Authenticate(req);
+            req.CachePolicy = new HttpRequestCachePolicy(HttpRequestCacheLevel.NoCacheNoStore);
+            WebResponse res = req.GetResponse();
                                 
-                Stream st = res.GetResponseStream();
-                StreamReader r = new StreamReader(st);
-                txt = r.ReadToEnd();
-
-                cache[url.AbsolutePath] = txt;
-            }
-            return txt;
+            return res.GetResponseStream();                            
         }
 
         private T GetObject<T>(string url)
-        {            
-            string json = GetUrl(url);
+        {
+            Stream st = GetUrl(url);
+            string json = new StreamReader(st).ReadToEnd();
             return JsonParser.Parse<T>(json);            
         }
 
@@ -188,17 +236,17 @@ namespace BattleNet.API.WoW
         /// <param name="realm"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Character FindCharacter(string realm, string name)
+        public Character GetCharacter(string realm, string name)
         {
-            return FindCharacter(realm, name, Character.Fields.Basic);
+            return GetCharacter(realm, name, Character.Fields.Basic);
         }
 
-        public Guild FindGuild(string realm, string name)
+        public Guild GetGuild(string realm, string name)
         {
-            return FindGuild(realm, name, Guild.Fields.Basic);
+            return GetGuild(realm, name, Guild.Fields.Basic);
         }
 
-        public Guild FindGuild(string realm, string name, Guild.Fields fields)
+        public Guild GetGuild(string realm, string name, Guild.Fields fields)
         {
             List<string> args = new List<string>();
             if ((fields & Guild.Fields.Achievements) == Guild.Fields.Achievements) args.Add("achievements");
@@ -226,7 +274,7 @@ namespace BattleNet.API.WoW
         /// <param name="name"></param>
         /// <param name="fields"></param>
         /// <returns></returns>
-        public Character FindCharacter(string realm, string name, Character.Fields fields)
+        public Character GetCharacter(string realm, string name, Character.Fields fields)
         {
             List<string> args = new List<string>();
             if ((fields & Character.Fields.Achievements) == Character.Fields.Achievements) args.Add("achievements");
@@ -289,14 +337,6 @@ namespace BattleNet.API.WoW
             req.Headers["Authorization"] = auth;
             Console.WriteLine(req.Headers);
         }
-        #region IDisposable Members
-
-        public void Dispose()
-        {
-            cache.SaveIndex();
-        }
-
-        #endregion
     }
 
     

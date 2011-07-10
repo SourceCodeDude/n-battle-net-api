@@ -9,83 +9,80 @@ namespace BattleNet.API.WoW
 {
     public class Item : ResponseRoot
     {
-        public int id { get; set; }
-        public string name { get; set; }
-        public string icon { get; set; }
-        public int quality { get; set; }
-
-        public ItemToolTip tooltipParams { get; set; }
+        [XmlElement("id")]              public int Id { get; set; }
+        [XmlElement("name")]            public string Name { get; set; }
+        [XmlElement("icon")]            public string Icon { get; set; }
+        [XmlElement("quality")]         public int Quality { get; set; }
+        [XmlElement("tooltipParams")]   public ItemToolTip TooltipParams { get; set; }
 
         // the rest are on the data api
 
-        public int disenchantingSkillRank { get; set; }
-        public string description { get; set; }
-        public int stackable { get; set; }
+        [XmlElement("disenchantingSkillRank")]  public int disenchantingSkillRank { get; set; }
+        [XmlElement("description")]             public string description { get; set; }
+        [XmlElement("stackable")]               public int stackable { get; set; }
 
         // not sure what this is...
         //"itemBind":{"id":0},
 
         [XmlArray("bonusStats")]
-        [XmlArrayItem("item")]
-        public List<object> BonusStats { get; set; }
-
+        [XmlArrayItem("item")]              public List<object> BonusStats { get; set; }
 
         [XmlArray("itemSpells")]
-        [XmlArrayItem("item")]
-        public List<object> ItemSpells { get; set; }
-        public int buyPrice { get; set; }
-        public ItemClass itemClass { get; set; }
-        public ItemSubClass itemSubClass { get; set; }
-        public int containerSlots { get; set; }
-        public WeaponInfo weaponInfo { get; set; }
-
-        public int inventoryType { get; set; }
-        public bool equippable { get; set; }
-        public int itemLevel { get; set; }
-        public int maxCount { get; set; }
-        public int maxDurability { get; set; }
-        public int minFactionId { get; set; }
-        public int minReputation { get; set; }        
-        public int sellPrice { get; set; }
-        public int requiredLevel { get; set; }
-        public int requiredSkill { get; set; }
-        public int requiredSkillRank { get; set; }
-
-        public ItemSource itemSource { get; set; }
-
-        public int baseArmor { get; set; }
-        public bool hasSockets { get; set; }
-        public bool isAuctionable { get; set; }
+        [XmlArrayItem("item")]              public List<object> ItemSpells { get; set; }
+        [XmlElement("buyPrice")]            public int BuyPrice { get; set; }
+        [XmlElement("itemClass")]           public ItemClass ItemClass { get; set; }
+        [XmlElement("itemSubClass")]        public ItemSubClass ItemSubClass { get; set; }
+        [XmlElement("containerSlots")]      public int ContainerSlots { get; set; }
+        [XmlElement("weaponInfo")]          public WeaponInfo WeaponInfo { get; set; }
+        [XmlElement("inventoryType")]       public int InventoryType { get; set; }
+        [XmlElement("equippable")]          public bool Equippable { get; set; }
+        [XmlElement("itemLevel")]           public int ItemLevel { get; set; }
+        [XmlElement("maxCount")]            public int MaxCount { get; set; }
+        [XmlElement("maxDurability")]       public int MaxDurability { get; set; }
+        [XmlElement("minFactionId")]        public int MinFactionId { get; set; }
+        [XmlElement("minReputation")]       public int MinReputation { get; set; }
+        [XmlElement("sellPrice")]           public int SellPrice { get; set; }
+        [XmlElement("requiredLevel")]       public int RequiredLevel { get; set; }
+        [XmlElement("requiredSkill")]       public int RequiredSkill { get; set; }
+        [XmlElement("requiredSkillRank")]   public int RequiredSkillRank { get; set; }
+        [XmlElement("itemSource")]          public ItemSource ItemSource { get; set; }
+        [XmlElement("baseArmor")]           public int BaseArmor { get; set; }
+        [XmlElement("hasSockets")]          public bool HasSockets { get; set; }
+        [XmlElement("isAuctionable")]       public bool IsAuctionable { get; set; }
     }
 
+    public enum SourceType
+    {
+        NONE,
+        // TODO: complete this list when blizzard does
+    }
     public class ItemSource
     {
-        public int sourceId { get; set; }
-        // TODO: change this to an ENUM  "NONE", 
-        public string sourceType { get; set; }
+        [XmlElement("sourceId")]    public int SourceId { get; set; }        
+        [XmlElement("sourceType")]  public SourceType SourceType { get; set; }
     }
 
     public class WeaponInfo
     {
-        public DamageRange Damage { get; set; }
-        public float weaponSpeed { get; set; }
-        public float dps { get; set; }
+        [XmlElement("damage")]      public DamageRange Damage { get; set; }
+        [XmlElement("weaponSpeed")] public float weaponSpeed { get; set; }
+        [XmlElement("dps")]         public float dps { get; set; }
     }
 
     public class DamageRange
     {
-        public int minDamage { get; set; }
-        public int maxDamage { get; set; }
+        [XmlElement("minDamage")]   public int MinDamage { get; set; }
+        [XmlElement("maxDamage")]   public int MaxDamage { get; set; }
     }
 
     public class ItemClass
     {
-        public int @class{get;set;}
-        public string name{get;set;}
+        [XmlElement("class")]       public int Class{get;set;}
+        [XmlElement("name")]        public string Name{get;set;}
     }
     public class ItemSubClass
     {
-        public int subclassId { get; set; }        
-        public string name { get; set; }
+        [XmlElement("subclassId")]  public int subclassId { get; set; }
+        [XmlElement("name")]        public string name { get; set; }
     }
 }

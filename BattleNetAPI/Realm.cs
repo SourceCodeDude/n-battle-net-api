@@ -30,12 +30,12 @@ namespace BattleNet.API.WoW
     
     public class Realm
     {
-        public RealmType type { get; set; }
-        public bool queue { get; set; }
-        public bool status { get; set; }
-        public RealmPopulation population { get; set; }
-        public string name { get; set; }
-        public string slug { get; set; }
+        [XmlElement("type")]        public RealmType Type { get; set; }
+        [XmlElement("queue")]       public bool Queue { get; set; }
+        [XmlElement("status")]      public bool Status { get; set; }
+        [XmlElement("population")]  public RealmPopulation Population { get; set; }
+        [XmlElement("name")]        public string Name { get; set; }
+        [XmlElement("slug")]        public string Slug { get; set; }
     }
 
     public enum RealmPopulation

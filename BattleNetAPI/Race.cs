@@ -11,14 +11,14 @@ namespace BattleNet.API.WoW
     {
         [XmlArray("races")]
         [XmlArrayItem("item")]
-        public List<Race> races { get; set; }
+        public List<Race> Races { get; set; }
     }
 
     public class Race
     {
-        public int id { get; set; }
-        public int mask { get; set; }
-        public string side { get; set; }
-        public string name { get; set; }
+        [XmlElement("id")]      public int Id { get; set; }
+        [XmlElement("mask")]    public int Mask { get; set; }
+        [XmlElement("side")]    public string Side { get; set; }
+        [XmlElement("name")]    public string Name { get; set; }
     }
 }

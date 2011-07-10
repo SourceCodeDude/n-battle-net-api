@@ -112,7 +112,7 @@ namespace BattleNet.API.WoW
             get
             {
                 RaceCollection o = GetObject<RaceCollection>("data/character/races");
-                return o.races;               
+                return o.Races;               
             }
         }
 

@@ -15,8 +15,8 @@ namespace BattleNet.API.WoW
 
     public class GuildPerk
     {
-        public int guildLevel { get; set; }
-        public Spell spell { get; set; }
+        [XmlElement("guildLevel")]  public int GuildLevel { get; set; }
+        [XmlElement("spell")]       public Spell Spell { get; set; }
 
     }
 }

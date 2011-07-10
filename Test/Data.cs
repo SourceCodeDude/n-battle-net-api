@@ -19,19 +19,19 @@ namespace Test
             RaceCollection rc = JsonParser.Parse<RaceCollection>(test);
 
             Assert.IsNotNull(rc);
-            Assert.IsNotNull(rc.races);
-            Assert.AreEqual(12, rc.races.Count);
+            Assert.IsNotNull(rc.Races);
+            Assert.AreEqual(12, rc.Races.Count);
 
-            Assert.AreEqual(3,          rc.races[0].id);
-            Assert.AreEqual(4,          rc.races[0].mask);
-            Assert.AreEqual("Dwarf",    rc.races[0].name);
-            Assert.AreEqual("alliance", rc.races[0].side);
+            Assert.AreEqual(3,          rc.Races[0].Id);
+            Assert.AreEqual(4,          rc.Races[0].Mask);
+            Assert.AreEqual("Dwarf",    rc.Races[0].Name);
+            Assert.AreEqual("alliance", rc.Races[0].Side);
 
 
-            Assert.AreEqual(6,          rc.races[1].id);
-            Assert.AreEqual(32,         rc.races[1].mask);
-            Assert.AreEqual("Tauren",   rc.races[1].name);
-            Assert.AreEqual("horde",    rc.races[1].side);
+            Assert.AreEqual(6,          rc.Races[1].Id);
+            Assert.AreEqual(32,         rc.Races[1].Mask);
+            Assert.AreEqual("Tauren",   rc.Races[1].Name);
+            Assert.AreEqual("horde",    rc.Races[1].Side);
         }
 
         [Test]
@@ -45,10 +45,10 @@ namespace Test
             Assert.IsNotNull(rc.Classes);
             Assert.AreEqual(10, rc.Classes.Count);
 
-            Assert.AreEqual(3, rc.Classes[0].id);
-            Assert.AreEqual(4, rc.Classes[0].mask);
-            Assert.AreEqual("Hunter", rc.Classes[0].name);
-            Assert.AreEqual(PowerType.Focus, rc.Classes[0].powerType);
+            Assert.AreEqual(3, rc.Classes[0].Id);
+            Assert.AreEqual(4, rc.Classes[0].Mask);
+            Assert.AreEqual("Hunter", rc.Classes[0].Name);
+            Assert.AreEqual(PowerType.Focus, rc.Classes[0].PowerType);
         }
 
 
@@ -62,31 +62,31 @@ namespace Test
             Assert.IsNotNull(rc.Rewards);
             Assert.AreEqual(2, rc.Rewards.Count);
 
-            Assert.AreEqual(0, rc.Rewards[0].minGuildLevel);
-            Assert.AreEqual(6, rc.Rewards[0].minGuildRepLevel);
-            Assert.AreEqual(6, rc.Rewards[0].races.Count);
-            Assert.IsNotNull(rc.Rewards[0].achievement);
+            Assert.AreEqual(0, rc.Rewards[0].MinGuildLevel);
+            Assert.AreEqual(6, rc.Rewards[0].MinGuildRepLevel);
+            Assert.AreEqual(6, rc.Rewards[0].Races.Count);
+            Assert.IsNotNull(rc.Rewards[0].Achievement);
 
-            Assert.AreEqual(5035, rc.Rewards[0].achievement.id);
-            Assert.AreEqual("Master Crafter", rc.Rewards[0].achievement.title);
-            Assert.AreEqual(10, rc.Rewards[0].achievement.points);
-            Assert.AreEqual("Craft 500 Epic items with an item level of at least 359.", rc.Rewards[0].achievement.description);
-            Assert.AreEqual("Reward: Cloak of Coordination", rc.Rewards[0].achievement.reward);
-            Assert.IsNotNull(rc.Rewards[0].achievement.rewardItem);
+            Assert.AreEqual(5035, rc.Rewards[0].Achievement.Id);
+            Assert.AreEqual("Master Crafter", rc.Rewards[0].Achievement.Title);
+            Assert.AreEqual(10, rc.Rewards[0].Achievement.Points);
+            Assert.AreEqual("Craft 500 Epic items with an item level of at least 359.", rc.Rewards[0].Achievement.Description);
+            Assert.AreEqual("Reward: Cloak of Coordination", rc.Rewards[0].Achievement.Reward);
+            Assert.IsNotNull(rc.Rewards[0].Achievement.RewardItem);
 
-            Assert.AreEqual(65360, rc.Rewards[0].achievement.rewardItem.id);
-            Assert.AreEqual("Cloak of Coordination", rc.Rewards[0].achievement.rewardItem.name);
-            Assert.AreEqual("inv_guild_cloak_alliance_c", rc.Rewards[0].achievement.rewardItem.icon);
-            Assert.AreEqual(4, rc.Rewards[0].achievement.rewardItem.quality);
-            Assert.IsNotNull(rc.Rewards[0].achievement.rewardItem.tooltipParams);
+            Assert.AreEqual(65360, rc.Rewards[0].Achievement.RewardItem.Id);
+            Assert.AreEqual("Cloak of Coordination", rc.Rewards[0].Achievement.RewardItem.Name);
+            Assert.AreEqual("inv_guild_cloak_alliance_c", rc.Rewards[0].Achievement.RewardItem.Icon);
+            Assert.AreEqual(4, rc.Rewards[0].Achievement.RewardItem.Quality);
+            Assert.IsNotNull(rc.Rewards[0].Achievement.RewardItem.TooltipParams);
 
 
-            Assert.IsNotNull(rc.Rewards[0].item);
-            Assert.AreEqual(65274, rc.Rewards[0].item.id);
-            Assert.AreEqual("Cloak of Coordination", rc.Rewards[0].item.name);
-            Assert.AreEqual("inv_guild_cloak_horde_c", rc.Rewards[0].item.icon);
-            Assert.AreEqual(4, rc.Rewards[0].item.quality);
-            Assert.IsNotNull(rc.Rewards[0].item.tooltipParams);
+            Assert.IsNotNull(rc.Rewards[0].Item);
+            Assert.AreEqual(65274, rc.Rewards[0].Item.Id);
+            Assert.AreEqual("Cloak of Coordination", rc.Rewards[0].Item.Name);
+            Assert.AreEqual("inv_guild_cloak_horde_c", rc.Rewards[0].Item.Icon);
+            Assert.AreEqual(4, rc.Rewards[0].Item.Quality);
+            Assert.IsNotNull(rc.Rewards[0].Item.TooltipParams);
         }
 
         [Test]
@@ -99,13 +99,13 @@ namespace Test
             Assert.IsNotNull(rc.Perks);
             Assert.AreEqual(2, rc.Perks.Count);
 
-            Assert.AreEqual(2, rc.Perks[0].guildLevel);
-            Assert.IsNotNull(rc.Perks[0].spell);
-            Assert.AreEqual(78631, rc.Perks[0].spell.id);
-            Assert.AreEqual("Fast Track", rc.Perks[0].spell.name);
-            Assert.AreEqual("Rank 1", rc.Perks[0].spell.subtext);
-            Assert.AreEqual("achievement_guildperk_fasttrack", rc.Perks[0].spell.icon);
-            Assert.AreEqual("Experience gained from killing monsters and completing quests increased by 5%.", rc.Perks[0].spell.description);            
+            Assert.AreEqual(2, rc.Perks[0].GuildLevel);
+            Assert.IsNotNull(rc.Perks[0].Spell);
+            Assert.AreEqual(78631, rc.Perks[0].Spell.Id);
+            Assert.AreEqual("Fast Track", rc.Perks[0].Spell.Name);
+            Assert.AreEqual("Rank 1", rc.Perks[0].Spell.Subtext);
+            Assert.AreEqual("achievement_guildperk_fasttrack", rc.Perks[0].Spell.Icon);
+            Assert.AreEqual("Experience gained from killing monsters and completing quests increased by 5%.", rc.Perks[0].Spell.Description);            
         }
     }
 }

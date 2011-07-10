@@ -13,20 +13,23 @@ namespace BattleNet.API.WoW
         {
             Basic = 0,
             Members,
-            Achievements,            
+            Achievements,  
+          
+            All = Members | Achievements,
         }
 
         #region Basic Fields
-        public UnixTimestamp lastModified { get; set; }
-        public string name { get; set; }
-        public string realm { get; set; }
-        public int level { get; set; }
+
+        [XmlElement("lastModified")]public UnixTimestamp LastModified { get; set; }
+        [XmlElement("name")]        public string Name { get; set; }
+        [XmlElement("realm")]       public string Realm { get; set; }
+        [XmlElement("level")]       public int Level { get; set; }
         /// <summary>
         /// 0 = alliance
         /// 1 = horde
         /// </summary>
-        public int side { get; set; }
-        public int achievementPoints { get; set; }
+        [XmlElement("side")]                public int Side { get; set; }
+        [XmlElement("achievementPoints")]   public int AchievementPoints { get; set; }
         #endregion
 
         /////////////////////////////////////////////////        
@@ -35,20 +38,19 @@ namespace BattleNet.API.WoW
 
         #region optional fields
 
-       
-        [XmlArray("members")]
+        [XmlArray("members", IsNullable=true)]
         [XmlArrayItem("item")]
         public List<Member> Members { get; set; }
 
-        [XmlElement("achievements")]
-        public Achievements Achievements { get; set; }
+        [XmlElement("achievements", IsNullable = true)] public Achievements Achievements { get; set; }
+        
         #endregion
     }
 
     public class Member
     {
-        public Character charcater { get; set; }
-        public int rank { get; set; }
+        [XmlElement("character")]   public Character Charcater { get; set; }
+        [XmlElement("rank")]        public int Rank { get; set; }
     }
 
 }

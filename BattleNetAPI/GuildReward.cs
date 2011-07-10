@@ -15,30 +15,28 @@ namespace BattleNet.API.WoW
 
     public class GuildReward
     {
-        public int minGuildLevel { get; set; }
-        public int minGuildRepLevel { get; set; }
+        [XmlElement("minGuildLevel")]       public int MinGuildLevel { get; set; }
+        [XmlElement("minGuildRepLevel")]    public int MinGuildRepLevel { get; set; }
 
         [XmlArray("races")]
-        [XmlArrayItem("item")]
-        public List<int> races { get; set; }
+        [XmlArrayItem("item")]              public List<int> Races { get; set; }
 
-        public Achievement achievement { get; set; }
+        [XmlElement("achievement")]         public Achievement Achievement { get; set; }
 
         /// <summary>
         /// This seems to be the 'more' correct item instead of the
         /// one on the achievement
         /// </summary>
-        public Item item { get; set; }
+        [XmlElement("item")]                public Item Item { get; set; }
     }
 
     public class Achievement
     {
-        public int id { get; set; }
-        public string title { get; set; }
-        public int points { get; set; }
-        public string description { get; set; }
-        public string reward { get; set; }
-        public Item rewardItem { get; set; }
-
+        [XmlElement("id")]          public int Id { get; set; }
+        [XmlElement("title")]       public string Title { get; set; }
+        [XmlElement("points")]      public int Points { get; set; }
+        [XmlElement("description")] public string Description { get; set; }
+        [XmlElement("reward")]      public string Reward { get; set; }
+        [XmlElement("rewardItem")]  public Item RewardItem { get; set; }
     }
 }

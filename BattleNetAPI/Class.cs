@@ -24,10 +24,14 @@ namespace BattleNet.API.WoW
     }
     public class Class
     {
-        public int id { get; set; }
-        public int mask { get; set; }
-        public PowerType powerType{get;set;}
-        public string name{get;set;}
+        [XmlElement("id")]
+        public int Id { get; set; }
+        [XmlElement("mask")]
+        public int Mask { get; set; }
+        [XmlElement("powerType")]
+        public PowerType PowerType{get;set;}
+        [XmlElement("name")]
+        public string Name{get;set;}
 
     }
 }

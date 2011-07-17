@@ -25,9 +25,11 @@ namespace BattleNet.API.WoW
         CN,        
     }
     public class BattleNetClient : IDisposable
-    {
-        
-        FailoverCache cache;
+    {        
+        Cache dataCache;
+        Cache iconCache;
+        Cache thumbNailCache;
+
         Uri baseUri;
         Uri iconUri;
         Uri thumbnailUri;
@@ -37,12 +39,7 @@ namespace BattleNet.API.WoW
         {
             get
             {
-                StringBuilder hex = new StringBuilder(privateKey.Length * 2);
-
-                for (int i = 0; i < privateKey.Length; i++) 
-                    hex.Append(privateKey[i].ToString("X2"));
-
-                return hex.ToString();  
+                return ToHex.ToHexString(privateKey);                
             }
             set
             {
@@ -57,7 +54,10 @@ namespace BattleNet.API.WoW
 
         public BattleNetClient(Region r)
         {
-            cache = new FailoverCache("battlenet.cache");
+            dataCache = new Cache("./cache");
+            iconCache = new Cache("./icons");
+            thumbNailCache = new Cache("./thumb");
+            
             switch (r)
             {
                 case Region.EU:
@@ -93,15 +93,14 @@ namespace BattleNet.API.WoW
         ~BattleNetClient()
         {
             Dispose();
-            cache = null;
+            thumbNailCache = iconCache = dataCache = null;
         }
 
         #region IDisposable Members
 
         public void Dispose()
         {
-            cache.SaveIndex();
-            cache.Close();
+            thumbNailCache = iconCache = dataCache = null;
         }
 
         #endregion
@@ -109,7 +108,7 @@ namespace BattleNet.API.WoW
         {
             // "http://us.battle.net/static-render/us/" + "medivh/66/3930434-avatar.jpg"
             Uri fullPath = new Uri(thumbnailUri,path);            
-            Stream st = GetUrl(fullPath);
+            Stream st = GetUrl(fullPath, thumbNailCache);
 
             Image img = new Bitmap(st);
             return img;
@@ -127,49 +126,79 @@ namespace BattleNet.API.WoW
 
             Uri fullPath = new Uri(iconUri, size + path);
             // baseUri + "static-render/us"
-            Stream st = GetUrl(fullPath);
+            Stream st = GetUrl(fullPath, iconCache);
 
             Image img = new Bitmap(st);            
             return img;
         }
 
-        private Stream GetUrl(string url)
+        private Stream GetUrl(string url, Cache cache)
         {
-            return GetUrl(new Uri(baseUri, url));
+            return GetUrl(new Uri(baseUri, url), cache);
         }
-        private Stream GetUrl(Uri url)
+
+        private Stream GetUrl(Uri url, Cache cache)
         {
             HttpWebRequest req = (HttpWebRequest) WebRequest.Create(url);
+            string key = url.ToString();
+
+            CacheItem ci = cache.GetItem(key);
+
+            // item was already cache?
+            // see if the server has a newer copy by sending
+            // if-modified-since
+            if (ci != null)
+            {
+                req.IfModifiedSince = ci.Created;
+            }
+            
+            // do any authentication
             Authenticate(req);
-            req.CachePolicy = new HttpRequestCachePolicy(HttpRequestCacheLevel.NoCacheNoStore);
-            WebResponse res = req.GetResponse();
-                                
-            return res.GetResponseStream();                            
+
+            try
+            {
+                WebResponse res = req.GetResponse();
+                ci = cache.Insert(key, res.GetResponseStream());
+            }
+            catch (WebException ex)
+            {
+                HttpWebResponse h = ex.Response as HttpWebResponse;
+                if (h.StatusCode != HttpStatusCode.NotModified)
+                {
+                    throw ex;
+                }
+                
+            }
+            return ci.Value;            
         }
 
         private T GetObject<T>(string url)
         {
-            Stream st = GetUrl(url);
+            Stream st = GetUrl(url, dataCache);
             string json = new StreamReader(st).ReadToEnd();
             return JsonParser.Parse<T>(json);            
         }
 
-        
-        public List<Race> Races
+
+        public RaceCollection Races
         {
             get
             {
                 RaceCollection o = GetObject<RaceCollection>("data/character/races");
-                return o.Races;               
+                // sort by id
+                o.Races.Sort();
+                return o;               
             }
         }
 
-        public List<Class> Classes
+        public ClassCollection Classes
         {
             get
             {
                 ClassCollection o = GetObject<ClassCollection>("data/character/classes");
-                return o.Classes;
+                // sort by id
+                o.Classes.Sort();
+                return o;
             }
         }
 
@@ -298,13 +327,13 @@ namespace BattleNet.API.WoW
 
             Character r = GetObject<Character>(url);
             // ?fields=achievements
-            if (r.Status == Status.Ok)
+            if (r!=null && r.Status == Status.Ok)
             {
                 return r;
             }
             else
             {
-                throw new ResponseException(r.Status, r.Reason);               
+                throw new ResponseException(Status.NotOk, "");//r.Status, r.Reason);               
             }
         }
 

@@ -34,6 +34,29 @@ namespace Test
             }
         }
 
+        [Test]
+        public void TestClasses()
+        {
+            using (BattleNetClient client = new BattleNetClient(BattleNet.API.WoW.Region.US))
+            {
+                List<Class> classes = client.Classes.Classes;
+                Assert.NotNull(classes);
+            }
+        }
+
+        /*
+        [Test]
+        public void GetChar()
+        {
+            using (BattleNetClient client = new BattleNetClient(BattleNet.API.WoW.Region.US))
+            {
+                Character c = client.GetCharacter("Thunderhorn", "Femor");
+                Assert.NotNull(c);
+            }
+
+        }
+         */
+
 
     }
 }

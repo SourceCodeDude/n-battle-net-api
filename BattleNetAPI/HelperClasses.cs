@@ -49,4 +49,17 @@ namespace BattleNet.API
 
         #endregion
     }
+
+    class ToHex
+    {
+        public static string ToHexString(byte[] data)
+        {
+            StringBuilder hex = new StringBuilder(data.Length * 2);
+
+            for (int i = 0; i < data.Length; i++)
+                hex.Append(data[i].ToString("X2"));
+
+            return hex.ToString();
+        }
+    }
 }

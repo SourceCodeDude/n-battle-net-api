@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Achievements.cs" />
     <Compile Include="BattleNetClient.cs" />
+    <Compile Include="Cache.cs" />
     <Compile Include="Character.cs" />
     <Compile Include="Class.cs" />
     <Compile Include="FailoverCache.cs" />

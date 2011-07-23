@@ -24,8 +24,14 @@ namespace BattleNet.API.WoW
         TW,
         CN,        
     }
+
     public class BattleNetClient : IDisposable
-    {        
+    {
+        /// <summary>
+        /// Called when there is an error parseing the json
+        /// </summary>
+        public event ParseErrorDelegate ParseError;
+
         Cache dataCache;
         Cache iconCache;
         Cache thumbNailCache;
@@ -104,6 +110,12 @@ namespace BattleNet.API.WoW
         }
 
         #endregion
+
+        /// <summary>
+        /// Retrieve a thumbnail image for an avatar
+        /// </summary>
+        /// <param name="path">thumbnail path in a Character object</param>
+        /// <returns></returns>
         public Image GetThumbnail(string path)
         {
             // "http://us.battle.net/static-render/us/" + "medivh/66/3930434-avatar.jpg"
@@ -118,7 +130,7 @@ namespace BattleNet.API.WoW
         /// Download the icon for a item
         /// </summary>
         /// <param name="path">path to icon, ie inv_misc_necklacea9.jpg</param>
-        /// <param name="large">Image size</param>
+        /// <param name="large">true of a 56x56 and false for 18x18</param>
         /// <returns></returns>
         public Image GetIcon(string path, bool large=true)
         {
@@ -176,9 +188,17 @@ namespace BattleNet.API.WoW
         {
             Stream st = GetUrl(url, dataCache);
             string json = new StreamReader(st).ReadToEnd();
-            return JsonParser.Parse<T>(json);            
+            return JsonParser.Parse<T>(json, Parse_Error);            
         }
 
+        private void Parse_Error(string msg)
+        {
+            ParseErrorDelegate pe = ParseError;
+            if (pe != null)
+            {
+                pe(msg);
+            }
+        }
 
         public RaceCollection Races
         {

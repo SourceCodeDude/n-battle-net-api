@@ -96,13 +96,13 @@ namespace Test
             VerifyBasicData(rc);
 
             // test achievements
-            Assert.IsNotNull(rc.achievements);
-            Assert.AreEqual(5, rc.achievements.achievementsCompleted.Count);
-            Assert.AreEqual(5, rc.achievements.achievementsCompletedTimestamp.Count);
-            Assert.AreEqual(5, rc.achievements.criteria.Count);
-            Assert.AreEqual(5, rc.achievements.criteriaQuantity.Count);
-            Assert.AreEqual(5, rc.achievements.criteriaTimestamp.Count);
-            Assert.AreEqual(5, rc.achievements.criteriaCreated.Count);
+            Assert.IsNotNull(rc.Achievements);
+            Assert.AreEqual(5, rc.Achievements.achievementsCompleted.Count);
+            Assert.AreEqual(5, rc.Achievements.achievementsCompletedTimestamp.Count);
+            Assert.AreEqual(5, rc.Achievements.criteria.Count);
+            Assert.AreEqual(5, rc.Achievements.criteriaQuantity.Count);
+            Assert.AreEqual(5, rc.Achievements.criteriaTimestamp.Count);
+            Assert.AreEqual(5, rc.Achievements.criteriaCreated.Count);
         }
 
 
@@ -153,6 +153,39 @@ namespace Test
             Assert.IsNotNull(a.Neck);
             Assert.IsNotNull(a.Ranged);
             Assert.IsNotNull(a.Shirt);
+            Assert.IsNotNull(a.Shoulder);
+            Assert.IsNotNull(a.Tabard);
+            Assert.IsNotNull(a.Trinket1);
+            Assert.IsNotNull(a.Trinket2);
+            Assert.IsNotNull(a.Waist);
+        }
+
+        [Test]
+        public void TestAll()
+        {
+            string test = ReadData("data/character/all.json");
+
+            Character rc = JsonParser.Parse<Character>(test);
+
+            //VerifyBasicData(rc);
+
+            CharacterItems a = rc.Items;
+            // test Appearance
+            Assert.IsNotNull(a);
+            Assert.AreEqual(353, a.AverageItemLevel);
+            Assert.AreEqual(352, a.averageItemLevelEquipped);
+            Assert.IsNotNull(a.Back);
+            Assert.IsNotNull(a.Chest);
+            Assert.IsNotNull(a.Feet);
+            Assert.IsNotNull(a.Finger1);
+            Assert.IsNotNull(a.Finger2);
+            Assert.IsNotNull(a.Hands);
+            Assert.IsNotNull(a.Head);
+            Assert.IsNotNull(a.Legs);
+            Assert.IsNotNull(a.MainHand);
+            Assert.IsNotNull(a.Neck);
+            Assert.IsNotNull(a.Ranged);
+            Assert.IsNull(a.Shirt);
             Assert.IsNotNull(a.Shoulder);
             Assert.IsNotNull(a.Tabard);
             Assert.IsNotNull(a.Trinket1);

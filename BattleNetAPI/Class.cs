@@ -4,8 +4,40 @@ using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 
+using System.ComponentModel;
 namespace BattleNet.API.WoW
 {
+    class PowerTypeConverter : TypeConverter
+    {
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        {
+            if (sourceType == typeof(string))
+                return true;
+            else
+                return base.CanConvertFrom(context, sourceType);
+        }
+        public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
+        {
+            string s = Translate(value as string);            
+            return Enum.Parse(typeof(PowerType), s);
+        }
+
+
+        string Translate(string k)
+        {
+            switch (k)
+            {
+                case "focus": return "Focus";
+                case "rage": return "Rage";
+                case "mana": return "Mana";
+                case "energy": return "Energy";
+                case "runic-power": return "RunicPower";
+                default: return k;
+            }
+        }
+    }
+
+    [TypeConverter(typeof(PowerTypeConverter))]
     public enum PowerType
     {
         [XmlEnum("focus")] Focus,

@@ -43,6 +43,7 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -54,6 +55,7 @@
     <Compile Include="Cache.cs" />
     <Compile Include="Character.cs" />
     <Compile Include="Class.cs" />
+    <Compile Include="Converter\WoWApiConverter.cs" />
     <Compile Include="FailoverCache.cs" />
     <Compile Include="Guild.cs" />
     <Compile Include="GuildPerk.cs" />
@@ -71,6 +73,7 @@
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

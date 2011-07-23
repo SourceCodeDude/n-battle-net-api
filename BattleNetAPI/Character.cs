@@ -97,8 +97,8 @@ namespace BattleNet.API.WoW
 
 
         // achievements        
-        [XmlElement("achievements", IsNullable = true)] public Achievements achievements { get; set; }
-        [XmlElement("progression", IsNullable = true)]  public Progression progression { get; set; }
+        [XmlElement("achievements", IsNullable = true)] public Achievements Achievements { get; set; }
+        [XmlElement("progression", IsNullable = true)]  public Progression Progression { get; set; }
         [XmlElement("guild", IsNullable = true)]        public GuildInfo Guild { get; set; }
 
     }
@@ -265,9 +265,9 @@ Roster = members
 
     public class Stats
     {
-        [XmlElement("health")]      public int Health;
-        [XmlElement("power")]       public int Power;
-        [XmlElement("powerType")]   public PowerType PowerType;
+        [XmlElement("health")]      public int Health { get; set; }
+        [XmlElement("power")]       public int Power  { get; set; }
+        [XmlElement("powerType")]   public PowerType PowerType { get; set; }
         [XmlElement("str")]         public int Strength { get; set; }
         [XmlElement("agi")]         public int Agility { get; set; }
         [XmlElement("sta")]         public int Stamina { get; set; }
@@ -403,8 +403,11 @@ Roster = members
         public int gem2 { get; set; }
         public int gem3 { get; set; }
         public bool extraSocket { get; set; }
-        public int enchange { get; set; }
+        public int enchant { get; set; }
         public int reforge { get; set; }
+        [XmlArray("set")]
+        [XmlArrayItem("item")]
+        public List<int> set { get; set; }
     }
 
 }

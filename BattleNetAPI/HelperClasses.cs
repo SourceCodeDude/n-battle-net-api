@@ -8,13 +8,36 @@ using System.ComponentModel;
 using System.Diagnostics;
 namespace BattleNet.API
 {
+    class UnixTimestampClassConverter : TypeConverter
+    {
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        {
+            if (sourceType == typeof(string))
+                return true;
+            else
+                return base.CanConvertFrom(context, sourceType);
+        }
+        public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
+        {
+            string s = value as string;
+            return new UnixTimestamp(long.Parse(s));
+        }
+
+    }
+
     [Serializable]
-    public struct UnixTimestamp : IXmlSerializable
+    [TypeConverter(typeof(UnixTimestampClassConverter))]
+    public class UnixTimestamp : IXmlSerializable
     {
         private static DateTimeOffset origin = new DateTimeOffset(1970, 1, 1, 0, 0, 0, 0, TimeSpan.Zero);
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         DateTimeOffset time;
+
+        public UnixTimestamp()
+        {
+            time = DateTime.MinValue;
+        }
 
         public UnixTimestamp(long msec)
         {
@@ -22,6 +45,15 @@ namespace BattleNet.API
             FromMsec(msec);
         }
 
+        public static implicit operator UnixTimestamp(long msec)
+        {
+            return new UnixTimestamp(msec);
+        }
+
+        public static implicit operator long(UnixTimestamp value)
+        {
+            return (long)(value.Time - origin).TotalMilliseconds;
+        }
         public DateTimeOffset Time { get { return time; } }
 
         private void FromMsec(long msec)

@@ -16,7 +16,7 @@ namespace Test
         {
             string test = Test.Resource.race1;
 
-            RaceCollection rc = JsonParser.Parse<RaceCollection>(test);
+            RaceCollection rc = JsonParser.Parse<RaceCollection>(test, null);
 
             Assert.IsNotNull(rc);
             Assert.IsNotNull(rc.Races);

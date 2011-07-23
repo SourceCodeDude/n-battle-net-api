@@ -10,20 +10,27 @@ using System.Web;
 using System.Net;
 using BattleNet.API.WoW;
 
+using System.Collections.ObjectModel;
 using System.Reflection;
 using NUnit.Framework;
+
+using System.Web.Script.Serialization;
+
+using BattleNet.API;
+
 namespace Test
 {
-
 
     class Program
     {
         [STAThread]
         static void Main(string[] args)
         {
+            
 
             BattleNetClient c = new BattleNetClient(Region.US);
             object p = c.Classes;
+            //c.GetCharacter("realm", "name", Character.Fields.Items);
 
             string[] my_args = { Assembly.GetExecutingAssembly().Location };
 

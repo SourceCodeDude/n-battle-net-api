@@ -46,6 +46,14 @@ namespace BattleNet.API
         {
             return Parse<T>(json, null);
         }
+
+        /// <summary>
+        /// Convert Json string into an Object
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="json">json string</param>
+        /// <param name="onError"></param>
+        /// <returns></returns>
         static public T Parse<T>(string json, ParseErrorDelegate onError)
         {
             try
@@ -53,7 +61,9 @@ namespace BattleNet.API
                 if (UseJson)
                 {
                     JavaScriptSerializer jss = new MyJavaScriptSerializer(onError);
-                    jss.RegisterConverters(converters);
+                    // yeah.. its a big number
+                    jss.MaxJsonLength = int.MaxValue;
+                    jss.RegisterConverters(converters);                    
                     return (T)jss.Deserialize<T>(json);
                 }
                 else

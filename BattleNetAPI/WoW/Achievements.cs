@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 using System.Xml.Serialization;
-namespace BattleNet.API
+namespace BattleNet.API.WoW
 {
     // TODO: need to rename this. Shouldnt be any
     // pluralized class names

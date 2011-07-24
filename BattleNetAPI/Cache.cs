@@ -57,6 +57,11 @@ namespace BattleNet.API
             Flush();
         }
 
+        public void Clear()
+        {
+            cache.Clear();
+        }
+
         /// <summary>
         /// Prime the cache from the disk
         /// </summary>
@@ -80,7 +85,7 @@ namespace BattleNet.API
             }
         }
 
-        void Flush()
+        public void Flush()
         {
             // flush cache to disk
             lock (cache)
@@ -108,6 +113,7 @@ namespace BattleNet.API
             {
                 // existing item, just update the value
                 ci.Value = val;
+                ci.LastUpdated = created;
             }
             else
             {
@@ -156,6 +162,7 @@ namespace BattleNet.API
                 CacheItem ci = new CacheItem(c, key, abs, idle);
 
                 ci.LastAccessed = DateTime.FromBinary(r.ReadInt64());
+                ci.LastUpdated = DateTime.FromBinary(r.ReadInt64());
                 ci.Created = DateTime.FromBinary(r.ReadInt64());
                 return ci;
             }
@@ -168,6 +175,7 @@ namespace BattleNet.API
                 w.Write( Expire.ToBinary() );
                 w.Write( IdleTime.Ticks );
                 w.Write( LastAccessed.ToBinary() );
+                w.Write( LastUpdated.ToBinary());
                 w.Write( Created.ToBinary() );
             }
         }
@@ -199,7 +207,7 @@ namespace BattleNet.API
              
             
             Value = val;
-            LastAccessed = Created = created;
+            LastUpdated = LastAccessed = Created = created;
             if (idle == TimeSpan.Zero)
             {
                 Expire = abs;
@@ -250,10 +258,11 @@ namespace BattleNet.API
         /// </summary>
         public DateTime LastAccessed { get; set; }
 
+        public DateTime LastUpdated { get; set; }
         public Stream Value{
             get
             {
-                LastAccessed = DateTime.UtcNow;
+                LastUpdated = LastAccessed = DateTime.UtcNow;
                 return File.Open(cache.CachePath + "/"+hashedFileName, FileMode.Open);
             }
             set

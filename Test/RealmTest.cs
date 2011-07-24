@@ -9,31 +9,12 @@ using BattleNet.API;
 namespace Test
 {
     [TestFixture]
-    class Realm
+    class RealmTest
     {
 
         [Test]
         public void ParseRealmCollection()
         {
-/*
-  "realms":[
-    {
-      "type":"pvp",
-      "queue":false,
-      "status":true,
-      "population":"low",
-      "name":"Aegwynn",
-      "slug":"aegwynn"
-    },
-    {
-      "type":"pve",
-      "queue":false,
-      "status":true,
-      "population":"high",
-      "name":"Aerie Peak",
-      "slug":"aerie-peak"
-    },
- */
             string test = Test.Resource.realm1;
             
             RealmCollection rc =  JsonParser.Parse<RealmCollection>(test);

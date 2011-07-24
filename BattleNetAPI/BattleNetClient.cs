@@ -40,6 +40,8 @@ namespace BattleNet.API.WoW
         Uri iconUri;
         Uri thumbnailUri;
 
+        public bool UseCache{get;set;}
+
         byte[] privateKey = null;
         public string PrivateKey
         {
@@ -58,8 +60,19 @@ namespace BattleNet.API.WoW
         }
         public string PublicKey { get; set; }
 
+        public System.Globalization.CultureInfo Locale { get; set; }
         public BattleNetClient(Region r)
+            : this(r, System.Globalization.CultureInfo.CurrentCulture)
+        {        
+        }
+
+        public BattleNetClient(Region r,System.Globalization.CultureInfo loc)
         {
+            UseCache = true;
+
+            // default to current culture
+            Locale = loc;
+
             dataCache = new Cache("./cache");
             iconCache = new Cache("./icons");
             thumbNailCache = new Cache("./thumb");
@@ -104,8 +117,19 @@ namespace BattleNet.API.WoW
 
         #region IDisposable Members
 
+
+        public void ClearCache()
+        {
+            dataCache.Clear();
+            iconCache.Clear();
+            thumbNailCache.Clear();
+        }
+
         public void Dispose()
         {
+            if(thumbNailCache!=null) thumbNailCache.Flush();
+            if (iconCache != null) iconCache.Flush();
+            if (dataCache != null) dataCache.Flush();
             thumbNailCache = iconCache = dataCache = null;
         }
 
@@ -154,34 +178,70 @@ namespace BattleNet.API.WoW
             HttpWebRequest req = (HttpWebRequest) WebRequest.Create(url);
             string key = url.ToString();
 
-            CacheItem ci = cache.GetItem(key);
+            CacheItem ci = null;
+            
+            if(UseCache) ci = cache.GetItem(key);            
 
             // item was already cache?
             // see if the server has a newer copy by sending
             // if-modified-since
             if (ci != null)
             {
-                req.IfModifiedSince = ci.Created;
+                req.IfModifiedSince = ci.LastUpdated;
             }
             
             // do any authentication
             Authenticate(req);
-
+            WebResponse res=null;
             try
             {
-                WebResponse res = req.GetResponse();
-                ci = cache.Insert(key, res.GetResponseStream());
+                // only get a request if it wasnt cached,
+                // or the cache item is expired.. and even then
+                // we ask the serer if it has a newer version of the
+                // item or not
+                if (ci == null || ci.Expire < DateTime.UtcNow)
+                {
+                    res = req.GetResponse();
+                    if (UseCache)
+                    {
+                        ci = cache.Insert(key, res.GetResponseStream());
+
+                        // response had a cache expires header, so lets use it
+                        // this usualy happens for the DATA APIs
+                        string exp = res.Headers["Expires"];
+                        if (exp != null)
+                        {
+                            ci.Expire = DateTime.Parse(exp).ToUniversalTime();
+                        }
+                    }
+                    else
+                    {
+                        //Console.WriteLine("Bypass cache");
+                    }
+                }
+                else
+                {
+                    //Console.WriteLine("Not Expired " + url);
+                }
             }
             catch (WebException ex)
-            {
+            {                
                 HttpWebResponse h = ex.Response as HttpWebResponse;
                 if (h.StatusCode != HttpStatusCode.NotModified)
                 {
                     throw ex;
                 }
-                
+                //Console.WriteLine("HIT");                
             }
-            return ci.Value;            
+
+            if (UseCache)
+            {
+                return ci.Value;
+            }
+            else
+            {
+                return res.GetResponseStream();
+            }
         }
 
         private T GetObject<T>(string url)
@@ -200,11 +260,20 @@ namespace BattleNet.API.WoW
             }
         }
 
+        #region Data Access API
+        
+        public IList<AuctionFile> GetAuctions(string realm)
+        {
+            AuctionResponse resp = GetObject<AuctionResponse>("auction/data/" + HttpUtility.UrlPathEncode(realm));            
+            return resp.Files;
+        }
+
         public RaceCollection Races
         {
             get
             {
-                RaceCollection o = GetObject<RaceCollection>("data/character/races");
+                RacesQuery q = new RacesQuery();
+                RaceCollection o = GetObject<RaceCollection>(q.ToString());
                 // sort by id
                 o.Races.Sort();
                 return o;               
@@ -215,23 +284,33 @@ namespace BattleNet.API.WoW
         {
             get
             {
-                ClassCollection o = GetObject<ClassCollection>("data/character/classes");
+                ClassesQuery q = new ClassesQuery();
+                ClassCollection o = GetObject<ClassCollection>(q.ToString());
                 // sort by id
                 o.Classes.Sort();
                 return o;
             }
         }
 
-        public Item FindItem(int id)
+        public Item GetItem(int id)
         {
-            return GetObject<Item>("data/item/" + id);
+            return GetItem(new ItemQuery()
+            {
+                ItemId = id
+            });
+        }
+
+        public Item GetItem(ItemQuery query)
+        {
+            return GetObject<Item>(query.ToString());
         }
 
         public List<GuildReward> GuildRewards
         {
             get
             {
-                GuildRewardCollection o = GetObject<GuildRewardCollection>("data/guild/rewards");
+                GuildRewardsQuery q = new GuildRewardsQuery();
+                GuildRewardCollection o = GetObject<GuildRewardCollection>(q.ToString());
                 return o.Rewards;
             }
         }
@@ -240,11 +319,18 @@ namespace BattleNet.API.WoW
         {
             get
             {
-                GuildPerkCollection o = GetObject<GuildPerkCollection>("data/guild/perks");
+                GuildPerksQuery q = new GuildPerksQuery();
+                GuildPerkCollection o = GetObject<GuildPerkCollection>(q.ToString());
                 return o.Perks;
             }
         }
-        
+
+        #endregion
+
+        public List<Realm> RealmStatus()
+        {
+            return RealmStatus(new RealmQuery() { Locale = Locale });
+        }
         public List<Realm> RealmStatus(params string[] slugs)
         {
             return RealmStatus((IEnumerable<string>)slugs);
@@ -252,33 +338,21 @@ namespace BattleNet.API.WoW
 
         public List<Realm> RealmStatus(IEnumerable<string> slugs)
         {
-            string[] s = slugs.ToArray();
-            for (int i = 0; i < s.Length; i++)
-            {
-                s[i] = HttpUtility.UrlEncode(s[i]);
-            }            
-            RealmCollection rc = GetObject<RealmCollection>("realm/status?realms=" + string.Join(",",s) );
+            return RealmStatus(new RealmQuery()
+                {
+                    Realms = slugs,
+                    Locale = Locale
+                });   
+        }
+
+        public List<Realm> RealmStatus(RealmQuery query)
+        {
+                
+            RealmCollection rc = GetObject<RealmCollection>( query.ToString() );
 
             return rc.Realms;
         }
-        public Realm RealmStatus(string slug)
-        {
-            slug = HttpUtility.UrlEncode(slug);
-            RealmCollection rc = GetObject<RealmCollection>("realm/status?realms=" + slug);
-
-            if (rc.Status == Status.Ok)
-            {
-                if (rc.Realms.Count == 1)
-                    return rc.Realms[0];
-                else
-                {
-                    throw new RealmNotFoundException(slug + " not found");
-                }
-            }
-
-            throw new ResponseException(rc.Status, rc.Reason);
-        }
-
+        
         /// <summary>
         /// Get Character with basic fields
         /// </summary>
@@ -287,25 +361,30 @@ namespace BattleNet.API.WoW
         /// <returns></returns>
         public Character GetCharacter(string realm, string name)
         {
-            return GetCharacter(realm, name, Character.Fields.Basic);
+            return GetCharacter(realm, name, CharacterFields.Basic);
         }
 
         public Guild GetGuild(string realm, string name)
         {
-            return GetGuild(realm, name, Guild.Fields.Basic);
+            return GetGuild(realm, name, GuildFields.Basic);
         }
 
-        public Guild GetGuild(string realm, string name, Guild.Fields fields)
+        public Guild GetGuild(string realm, string name, GuildFields fields)
         {
-            List<string> args = new List<string>();
-            if ((fields & Guild.Fields.Achievements) == Guild.Fields.Achievements) args.Add("achievements");
-            if ((fields & Guild.Fields.Members) == Guild.Fields.Members) args.Add("members");
+            return GetGuild( new GuildQuery(){
+                Realm = realm,
+                Name = name,
+                Fields = fields,
+                Locale = Locale
+            });
+        }
 
-            string _f = string.Join(",", args.ToArray());
-
-            string url = "guild/" + realm + "/" + name;
-            if (_f != "") url += "?fields=" + _f;            
+        public Guild GetGuild(GuildQuery query)
+        {
+            string url = query.ToString();
+            
             Guild g = GetObject<Guild>(url);
+
             if (g.Status == Status.Ok)
             {
                 return g;
@@ -323,30 +402,23 @@ namespace BattleNet.API.WoW
         /// <param name="name"></param>
         /// <param name="fields"></param>
         /// <returns></returns>
-        public Character GetCharacter(string realm, string name, Character.Fields fields)
+        public Character GetCharacter(string realm, string name, CharacterFields fields)
         {
-            List<string> args = new List<string>();
-            if ((fields & Character.Fields.Achievements) == Character.Fields.Achievements) args.Add("achievements");
-            if ((fields & Character.Fields.Appearance) == Character.Fields.Appearance) args.Add("appearance");
-            if ((fields & Character.Fields.Companions) == Character.Fields.Companions) args.Add("companions");
-            if ((fields & Character.Fields.Items) == Character.Fields.Items) args.Add("items");
-            if ((fields & Character.Fields.Mounts) == Character.Fields.Mounts) args.Add("mounts");
-            if ((fields & Character.Fields.Pets) == Character.Fields.Pets) args.Add("pets");
-            if ((fields & Character.Fields.Professions) == Character.Fields.Professions) args.Add("professions");
-            if ((fields & Character.Fields.Progression) == Character.Fields.Progression) args.Add("Progression");
-            if ((fields & Character.Fields.Reputation) == Character.Fields.Reputation) args.Add("reputation");
-            if ((fields & Character.Fields.Stats) == Character.Fields.Stats) args.Add("stats");
-            if ((fields & Character.Fields.Talents) == Character.Fields.Talents) args.Add("talents");
-            if ((fields & Character.Fields.Titles) == Character.Fields.Titles) args.Add("titles");
-            if ((fields & Character.Fields.Guild) == Character.Fields.Guild) args.Add("guild");
+            return GetCharacter(new CharacterQuery
+            {
+                Realm = realm,
+                Name = name,
+                Fields = fields,
+                Locale = Locale,
+            });
+        }
 
-            string _f = string.Join(",", args.ToArray() );
-
-            string url = "character/" + realm + "/" + name;
-            if (_f != "") url += "?fields=" + _f;
+        public Character GetCharacter(CharacterQuery query)
+        {            
+            string url =  query.ToString();
 
             Character r = GetObject<Character>(url);
-            // ?fields=achievements
+            
             if (r!=null && r.Status == Status.Ok)
             {
                 return r;

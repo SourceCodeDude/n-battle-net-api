@@ -8,16 +8,6 @@ namespace BattleNet.API.WoW
 {
     public class Guild : ResponseRoot
     {
-        [Flags]
-        public enum Fields
-        {
-            Basic = 0,
-            Members,
-            Achievements,  
-          
-            All = Members | Achievements,
-        }
-
         #region Basic Fields
 
         [XmlElement("lastModified")]public UnixTimestamp LastModified { get; set; }

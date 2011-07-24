@@ -12,29 +12,7 @@ namespace BattleNet.API.WoW
          * talents, titles, collected mounts and companions, quests, profession recipes, Hunter pets, PvP information
          */
     public class Character : ResponseRoot
-    {
-        [Flags]
-        public enum Fields
-        {
-            Basic = 0,
-            Stats,
-            Talents,
-            Items,
-            Reputation,
-            Titles,
-            Professions,
-            Appearance,
-            Companions,
-            Mounts,
-            Pets,
-            Achievements,
-            Progression,
-            Guild,
-
-            All = Guild | Progression | Achievements | Pets | Mounts | Companions | 
-                  Appearance | Professions | Titles | Reputation | Items | Talents | Stats,
-        }
-
+    {        
         [XmlElement("lastModified")] public UnixTimestamp LastModified { get; set; }
         [XmlElement("name")]     public string Name { get; set; }
         [XmlElement("realm")]    public string Realm { get; set; }
@@ -398,16 +376,30 @@ Roster = members
 
     public class ItemToolTip
     {
-        public int gem0 { get; set; }
-        public int gem1 { get; set; }
-        public int gem2 { get; set; }
-        public int gem3 { get; set; }
-        public bool extraSocket { get; set; }
-        public int enchant { get; set; }
-        public int reforge { get; set; }
+        [XmlElement("gem0")]
+        public int Gem0 { get; set; }
+        [XmlElement("gem1")]
+        public int Gem1 { get; set; }
+        [XmlElement("gem2")]
+        public int Gem2 { get; set; }
+        [XmlElement("gem3")]
+        public int Gem3 { get; set; }
+        [XmlElement("extraSocket")]
+        public bool ExtraSocket { get; set; }
+        [XmlElement("enchant")]
+        public int Enchant { get; set; }
+        [XmlElement("reforge")]
+        public int Reforge { get; set; }
         [XmlArray("set")]
         [XmlArrayItem("item")]
-        public List<int> set { get; set; }
+        public List<int> Set { get; set; }
+        
+        /// <summary>        
+        /// if an item has been 'tinkered' by an engineering they have this.
+        /// This is the spell id of the effect..
+        /// </summary>
+        [XmlElement("tinker")]
+        public int Tinker { get; set; }
     }
 
 }

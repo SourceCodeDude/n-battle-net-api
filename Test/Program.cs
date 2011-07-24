@@ -26,11 +26,6 @@ namespace Test
         [STAThread]
         static void Main(string[] args)
         {
-            
-
-            BattleNetClient c = new BattleNetClient(Region.US);
-            object p = c.Classes;
-            //c.GetCharacter("realm", "name", Character.Fields.Items);
 
             string[] my_args = { Assembly.GetExecutingAssembly().Location };
 

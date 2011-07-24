@@ -50,25 +50,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Achievements.cs" />
+    <Compile Include="WoW\Achievements.cs" />
+    <Compile Include="WoW\AuctionResponse.cs" />
+    <Compile Include="WoW\DataQueryClasses.cs" />
     <Compile Include="BattleNetClient.cs" />
     <Compile Include="Cache.cs" />
-    <Compile Include="Character.cs" />
-    <Compile Include="Class.cs" />
+    <Compile Include="WoW\Character.cs" />
+    <Compile Include="WoW\CharacterQuery.cs" />
+    <Compile Include="WoW\Class.cs" />
     <Compile Include="Converter\WoWApiConverter.cs" />
     <Compile Include="FailoverCache.cs" />
-    <Compile Include="Guild.cs" />
-    <Compile Include="GuildPerk.cs" />
-    <Compile Include="GuildReward.cs" />
+    <Compile Include="WoW\Guild.cs" />
+    <Compile Include="WoW\GuildPerk.cs" />
+    <Compile Include="WoW\GuildQuery.cs" />
+    <Compile Include="WoW\GuildReward.cs" />
     <Compile Include="HelperClasses.cs" />
-    <Compile Include="Item.cs" />
+    <Compile Include="WoW\Item.cs" />
     <Compile Include="JsonParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Race.cs" />
-    <Compile Include="Realm.cs" />
+    <Compile Include="QueryBase.cs" />
+    <Compile Include="WoW\Race.cs" />
+    <Compile Include="WoW\Realm.cs" />
     <Compile Include="Exceptions.cs" />
+    <Compile Include="WoW\RealmQuery.cs" />
     <Compile Include="ResponseRoot.cs" />
-    <Compile Include="Spell.cs" />
+    <Compile Include="WoW\Spell.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

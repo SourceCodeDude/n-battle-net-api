@@ -4,9 +4,37 @@ using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 
+using System.ComponentModel;
+
 namespace BattleNet.API
 {
+    class StatusTypeConverter : TypeConverter
+    {
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        {
+            if (sourceType == typeof(string))
+                return true;
+            else
+                return base.CanConvertFrom(context, sourceType);
+        }
+        public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
+        {
+            string s = Translate(value as string);
+            return Enum.Parse(typeof(Status), s);
+        }
 
+
+        string Translate(string k)
+        {
+            switch (k)
+            {
+                case "nok": return "NotOk";
+                default: return k;
+            }
+        }
+    }
+
+    [TypeConverter(typeof(StatusTypeConverter))]
     public enum Status
     {
         Ok,

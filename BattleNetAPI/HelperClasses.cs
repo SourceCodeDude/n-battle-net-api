@@ -80,6 +80,11 @@ namespace BattleNet.API
         }
 
         #endregion
+
+        public override string ToString()
+        {
+            return time.ToString();
+        }
     }
 
     class ToHex

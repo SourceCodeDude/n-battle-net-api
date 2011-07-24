@@ -229,7 +229,11 @@ namespace BattleNet.API.WoW
                 HttpWebResponse h = ex.Response as HttpWebResponse;
                 if (h.StatusCode != HttpStatusCode.NotModified)
                 {
-                    throw ex;
+                    //throw ex;
+                    string txt = new StreamReader( h.GetResponseStream() ).ReadToEnd();
+                    ResponseRoot r = JsonParser.Parse<ResponseRoot>(txt);
+                    throw new ResponseException(r.Status, r.Reason);
+
                 }
                 //Console.WriteLine("HIT");                
             }
@@ -425,7 +429,7 @@ namespace BattleNet.API.WoW
             }
             else
             {
-                throw new ResponseException(Status.NotOk, "");//r.Status, r.Reason);               
+                throw new ResponseException(r.Status, r.Reason);               
             }
         }
 
@@ -453,7 +457,7 @@ namespace BattleNet.API.WoW
             byte[] hash = hmac.ComputeHash(buffer);
             string sig = Convert.ToBase64String(hash);
 
-            string auth = "BNET " + "publickey" + ":" + sig;
+            string auth = "BNET " +  PublicKey + ":" + sig;
 
             req.Headers["Authorization"] = auth;
             Console.WriteLine(req.Headers);

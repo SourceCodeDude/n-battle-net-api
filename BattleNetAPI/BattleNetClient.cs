@@ -13,6 +13,7 @@ using System.Net.Cache;
 
 using System.Drawing;
 using System.Security.Cryptography;
+using System.Reflection;
 
 namespace BattleNet.API.WoW
 {
@@ -344,7 +345,7 @@ namespace BattleNet.API.WoW
         {
             return RealmStatus(new RealmQuery()
                 {
-                    Realms = slugs,
+                    Realms = new List<string>(slugs),
                     Locale = Locale
                 });   
         }
@@ -439,15 +440,26 @@ namespace BattleNet.API.WoW
             // no key set, so dont even try
             if (privateKey == null) return;
 
-            // BOOO!!! http://stackoverflow.com/questions/1140553/asp-net-httpwebrequest-date-header-workaround
-            // apparently HttpWebRequest will NEVER send the DATE header
-            // MS only fixed this in .NET 4.0, so thats what we have to use..
-            req.Date = DateTime.Now;
-            // this is the only reason for 4.0
+            // use the same date through out
+            DateTime date = DateTime.Now.ToUniversalTime();
 
-            string date = req.Date.ToUniversalTime().ToString("r");
+            //  To make this v2.0 to v3.5 friendly we have to use a little reflection
+            // to set the "Date" header.  v4.0 gives us the Date property to do it.
+            //            
+
+            // use the Protected method to set the value
+            Type type = req.Headers.GetType();
+            BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
+            MethodInfo method = type.GetMethod("AddWithoutValidate", flags);
+            method.Invoke(req.Headers, new[] { "Date", date.ToString("r") });
+
+            // this is .net v4.0 only
+            //req.Date = DateTime.Now;
+            
+
+            string dateStr = date.ToString("r");
             string stringToSign = req.Method + "\n" +
-                date + "\n" +
+                dateStr + "\n" +
                 req.RequestUri.PathAndQuery+"\n";
                       
 
@@ -459,8 +471,7 @@ namespace BattleNet.API.WoW
 
             string auth = "BNET " +  PublicKey + ":" + sig;
 
-            req.Headers["Authorization"] = auth;
-            Console.WriteLine(req.Headers);
+            req.Headers["Authorization"] = auth;            
         }
     }
 

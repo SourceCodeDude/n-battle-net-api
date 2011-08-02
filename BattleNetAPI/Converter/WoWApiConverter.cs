@@ -12,8 +12,11 @@ namespace BattleNet.API.Converter
 
     public class WowAPIConverter : JavaScriptConverter
     {
+        static MethodInfo method = typeof(JavaScriptSerializer).GetMethod("ConvertToType");
         public override object Deserialize(IDictionary<string, object> dictionary, Type type, JavaScriptSerializer serializer)
         {
+            
+
             object obj = Activator.CreateInstance(type);
             foreach (KeyValuePair<string, object> kvp in dictionary)
             {
@@ -26,14 +29,18 @@ namespace BattleNet.API.Converter
                     {
                         case MemberTypes.Property:
                             PropertyInfo pi = mi[0] as PropertyInfo;
-                            
-                            v = serializer.ConvertToType(kvp.Value, pi.PropertyType);
+                            //TODO: May want to Cache these for performance..  adds ~200ms onto tests
+                            v = method.MakeGenericMethod(pi.PropertyType).Invoke(serializer, new object[]{kvp.Value} );
+                            // 4.0 only :-/
+                            //v = serializer.ConvertToType(kvp.Value , pi.PropertyType);
                             pi.SetValue(obj, v, null);
                             break;
                         case MemberTypes.Field:
                             FieldInfo fi = mi[0] as FieldInfo;
-                            // TODO: finsih
-                            v = serializer.ConvertToType(kvp.Value, fi.FieldType);
+                            //TODO: May want to Cache these for performance
+                            v = method.MakeGenericMethod(fi.FieldType).Invoke(serializer, new object[] { kvp.Value });
+                            // 4.0 only :-/
+                            //v = serializer.ConvertToType(kvp.Value, fi.FieldType);
                             fi.SetValue(obj, v);
                             break;
                         default:

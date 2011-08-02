@@ -7,7 +7,7 @@ namespace BattleNet.API.WoW
 {
     public class RealmQuery : QueryBase
     {
-        public IEnumerable<string> Realms { get; set; }
+        public List<string> Realms { get; set; }
 
         public override string ToString()
         {
@@ -18,7 +18,7 @@ namespace BattleNet.API.WoW
         {
             if (Realms!=null)
             {
-                query.Add("realms", string.Join(",", Realms));
+                query.Add("realms", string.Join(",", Realms.ToArray() ));
             }
             base.BuildQuery(query);
         }

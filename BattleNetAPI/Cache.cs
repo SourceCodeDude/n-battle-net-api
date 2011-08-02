@@ -76,15 +76,33 @@ namespace BattleNet.API
                 }
                 using (Stream st = File.Open(cachePath + "/cache.index", FileMode.OpenOrCreate))
                 {
-                    while (st.Position != st.Length)
+                    BinaryReader r = new BinaryReader(st);                    
+                    int version = r.ReadInt32();
+                    switch(version)
                     {
-                        CacheItem c = CacheItem.Create(st, this);                        
-                        cache.Add(c.Key, c);
+                        case 0x00000100:
+                            ParseV100(st);
+                            break;
+                        default:
+                            // unknown cache version.. 3
+                            // so clear the directoy of cached files
+                            st.Close();
+                            Directory.Delete(cachePath, true);
+                            Directory.CreateDirectory(cachePath);
+                            break;
                     }
                 }                
             }
         }
 
+        private void ParseV100(Stream st)
+        {
+            while (st.Position != st.Length)
+            {
+                CacheItem c = CacheItem.Create(st, this);
+                cache.Add(c.Key, c);
+            }
+        }
         public void Flush()
         {
             // flush cache to disk
@@ -92,6 +110,8 @@ namespace BattleNet.API
             {                
                 using (Stream st = File.Open(cachePath + "/cache.index", FileMode.Create))
                 {
+                    BinaryWriter w = new BinaryWriter(st);
+                    w.Write( (int) 0x100);
                     foreach (CacheItem ci in cache.Values)
                     {
                         ci.Write(st);                        

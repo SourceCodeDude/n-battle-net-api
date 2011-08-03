@@ -49,10 +49,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -71,6 +67,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BattleNet.API.Json\BattleNet.API.Json.csproj">
+      <Project>{4E710B3F-744E-48DF-A0BE-F5936A6CE236}</Project>
+      <Name>BattleNet.API.Json</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BattleNetAPI\BattleNetApi.csproj">
       <Project>{E4697D43-4D45-40A5-9C6B-9EFB84C2CFDF}</Project>
       <Name>BattleNetApi</Name>

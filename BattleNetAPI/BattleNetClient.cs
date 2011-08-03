@@ -48,15 +48,11 @@ namespace BattleNet.API.WoW
         {
             get
             {
-                return ToHex.ToHexString(privateKey);                
+                return Encoding.UTF8.GetString(privateKey);                
             }
             set
-            {
-                int NumberChars = value.Length;
-                byte[] bytes = new byte[NumberChars / 2];
-                for (int i = 0; i < NumberChars; i += 2)
-                    bytes[i / 2] = Convert.ToByte(value.Substring(i, 2), 16);
-                privateKey = bytes;
+            {                
+                privateKey = Encoding.UTF8.GetBytes(value);
             }
         }
         public string PublicKey { get; set; }
@@ -169,7 +165,7 @@ namespace BattleNet.API.WoW
             return img;
         }
 
-        private Stream GetUrl(string url, Cache cache)
+        public Stream GetUrl(string url, Cache cache)
         {
             return GetUrl(new Uri(baseUri, url), cache);
         }
@@ -249,7 +245,7 @@ namespace BattleNet.API.WoW
             }
         }
 
-        private T GetObject<T>(string url)
+        internal T GetObject<T>(string url)
         {
             Stream st = GetUrl(url, dataCache);
             string json = new StreamReader(st).ReadToEnd();
@@ -269,7 +265,11 @@ namespace BattleNet.API.WoW
         
         public IList<AuctionFile> GetAuctions(string realm)
         {
-            AuctionResponse resp = GetObject<AuctionResponse>("auction/data/" + HttpUtility.UrlPathEncode(realm));            
+            AuctionResponse resp = GetObject<AuctionResponse>("auction/data/" + HttpUtility.UrlPathEncode(realm));
+            foreach (AuctionFile f in resp.Files)
+            {
+                f.Client = this;
+            }
             return resp.Files;
         }
 
@@ -460,9 +460,8 @@ namespace BattleNet.API.WoW
             string dateStr = date.ToString("r");
             string stringToSign = req.Method + "\n" +
                 dateStr + "\n" +
-                req.RequestUri.PathAndQuery+"\n";
-                      
-
+                req.RequestUri.LocalPath+"\n";
+            
             byte[] key= new byte[32];
             byte[] buffer = Encoding.UTF8.GetBytes(stringToSign);
             HMACSHA1 hmac = new HMACSHA1(privateKey);

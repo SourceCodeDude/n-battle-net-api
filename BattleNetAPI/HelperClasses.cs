@@ -8,6 +8,28 @@ using System.ComponentModel;
 using System.Diagnostics;
 namespace BattleNet.API
 {
+    public class HttpUtility
+    {
+        public static string UrlPathEncode(string path)
+        {
+            byte[] bytes = Encoding.UTF8.GetBytes(path);
+            // encode anything between 0x20 and 0x7f        
+            StringBuilder b = new StringBuilder();
+            foreach (byte c in bytes)
+            {
+                if (c <= 0x20 || c > 0x7f)
+                {
+                    b.AppendFormat("%{0:x2}", c);
+                }
+                else
+                {
+                    b.Append((char)c);
+                }
+            }
+
+            return b.ToString();
+        }
+    }
     class UnixTimestampClassConverter : TypeConverter
     {
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)

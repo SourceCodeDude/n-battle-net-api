@@ -19,8 +19,11 @@ namespace BattleNet.API.WoW
 
     public class AuctionFile
     {
+        [XmlIgnore]
+        public BattleNetClient Client { set; protected get; }
+
         [XmlElement("url")]
-        public Uri Url { get; set; }
+        public string Url { get; set; }
 
         [XmlElement("lastModified")]
         public UnixTimestamp LastModified { get; set; }
@@ -41,13 +44,16 @@ namespace BattleNet.API.WoW
 
         protected void LoadData()
         {
+            data = Client.GetObject<AuctionData>(this.Url);
+            /*
             WebRequest req = WebRequest.Create(this.Url);
             WebResponse res = req.GetResponse();
 
             // the file is json.gz  so lets decompress it first
-            using (GZipStream gzip = new GZipStream(res.GetResponseStream(), CompressionMode.Decompress))
+            //  new GZipStream(res.GetResponseStream(), CompressionMode.Decompress)
+            using (Stream st = res.GetResponseStream() )
             {
-                using (TextReader r = new StreamReader(gzip))
+                using (TextReader r = new StreamReader(st))
                 {
                     // sure to be a big string.. so clean it up
                     // as fast as possible
@@ -56,20 +62,23 @@ namespace BattleNet.API.WoW
                     txt = null;                    
                 }
             }
+             */
         }
     }
 
     
     public class AuctionData
     {
+        [XmlElement("realm")]
+        public Realm Realm { get; set; }
         [XmlElement("horde")]
         public AuctionCollection Horde { get; set; }
 
         [XmlElement("neutral")]
         public AuctionCollection Neutral { get; set; }
 
-        [XmlElement("aliance")]
-        public AuctionCollection Aliance { get; set; }
+        [XmlElement("alliance")]
+        public AuctionCollection Alliance { get; set; }
     }
 
     public class AuctionCollection

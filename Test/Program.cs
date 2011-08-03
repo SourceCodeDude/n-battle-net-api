@@ -14,8 +14,6 @@ using System.Collections.ObjectModel;
 using System.Reflection;
 using NUnit.Framework;
 
-using System.Web.Script.Serialization;
-
 using BattleNet.API;
 
 namespace Test

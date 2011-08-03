@@ -24,6 +24,19 @@ namespace Test
             client.UseCache = false;
             client.ParseError += new ParseErrorDelegate(client_ParseError);
         }
+
+        /*
+        [Test]
+        public void TestAuthentication()
+        {
+            client.PublicKey = "123PUBLIC456";
+            client.PrivateKey = "987PRIVATE65";
+            Stream st = client.GetUrl("http://everynothing.net/bnetauthtest.php?test=1", null);
+            TextReader r = new StreamReader(st);
+            string txt = r.ReadToEnd();
+        }
+        */
+
         [Test]
         public void CharacterTest()
         {            
@@ -48,9 +61,25 @@ namespace Test
             Assert.NotNull(r);
         }
 
+        [Test]
+        public void AuctionTest()
+        {            
+            // high population server should always have autions
+            IList<AuctionFile> auctions = client.GetAuctions("Magtheridon");
+            foreach (AuctionFile a in auctions)
+            {
+                AuctionData d = a.Data;
+                Assert.NotNull(d.Realm);
+                Assert.NotNull(d.Alliance);
+                Assert.NotNull(d.Horde);
+                Assert.NotNull(d.Neutral);
+            }            
+        }
         void client_ParseError(string message)
         {
             Assert.Fail(message);            
         }
+
+
     }
 }

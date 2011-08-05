@@ -7,11 +7,12 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Runtime.Serialization.Json;
-using System.Web;
 using System.Net;
-using System.Net.Cache;
 
+#if SILVERLIGHT
+#else
 using System.Drawing;
+#endif
 using System.Security.Cryptography;
 using System.Reflection;
 
@@ -48,7 +49,7 @@ namespace BattleNet.API.WoW
         {
             get
             {
-                return Encoding.UTF8.GetString(privateKey);                
+                return Encoding.UTF8.GetString(privateKey,0, privateKey.Length);                
             }
             set
             {                
@@ -132,11 +133,40 @@ namespace BattleNet.API.WoW
 
         #endregion
 
+#if SILVERLIGHT
+
+        public System.Windows.Media.Imaging.BitmapImage GetThumbnail(string path)
+        {
+            Uri fullPath = new Uri(thumbnailUri, path);
+            // TODO: allow for caching
+            return new System.Windows.Media.Imaging.BitmapImage(fullPath);
+        }
+
+        /// <summary>
+        /// Download the icon for a item
+        /// </summary>
+        /// <param name="path">path to icon, ie inv_misc_necklacea9.jpg</param>
+        /// <param name="large">true of a 56x56 and false for 18x18</param>
+        /// <returns></returns>
+        public System.Windows.Media.Imaging.BitmapImage GetIcon(string path, bool large = true)
+        {
+            string size = large ? "56/" : "18/";
+
+            Uri fullPath = new Uri(iconUri, size + path);
+            // TODO: allow for caching
+            return new System.Windows.Media.Imaging.BitmapImage(fullPath);
+            // baseUri + "static-render/us"
+            //Stream st = GetUrl(fullPath, iconCache);
+            //Image img = new Bitmap(st);
+            //return img;
+        }
+#else
         /// <summary>
         /// Retrieve a thumbnail image for an avatar
         /// </summary>
         /// <param name="path">thumbnail path in a Character object</param>
         /// <returns></returns>
+        /// 
         public Image GetThumbnail(string path)
         {
             // "http://us.battle.net/static-render/us/" + "medivh/66/3930434-avatar.jpg"
@@ -153,7 +183,7 @@ namespace BattleNet.API.WoW
         /// <param name="path">path to icon, ie inv_misc_necklacea9.jpg</param>
         /// <param name="large">true of a 56x56 and false for 18x18</param>
         /// <returns></returns>
-        public Image GetIcon(string path, bool large=true)
+        public Image GetIcon(string path, bool large = true)
         {
             string size = large ? "56/" : "18/";
 
@@ -161,9 +191,10 @@ namespace BattleNet.API.WoW
             // baseUri + "static-render/us"
             Stream st = GetUrl(fullPath, iconCache);
 
-            Image img = new Bitmap(st);            
+            Image img = new Bitmap(st);
             return img;
         }
+#endif
 
         public Stream GetUrl(string url, Cache cache)
         {
@@ -184,7 +215,11 @@ namespace BattleNet.API.WoW
             // if-modified-since
             if (ci != null)
             {
+#if SILVERLIGHT
+                // silverlight doesnt support this
+#else
                 req.IfModifiedSince = ci.LastUpdated;
+#endif
             }
             
             // do any authentication
@@ -198,7 +233,8 @@ namespace BattleNet.API.WoW
                 // item or not
                 if (ci == null || ci.Expire < DateTime.UtcNow)
                 {
-                    res = req.GetResponse();
+                    IAsyncResult ia = req.BeginGetResponse(null, null);
+                    res = req.EndGetResponse(ia);
                     if (UseCache)
                     {
                         ci = cache.Insert(key, res.GetResponseStream());
@@ -460,7 +496,7 @@ namespace BattleNet.API.WoW
             string dateStr = date.ToString("r");
             string stringToSign = req.Method + "\n" +
                 dateStr + "\n" +
-                req.RequestUri.LocalPath+"\n";
+                HttpUtility.UrlPathEncode(req.RequestUri.LocalPath) +"\n";
             
             byte[] key= new byte[32];
             byte[] buffer = Encoding.UTF8.GetBytes(stringToSign);

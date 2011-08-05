@@ -46,14 +46,14 @@ namespace BattleNet.API.WoW
     {
         [XmlElement("character")]
         [DataMember(Name = "character")]
-        public Character Characater { get; set; }
+        public Character Character { get; set; }
         [XmlElement("rank")]
         [DataMember(Name = "rank")]
         public int Rank { get; set; }
 
         public override string ToString()
         {
-            return "{" + this.Characater.Name + " " + Rank + "}";
+            return "{" + this.Character.Name + " " + Rank + "}";
         }
     }
 

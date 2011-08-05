@@ -60,12 +60,11 @@ namespace BattleNet.API
 
         public UnixTimestamp()
         {
-            time = DateTime.MinValue;
+            time = DateTimeOffset.MinValue;
         }
 
         public UnixTimestamp(long msec)
-        {
-            time = DateTime.MinValue;
+        {            
             FromMsec(msec);
         }
 

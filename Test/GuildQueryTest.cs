@@ -40,8 +40,10 @@ namespace Test
 
             string txt = q.ToString();
 
+            string encoded = System.Web.HttpUtility.UrlPathEncode("Coådina");
+
             // test for UTF8 escaping
-            Assert.AreEqual("guild/Realm/Co%c3%a5dina?", txt);
+            Assert.AreEqual("guild/Realm/Co%C3%A5dina?", txt);
         }
     }
 }

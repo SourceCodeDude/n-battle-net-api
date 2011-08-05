@@ -20,7 +20,7 @@ namespace BattleNet.API
             {
                 if (c <= 0x20 || c > 0x7f)
                 {
-                    b.AppendFormat("%{0:x2}", c);
+                    b.AppendFormat("%{0:X2}", c);
                 }
                 else
                 {

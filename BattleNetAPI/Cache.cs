@@ -73,24 +73,36 @@ namespace BattleNet.API
                 {
                     Directory.CreateDirectory(cachePath);
                 }
-                using (Stream st = File.Open(cachePath + "/cache.index", FileMode.OpenOrCreate))
+                try
                 {
-                    BinaryReader r = new BinaryReader(st);                    
-                    int version = r.ReadInt32();
-                    switch(version)
+                    using (Stream st = File.Open(cachePath + "/cache.index", FileMode.OpenOrCreate))
                     {
-                        case 0x00000100:
-                            ParseV100(st);
-                            break;
-                        default:
-                            // unknown cache version.. 3
-                            // so clear the directoy of cached files
-                            st.Close();
-                            Directory.Delete(cachePath, true);
-                            Directory.CreateDirectory(cachePath);
-                            break;
+                        // new and empty file
+                        if (st.Length == 0) return;
+
+                        BinaryReader r = new BinaryReader(st);
+                        int version = r.ReadInt32();
+                        switch (version)
+                        {
+                            case 0x00000100:
+                                ParseV100(st);
+                                break;
+                            default:
+                                // unknown cache version.. 3
+                                // so clear the directoy of cached files
+                                st.Close();
+                                Directory.Delete(cachePath, true);
+                                Directory.CreateDirectory(cachePath);
+                                break;
+                        }
                     }
-                }                
+                }
+                catch (Exception)
+                {
+                    // some problem reading the cache.. so we'll clear it
+                    cache.Clear();
+                    // TODO: remove all old files also
+                }
             }
         }
 

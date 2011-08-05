@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Web;
 
 namespace BattleNet.API.WoW
 {
@@ -29,7 +28,7 @@ namespace BattleNet.API.WoW
             return "guild/" + Encode(Realm) + "/" + Encode(Name) + "?" + base.ToString();
         }
 
-        override protected void BuildQuery(System.Collections.Specialized.NameValueCollection query)
+        override protected void BuildQuery(IDictionary<string,string> query)
         {
             List<string> args = new List<string>();
             if ((Fields & GuildFields.Achievements) == GuildFields.Achievements) args.Add("achievements");

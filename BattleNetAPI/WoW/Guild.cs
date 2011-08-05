@@ -4,8 +4,11 @@ using System.Linq;
 using System.Text;
 
 using System.Xml.Serialization;
+using System.Runtime.Serialization;
 namespace BattleNet.API.WoW
 {
+
+    [DataContract]
     public class Guild : ResponseRoot
     {
         #region Basic Fields
@@ -30,6 +33,7 @@ namespace BattleNet.API.WoW
 
         [XmlArray("members", IsNullable=true)]
         [XmlArrayItem("item")]
+        [DataMember(Name="members")]
         public List<Member> Members { get; set; }
 
         [XmlElement("achievements", IsNullable = true)] public Achievements Achievements { get; set; }
@@ -37,10 +41,20 @@ namespace BattleNet.API.WoW
         #endregion
     }
 
+    [DataContract]
     public class Member
     {
-        [XmlElement("character")]   public Character Charcater { get; set; }
-        [XmlElement("rank")]        public int Rank { get; set; }
+        [XmlElement("character")]
+        [DataMember(Name = "character")]
+        public Character Charcater { get; set; }
+        [XmlElement("rank")]
+        [DataMember(Name = "rank")]
+        public int Rank { get; set; }
+
+        public override string ToString()
+        {
+            return "{" + this.Charcater.Name + " " + Rank + "}";
+        }
     }
 
 }

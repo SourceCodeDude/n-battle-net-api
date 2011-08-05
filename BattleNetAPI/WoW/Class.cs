@@ -19,7 +19,7 @@ namespace BattleNet.API.WoW
         public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
         {
             string s = Translate(value as string);            
-            return Enum.Parse(typeof(PowerType), s);
+            return Enum.Parse(typeof(PowerType), s, true);
         }
 
 

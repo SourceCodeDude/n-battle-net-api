@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Web;
 
 namespace BattleNet.API
 {
@@ -16,15 +15,15 @@ namespace BattleNet.API
 
         override public String ToString()
         {
-            System.Collections.Specialized.NameValueCollection q = new System.Collections.Specialized.NameValueCollection();
+            IDictionary<string, string> q = new Dictionary<string, string>();
             BuildQuery(q);
 
             StringBuilder sb = new StringBuilder();
 
-            for (int i = 0; i < q.Count;i++ )
+            foreach(KeyValuePair<string,string> kvp in q)            
             {
-                string key = q.GetKey(i);
-                string value = q[i];
+                string key = kvp.Key;
+                string value = kvp.Value;
                 if (value == "") continue;                
                 sb.AppendFormat("{0}={1}&",
                     Encode(key),
@@ -38,7 +37,7 @@ namespace BattleNet.API
         {
             return HttpUtility.UrlPathEncode(s);
         }
-        protected virtual void BuildQuery(System.Collections.Specialized.NameValueCollection query)
+        protected virtual void BuildQuery(IDictionary<string, string> query)
         {
             if (Locale != null)
             {

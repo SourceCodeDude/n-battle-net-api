@@ -50,7 +50,7 @@ namespace Test
         public void GuildTest()
         {                                    
             Guild g = client.GetGuild("burning-blade", "rival city", GuildFields.All);
-            Assert.NotNull(g);
+            Assert.NotNull(g);            
         }
 
         [Test]

@@ -14,7 +14,7 @@ namespace BattleNet.API.WoW
             return "realm/status?" + base.ToString();
         }
 
-        protected override void BuildQuery(System.Collections.Specialized.NameValueCollection query)
+        protected override void BuildQuery(IDictionary<string,string> query)
         {
             if (Realms!=null)
             {

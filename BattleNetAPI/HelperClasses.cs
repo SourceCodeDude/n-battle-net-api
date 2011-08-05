@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using System.Xml.Serialization;
+using System.Runtime.Serialization;
 using System.ComponentModel;
 using System.Diagnostics;
 namespace BattleNet.API
@@ -30,6 +31,8 @@ namespace BattleNet.API
             return b.ToString();
         }
     }
+
+    
     class UnixTimestampClassConverter : TypeConverter
     {
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
@@ -46,8 +49,7 @@ namespace BattleNet.API
         }
 
     }
-
-    [Serializable]
+    
     [TypeConverter(typeof(UnixTimestampClassConverter))]
     public class UnixTimestamp : IXmlSerializable
     {
@@ -84,6 +86,10 @@ namespace BattleNet.API
         }
         #region IXmlSerializable Members
 
+        public long ToMsec()
+        {
+            return (long)(time - origin).TotalMilliseconds;
+        }
         public System.Xml.Schema.XmlSchema GetSchema()
         {
             // there is no schema.. yet
@@ -107,6 +113,7 @@ namespace BattleNet.API
         {
             return time.ToString();
         }
+
     }
 
     class ToHex

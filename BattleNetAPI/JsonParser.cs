@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
+using System.Runtime.Serialization.Json;
 using System.Xml;
 using System.Xml.Serialization;
-using System.Runtime.Serialization.Json;
 
+using System.IO;
 using BattleNet.API.WoW;
 using System.Reflection;
 namespace BattleNet.API
@@ -28,10 +28,16 @@ namespace BattleNet.API
         public T Deserialize<T>(string json)
         {
             Type t = typeof(T);
-            byte[] b = ASCIIEncoding.ASCII.GetBytes(json);
+            byte[] b = System.Text.UTF8Encoding.UTF8.GetBytes(json);
+            /*
+            System.Runtime.Serialization.Json.DataContractJsonSerializer s = new DataContractJsonSerializer(t);
+            T ret = (T)s.ReadObject(new MemoryStream(b));
+            return ret;
+            */
             XmlReader rd = JsonReaderWriterFactory.CreateJsonReader(b, new XmlDictionaryReaderQuotas());
             XmlSerializer s = new XmlSerializer(t, new XmlRootAttribute("root"));
             return (T)s.Deserialize(rd);
+            
         }
 
         #endregion
@@ -49,7 +55,7 @@ namespace BattleNet.API
         /// <summary>
         /// Parse as json, or convert to XML first.  Using Json is faster.  XML is tolerant to errors, but slow
         /// </summary>
-        static bool UseJson
+        static public bool UseJson
         {
             get { return useJson;  }
             set

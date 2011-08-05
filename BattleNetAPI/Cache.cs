@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
 using System.Runtime.Serialization;
 
@@ -163,8 +162,8 @@ namespace BattleNet.API
     /// </summary>    
     public class CacheItem 
     {
-        
-        static SHA1 hashAlgo = new SHA1CryptoServiceProvider();
+
+        static SHA1 hashAlgo = new SHA1Managed();
 
         private string key;
         
@@ -177,13 +176,13 @@ namespace BattleNet.API
             BinaryReader r = new BinaryReader(st);
             {
                 string key = r.ReadString();
-                DateTime abs = DateTime.FromBinary(r.ReadInt64());
+                DateTime abs = new DateTime(r.ReadInt64(), DateTimeKind.Utc);
                 TimeSpan idle = TimeSpan.FromTicks(r.ReadInt64());                
                 CacheItem ci = new CacheItem(c, key, abs, idle);
 
-                ci.LastAccessed = DateTime.FromBinary(r.ReadInt64());
-                ci.LastUpdated = DateTime.FromBinary(r.ReadInt64());
-                ci.Created = DateTime.FromBinary(r.ReadInt64());
+                ci.LastAccessed = new DateTime(r.ReadInt64(), DateTimeKind.Utc);
+                ci.LastUpdated = new DateTime(r.ReadInt64(), DateTimeKind.Utc);
+                ci.Created = new DateTime(r.ReadInt64(), DateTimeKind.Utc);
                 return ci;
             }
         }
@@ -192,11 +191,11 @@ namespace BattleNet.API
             BinaryWriter w = new BinaryWriter(st);
             {
                 w.Write(this.key);
-                w.Write( Expire.ToBinary() );
+                w.Write( Expire.ToUniversalTime().Ticks );
                 w.Write( IdleTime.Ticks );
-                w.Write( LastAccessed.ToBinary() );
-                w.Write( LastUpdated.ToBinary());
-                w.Write( Created.ToBinary() );
+                w.Write( LastAccessed.ToUniversalTime().Ticks );
+                w.Write( LastUpdated.ToUniversalTime().Ticks);
+                w.Write( Created.ToUniversalTime().Ticks );
             }
         }
         private CacheItem(Cache c, string key, DateTime abs, TimeSpan idle)
@@ -245,7 +244,7 @@ namespace BattleNet.API
             {
                 key = value;
                 // file name to store
-                hashedFileName = ToHex.ToHexString(hashAlgo.ComputeHash(Encoding.ASCII.GetBytes(key)));
+                hashedFileName = ToHex.ToHexString(hashAlgo.ComputeHash(Encoding.UTF8.GetBytes(key)));
             }
         }
         /// <summary>

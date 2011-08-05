@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml.Serialization;
 
 using System.ComponentModel;
+using System.Runtime.Serialization;
 
 namespace BattleNet.API
 {
@@ -20,7 +21,7 @@ namespace BattleNet.API
         public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
         {
             string s = Translate(value as string);
-            return Enum.Parse(typeof(Status), s);
+            return Enum.Parse(typeof(Status), s, true);
         }
 
 
@@ -46,6 +47,7 @@ namespace BattleNet.API
     /// Base class for a response
     /// </summary>
     [XmlRoot("root")]
+    [DataContract]
     public class ResponseRoot
     {
         [XmlElement("status")]

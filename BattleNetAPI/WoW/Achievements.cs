@@ -2,21 +2,41 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Runtime.Serialization;
 using System.Xml.Serialization;
+
 namespace BattleNet.API.WoW
 {
     // TODO: need to rename this. Shouldnt be any
     // pluralized class names
+    [DataContract]
     public class Achievements
     {
         [XmlArray("achievementsCompleted")]
         [XmlArrayItem("item")]
+        [DataMember(Name="achievementsCompleted")]
         public List<int> achievementsCompleted { get; set; }
 
         [XmlArray("achievementsCompletedTimestamp")]
-        [XmlArrayItem("item")]
-        public List<UnixTimestamp> achievementsCompletedTimestamp { get; set; }
+        [XmlArrayItem("item")]        
+        public List<UnixTimestamp> AchievementsCompletedTimestamp { get; set; }
+        
+        [DataMember(Name = "achievementsCompletedTimestamp")]
+        internal List<long> achievementsCompletedTimestamp
+        {
+            get
+            {
+                return null;
+            }
+            set
+            {
+                AchievementsCompletedTimestamp = new List<UnixTimestamp>();
+                foreach (long l in value)
+                {
+                    AchievementsCompletedTimestamp.Add(new UnixTimestamp(l));
+                }
+            }
+        }
 
         [XmlArray("criteria")]
         [XmlArrayItem("item")]

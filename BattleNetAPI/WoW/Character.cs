@@ -4,80 +4,128 @@ using System.Linq;
 using System.Text;
 
 using System.Xml.Serialization;
+using System.Runtime.Serialization;
 namespace BattleNet.API.WoW
 {
     /*
-         Basic information: name, level, class, race, gender, faction, guild, achievement points
-        Optional fields: equipped items, stats, reputation, primary and secondary skills, achievements/statistics,
-         * talents, titles, collected mounts and companions, quests, profession recipes, Hunter pets, PvP information
-         */
+      Basic information: name, level, class, race, gender, faction, guild, achievement points
+      Optional fields: equipped items, stats, reputation, primary and secondary skills, achievements/statistics,
+      talents, titles, collected mounts and companions, quests, profession recipes, Hunter pets, PvP information
+    */    
+    [DataContract]
     public class Character : ResponseRoot
     {        
-        [XmlElement("lastModified")] public UnixTimestamp LastModified { get; set; }
-        [XmlElement("name")]     public string Name { get; set; }
-        [XmlElement("realm")]    public string Realm { get; set; }
+        [XmlElement("lastModified")]                        
+        public UnixTimestamp LastModified { get; set; }
+        
+        [DataMember(Name = "lastModified")]
+        internal long lastModified
+        {
+            get { return LastModified.ToMsec(); }
+            set{
+                LastModified = new UnixTimestamp(value);
+            }
+        }
+        [XmlElement("name")]
+        [DataMember(Name="name")]
+        public string Name { get; set; }
 
-        [XmlElement("class")]                       public int Class { get; set; }
-        [XmlElement("race")]     public int Race { get; set; }
-        [XmlElement("gender")]   public int Gender { get; set; }
-        [XmlElement("level")]    public int Level { get; set; }
-        [XmlElement("achievementPoints")]    public int AchievementPoints { get; set; }
+        [XmlElement("realm")]
+        [DataMember(Name = "realm")]
+        public string Realm { get; set; }
+
+        [XmlElement("class")]
+        [DataMember(Name = "class")]
+        public int Class { get; set; }
+        [XmlElement("race")]
+        [DataMember(Name = "race")]
+        public int Race { get; set; }
+        [XmlElement("gender")]
+        [DataMember(Name = "gender")]
+        public int Gender { get; set; }
+        [XmlElement("level")]
+        [DataMember(Name = "level")]
+        public int Level { get; set; }
+        [XmlElement("achievementPoints")]
+        [DataMember(Name = "achievementPoints")]
+        public int AchievementPoints { get; set; }
 
         // Add http://us.battle.net/static-render/us/ infront to get image
-        [XmlElement("thumbnail")]    public string Thumbnail { get; set; }
+        [XmlElement("thumbnail")]
+        [DataMember(Name = "thumbnail")]
+        public string Thumbnail { get; set; }
 
         // stats
-        [XmlElement("stats", IsNullable = true)]        public Stats Statistics { get; set; }
+        [XmlElement("stats", IsNullable = true)]
+        [DataMember(Name = "stats")]
+        public Stats Statistics { get; set; }
 
         [XmlArray("talents", IsNullable=true)]
         [XmlArrayItem("item")]
+        [DataMember(Name = "talents")]
         public List<Talent> Talents { get; set; }
 
         /////////////////////////////
         // items
         /////////////////////////////
         [XmlElement("items", IsNullable = true)]
+        [DataMember(Name = "items")]
         public CharacterItems Items { get; set; }
 
         // reputation
         [XmlArray("reputation", IsNullable = true)]
         [XmlArrayItem("item")]
+        [DataMember(Name = "reputation")]
         public List<Reputation> Reputation { get; set; }
 
         // Titles
         [XmlArray("titles", IsNullable = true)]
         [XmlArrayItem("item")]
+        [DataMember(Name = "titles")]
         public List<Title> Titles { get; set; }
 
         // professions
         [XmlElement("professions", IsNullable = true)]
+        [DataMember(Name = "professions")]
         public Professions Professions { get; set; }
 
         // appearance
         [XmlElement("appearance", IsNullable = true)]
+        [DataMember(Name = "appearance")]
         public Appearance Appearance { get; set; }
 
 
         // companions
         [XmlArray("companions", IsNullable = true)]
         [XmlArrayItem("item")]
+        [DataMember(Name = "companions")]
         public List<int> Companions { get; set; }
 
         // mounts
         [XmlArray("mounts", IsNullable = true)]
         [XmlArrayItem("item")]
+        [DataMember(Name = "mounts")]
         public List<int> Mounts { get; set; }
 
         // pets
         [XmlArray("pets", IsNullable = true)]
         [XmlArrayItem("item")]
+        [DataMember(Name = "pets")]
         public List<Pet> Pets { get; set; }
 
 
         // achievements        
-        [XmlElement("achievements", IsNullable = true)] public Achievements Achievements { get; set; }
-        [XmlElement("progression", IsNullable = true)]  public Progression Progression { get; set; }
-        [XmlElement("guild", IsNullable = true)]        public GuildInfo Guild { get; set; }
+        [XmlElement("achievements", IsNullable = true)]
+        [DataMember(Name = "achievements")]        
+        public Achievements Achievements { get; set; }
+
+        [XmlElement("progression", IsNullable = true)]
+        [DataMember(Name = "progression")] 
+        public Progression Progression { get; set; }
+
+        [XmlElement("guild", IsNullable = true)]
+        [DataMember(Name = "guild")] 
+        public GuildInfo Guild { get; set; }
 
     }
 
@@ -85,28 +133,56 @@ namespace BattleNet.API.WoW
     /// We need this 'extra' guild class because 'members' is an array
     /// in the real one, and only a number in the Character one
     /// </summary>
+    [DataContract]
     public class GuildInfo
     {
-        [XmlElement("name")]                public string Name { get; set; }
-        [XmlElement("realm")]               public string Realm { get; set; }
-        [XmlElement("level")]               public int Level { get; set; }
-        [XmlElement("members")]             public int Members { get; set; }
-        [XmlElement("achievementPoints")]   public int AchievementPoints { get; set; }
-        [XmlElement("emblem")]              public Emblem Emblem { get; set; }
+        [XmlElement("name")]
+        [DataMember(Name="name")]
+        public string Name { get; set; }
+        
+        [XmlElement("realm")]
+        [DataMember(Name = "realm")]
+        public string Realm { get; set; }
+
+        [XmlElement("level")]
+        [DataMember(Name = "level")]
+        public int Level { get; set; }
+
+        [XmlElement("members")]
+        [DataMember(Name = "members")]
+        public int Members { get; set; }
+
+        [XmlElement("achievementPoints")]
+        [DataMember(Name = "achievementPoints")]
+        public int AchievementPoints { get; set; }
+
+        [XmlElement("emblem")]
+        [DataMember(Name = "emblem")]
+        public Emblem Emblem { get; set; }
 
     }
 
+    [DataContract]
     public class Emblem
     {
         [XmlElement("icon")]
+        [DataMember(Name="icon")]
         public int Icon { get; set; }
+
         [XmlElement("iconColor")]
+        [DataMember(Name = "iconColor")]
         public string IconColor { get; set; }
+
         [XmlElement("border")]
+        [DataMember(Name = "border")]
         public int Border { get; set; }
+
         [XmlElement("borderColor")]
+        [DataMember(Name = "borderColor")]
         public string BorderColor { get; set; }
+
         [XmlElement("backgroundColor")]
+        [DataMember(Name = "backgroundColor")]
         public string BackgroundColor { get; set; }
     }
 

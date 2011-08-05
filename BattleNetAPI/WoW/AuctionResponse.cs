@@ -6,7 +6,6 @@ using System.Text;
 using System.Xml.Serialization;
 using System.Net;
 using System.IO;
-using System.IO.Compression;
 
 namespace BattleNet.API.WoW
 {

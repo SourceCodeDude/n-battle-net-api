@@ -38,6 +38,7 @@ namespace Test
         {
             string test = Test.Resource.char1;
 
+            JsonParser.UseJson = false;
             Character rc = JsonParser.Parse<Character>(test);
             VerifyBasicData(rc);
 
@@ -98,7 +99,7 @@ namespace Test
             // test achievements
             Assert.IsNotNull(rc.Achievements);
             Assert.AreEqual(5, rc.Achievements.achievementsCompleted.Count);
-            Assert.AreEqual(5, rc.Achievements.achievementsCompletedTimestamp.Count);
+            Assert.AreEqual(5, rc.Achievements.AchievementsCompletedTimestamp.Count);
             Assert.AreEqual(5, rc.Achievements.criteria.Count);
             Assert.AreEqual(5, rc.Achievements.criteriaQuantity.Count);
             Assert.AreEqual(5, rc.Achievements.criteriaTimestamp.Count);

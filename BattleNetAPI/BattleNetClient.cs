@@ -187,6 +187,12 @@ namespace BattleNet.API.WoW
         {
             string size = large ? "56/" : "18/";
 
+            // must have a file extension.. or it wont work
+            if (!path.EndsWith(".jpg"))
+            {
+                path += ".jpg";
+            }
+
             Uri fullPath = new Uri(iconUri, size + path);
             // baseUri + "static-render/us"
             Stream st = GetUrl(fullPath, iconCache);
@@ -260,13 +266,18 @@ namespace BattleNet.API.WoW
             catch (WebException ex)
             {                
                 HttpWebResponse h = ex.Response as HttpWebResponse;
-                if (h.StatusCode != HttpStatusCode.NotModified)
-                {
-                    //throw ex;
-                    string txt = new StreamReader( h.GetResponseStream() ).ReadToEnd();
-                    ResponseRoot r = JsonParser.Parse<ResponseRoot>(txt);
-                    throw new ResponseException(r.Status, r.Reason);
 
+                switch(h.StatusCode)
+                {
+                    case HttpStatusCode.NotFound:                        
+                        throw ex;                
+                    case HttpStatusCode.NotModified:
+                        // should only get to this line if CI was set...
+                        return ci.Value;                        
+                    default:
+                        string txt = new StreamReader( h.GetResponseStream() ).ReadToEnd();
+                        ResponseRoot r = JsonParser.Parse<ResponseRoot>(txt);
+                        throw new ResponseException(r.Status, r.Reason);
                 }
                 //Console.WriteLine("HIT");                
             }

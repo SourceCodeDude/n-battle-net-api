@@ -46,6 +46,7 @@ namespace BattleNet.API.WoW
 
         byte[] privateKey = null;
 
+        [Obsolete("Please set in consturctor")]
         public string PrivateKey
         {
             get
@@ -65,10 +66,12 @@ namespace BattleNet.API.WoW
                 }
             }
         }
+
+        [Obsolete("Please set in consturctor")]
         public string PublicKey { get; set; }
 
         public System.Globalization.CultureInfo Locale { get; set; }
-        public BattleNetClient(Region r)
+        public BattleNetClient(Region r = Region.US)
             : this(r, System.Globalization.CultureInfo.CurrentCulture)
         {        
         }
@@ -80,7 +83,7 @@ namespace BattleNet.API.WoW
         /// <param name="loc">Current Culture</param>
         /// <param name="publicKey">public key for authentication</param>
         /// <param name="privateKey">private key for authentication</param>
-        public BattleNetClient(Region r = Region.US, 
+        public BattleNetClient(Region r, 
             System.Globalization.CultureInfo loc, 
             string publicKey = null, 
             string privateKey = null)

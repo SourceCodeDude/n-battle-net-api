@@ -62,47 +62,6 @@ namespace Test {
         
         /// <summary>
         ///   Looks up a localized string similar to {
-        ///  &quot;classes&quot;:[
-        ///    {
-        ///      &quot;id&quot;:3,
-        ///      &quot;mask&quot;:4,
-        ///      &quot;powerType&quot;:&quot;focus&quot;,
-        ///      &quot;name&quot;:&quot;Hunter&quot;
-        ///    },
-        ///    {
-        ///      &quot;id&quot;:1,
-        ///      &quot;mask&quot;:1,
-        ///      &quot;powerType&quot;:&quot;rage&quot;,
-        ///      &quot;name&quot;:&quot;Warrior&quot;
-        ///    },
-        ///    {
-        ///      &quot;id&quot;:5,
-        ///      &quot;mask&quot;:16,
-        ///      &quot;powerType&quot;:&quot;mana&quot;,
-        ///      &quot;name&quot;:&quot;Priest&quot;
-        ///    },
-        ///    {
-        ///      &quot;id&quot;:9,
-        ///      &quot;mask&quot;:256,
-        ///      &quot;powerType&quot;:&quot;mana&quot;,
-        ///      &quot;name&quot;:&quot;Warlock&quot;
-        ///    },
-        ///    {
-        ///      &quot;id&quot;:7,
-        ///      &quot;mask&quot;:64,
-        ///      &quot;powerType&quot;:&quot;mana&quot;,
-        ///      &quot;name&quot;:&quot;Shaman&quot;
-        ///    },
-        ///   [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string classes {
-            get {
-                return ResourceManager.GetString("classes", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {
         ///  &quot;rewards&quot;:[
         ///    {
         ///      &quot;minGuildLevel&quot;:0,

@@ -11,7 +11,7 @@ namespace BattleNet.API
     public class CacheCollection
     {
         Dictionary<string, Cache> caches = new Dictionary<string, Cache>();
-
+        
         public CacheCollection()
         {
         }
@@ -47,8 +47,14 @@ namespace BattleNet.API
         /// <param name="storePath"></param>
         public Cache(string storePath)
         {
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(CurrentDomain_ProcessExit);
             cachePath = storePath;
             Prime();
+        }
+
+        void CurrentDomain_ProcessExit(object sender, EventArgs e)
+        {
+            Flush();
         }
 
         ~Cache()
@@ -116,9 +122,10 @@ namespace BattleNet.API
         }
         public void Flush()
         {
+            Console.WriteLine("Flushing " + cachePath);
             // flush cache to disk
             lock (cache)
-            {                
+            {   
                 using (Stream st = File.Open(cachePath + "/cache.index", FileMode.Create))
                 {
                     BinaryWriter w = new BinaryWriter(st);

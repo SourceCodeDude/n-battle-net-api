@@ -46,6 +46,16 @@ namespace BattleNet.API.WoW
 
         byte[] privateKey = null;
 
+        static CacheCollection cacheCollection;
+
+        static BattleNetClient()
+        {
+            // load up a single reference of the caches
+            cacheCollection = new CacheCollection();            
+            cacheCollection["data"] = new Cache("./cache");
+            cacheCollection["icons"] = new Cache("./icons");
+            cacheCollection["thumb"] = new Cache("./thumb");
+        }
         [Obsolete("Please set in consturctor")]
         public string PrivateKey
         {
@@ -120,9 +130,9 @@ namespace BattleNet.API.WoW
             UseCache = true;
             if (cache)
             {
-                dataCache = new Cache("./cache");
-                iconCache = new Cache("./icons");
-                thumbNailCache = new Cache("./thumb");
+                dataCache = cacheCollection["data"];
+                iconCache = cacheCollection["icon"];
+                thumbNailCache = cacheCollection["thumb"];
             }
             // default to current culture
             Locale = loc;
@@ -178,10 +188,7 @@ namespace BattleNet.API.WoW
         }
 
         public void Dispose()
-        {
-            if(thumbNailCache!=null) thumbNailCache.Flush();
-            if (iconCache != null) iconCache.Flush();
-            if (dataCache != null) dataCache.Flush();
+        {            
             thumbNailCache = iconCache = dataCache = null;
         }
 

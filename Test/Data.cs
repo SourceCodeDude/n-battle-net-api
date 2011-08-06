@@ -37,7 +37,7 @@ namespace Test
         [Test]
         public void ParseClassCollection()
         {
-            string test = Test.Resource.classes;
+            string test = Util.ReadData("data/classes.json");            
 
             ClassCollection rc = JsonParser.Parse<ClassCollection>(test);
 

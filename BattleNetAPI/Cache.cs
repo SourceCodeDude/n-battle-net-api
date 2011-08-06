@@ -32,7 +32,7 @@ namespace BattleNet.API
     /// <summary>
     /// Simple cache to store retrieved data
     /// </summary>
-    public class Cache
+    public class Cache : BattleNet.API.ICache
     {
         string cachePath;
         Dictionary<string, CacheItem> cache = new Dictionary<string, CacheItem>();

@@ -8,9 +8,11 @@ using BattleNet.API.WoW;
 using BattleNet.API;
 
 using System.IO;
+using System.Runtime.Serialization.Json;
 
 namespace Test
 {
+    
     [TestFixture]
     class GuildTest
     {
@@ -24,9 +26,8 @@ namespace Test
         {
             /*
              * Test to make sure text is handled as UTF8 correctly
-             */
+             */            
 
-            
             string test = ReadData("data/guild/utf8.json");
             Guild g;
             

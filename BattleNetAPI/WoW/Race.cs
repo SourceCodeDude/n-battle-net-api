@@ -4,13 +4,16 @@ using System.Linq;
 using System.Text;
 
 using System.Xml.Serialization;
+using System.Runtime.Serialization;
 
 namespace BattleNet.API.WoW
 {
+    [DataContract]
     public class RaceCollection : ResponseRoot //,IList<Race>
     {
         [XmlArray("races")]
         [XmlArrayItem("item")]
+        [DataMember(Name="races")]
         public List<Race> Races { get; set; }
 
         #region IList<Race> Members
@@ -104,11 +107,23 @@ namespace BattleNet.API.WoW
         #endregion
     }
 
+    [DataContract]
     public class Race
     {
-        [XmlElement("id")]      public int Id { get; set; }
-        [XmlElement("mask")]    public int Mask { get; set; }
-        [XmlElement("side")]    public string Side { get; set; }
-        [XmlElement("name")]    public string Name { get; set; }
+        [XmlElement("id")]
+        [DataMember(Name = "id")]
+        public int Id { get; set; }
+
+        [XmlElement("mask")]
+        [DataMember(Name = "mask")]
+        public int Mask { get; set; }
+
+        [XmlElement("side")]
+        [DataMember(Name = "side")]
+        public string Side { get; set; }
+
+        [XmlElement("name")]
+        [DataMember(Name = "name")]
+        public string Name { get; set; }
     }
 }

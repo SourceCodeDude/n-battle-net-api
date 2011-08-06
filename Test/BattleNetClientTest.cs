@@ -19,6 +19,7 @@ namespace Test
         {
             using (BattleNetClient client = new BattleNetClient(BattleNet.API.WoW.Region.US))
             {
+                client.IconCache = null;
                 Image img = client.GetIcon("inv_misc_necklacea9.jpg");
                 Assert.NotNull(img);
             }

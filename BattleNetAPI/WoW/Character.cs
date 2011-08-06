@@ -305,16 +305,36 @@ Roster = members
 
     }
 
-
+    [DataContract]
     public class Appearance
     {
-        [XmlElement("faceVariation")]   public int FaceVariation { get; set; }
-        [XmlElement("skinColor")]       public int SkinColor { get; set; }
-        [XmlElement("hairVariation")]   public int HairVariation { get; set; }
-        [XmlElement("hairColor")]       public int HairColor { get; set; }
-        [XmlElement("featureVariation")]public int FeatureVariation { get; set; }
-        [XmlElement("showHelm")]        public bool ShowHelm { get; set; }
-        [XmlElement("showCloak")]       public bool ShowCloak { get; set; }
+        [XmlElement("faceVariation")]
+        [DataMember(Name = "faceVariation")]
+        public int FaceVariation { get; set; }
+        
+        [XmlElement("skinColor")]
+        [DataMember(Name = "skinColor")]
+        public int SkinColor { get; set; }
+        
+        [XmlElement("hairVariation")]
+        [DataMember(Name = "hairVariation")]
+        public int HairVariation { get; set; }
+        
+        [XmlElement("hairColor")]
+        [DataMember(Name = "hairColor")]
+        public int HairColor { get; set; }
+        
+        [XmlElement("featureVariation")]
+        [DataMember(Name = "featureVariation")]
+        public int FeatureVariation { get; set; }
+        
+        [XmlElement("showHelm")]
+        [DataMember(Name = "showHelm")]
+        public bool ShowHelm { get; set; }
+        
+        [XmlElement("showCloak")]
+        [DataMember(Name = "showCloak")]
+        public bool ShowCloak { get; set; }
     }
 
     public class Stats
@@ -419,55 +439,140 @@ Roster = members
 
     }
 
+    [DataContract]
     public class CharacterItems
     {
-        [XmlElement("averageItemLevel")]            public int AverageItemLevel { get; set; }
-        [XmlElement("averageItemLevelEquipped")]    public int averageItemLevelEquipped { get; set; }
-        [XmlElement("head")]                        public Item Head { get; set; }
-        [XmlElement("neck")]                        public Item Neck { get; set; }
-        [XmlElement("shoulder")]                    public Item Shoulder { get; set; }
-        [XmlElement("shirt")]                       public Item Shirt { get; set; }
-        [XmlElement("back")]                        public Item Back { get; set; }
-        [XmlElement("chest")]                       public Item Chest { get; set; }
-        [XmlElement("tabard")]                      public Item Tabard { get; set; }
-        [XmlElement("wrist")]                       public Item Wrist { get; set; }
-        [XmlElement("hands")]                       public Item Hands { get; set; }
-        [XmlElement("waist")]                       public Item Waist { get; set; }
-        [XmlElement("legs")]                        public Item Legs { get; set; }
-        [XmlElement("feet")]                        public Item Feet { get; set; }
-        [XmlElement("finger1")]                     public Item Finger1 { get; set; }
-        [XmlElement("finger2")]                     public Item Finger2 { get; set; }
-        [XmlElement("trinket1")]                    public Item Trinket1 { get; set; }
-        [XmlElement("trinket2")]                    public Item Trinket2 { get; set; }
-        [XmlElement("mainHand")]                    public Item MainHand { get; set; }
-        [XmlElement("offHand")]                     public Item OffHand { get; set; }
-        [XmlElement("ranged")]                      public Item Ranged { get; set; }
+        [XmlElement("averageItemLevel")]
+        [DataMember(Name = "averageItemLevel")]
+        public int AverageItemLevel { get; set; }
+        
+        [XmlElement("averageItemLevelEquipped")]
+        [DataMember(Name = "averageItemLevelEquipped")]
+        public int averageItemLevelEquipped { get; set; }
+        
+        [XmlElement("head")]
+        [DataMember(Name = "head")]
+        public Item Head { get; set; }
+        
+        [XmlElement("neck")]
+        [DataMember(Name = "neck")]
+        public Item Neck { get; set; }
+        
+        [XmlElement("shoulder")]
+        [DataMember(Name = "shoulder")]
+        public Item Shoulder { get; set; }
+        
+        [XmlElement("shirt")]
+        [DataMember(Name = "shirt")]
+        public Item Shirt { get; set; }
+        
+        [XmlElement("back")]
+        [DataMember(Name = "back")]
+        public Item Back { get; set; }
+        
+        [XmlElement("chest")]
+        [DataMember(Name = "chest")]
+        public Item Chest { get; set; }
+        
+        [XmlElement("tabard")]
+        [DataMember(Name = "tabard")]
+        public Item Tabard { get; set; }
+        
+        [XmlElement("wrist")]
+        [DataMember(Name = "wrist")]
+        public Item Wrist { get; set; }
+        
+        [XmlElement("hands")]
+        [DataMember(Name = "hands")]
+        public Item Hands { get; set; }
+        
+        [XmlElement("waist")]
+        [DataMember(Name = "waist")]
+        public Item Waist { get; set; }
+        
+        [XmlElement("legs")]
+        [DataMember(Name = "legs")]
+        public Item Legs { get; set; }
+        
+        [XmlElement("feet")]
+        [DataMember(Name = "feet")]
+        public Item Feet { get; set; }
+        
+        [XmlElement("finger1")]
+        [DataMember(Name = "finger1")]
+        public Item Finger1 { get; set; }
+        
+        [XmlElement("finger2")]
+        [DataMember(Name = "finger2")]
+        public Item Finger2 { get; set; }
+        
+        [XmlElement("trinket1")]
+        [DataMember(Name = "trinket1")]
+        public Item Trinket1 { get; set; }
+        
+        [XmlElement("trinket2")]
+        [DataMember(Name = "trinket2")]
+        public Item Trinket2 { get; set; }
+        
+        [XmlElement("mainHand")]
+        [DataMember(Name = "mainHand")]
+        public Item MainHand { get; set; }
+        
+        [XmlElement("offHand")]
+        [DataMember(Name = "offHand")]
+        public Item OffHand { get; set; }
+        
+        [XmlElement("ranged")]
+        [DataMember(Name = "ranged")]
+        public Item Ranged { get; set; }
     }
-
+    [DataContract]
     public class Title
     {
-        public int id { get; set; }
-        public string name { get; set; }
+        [XmlElement("id")]
+        [DataMember(Name="id")]
+        public int Id { get; set; }
+
+        [XmlElement("name")]
+        [DataMember(Name = "name")]
+        public string Name { get; set; }
     }
 
+    [DataContract]
     public class ItemToolTip
     {
         [XmlElement("gem0")]
+        [DataMember(Name = "gem0")]
         public int Gem0 { get; set; }
+        
         [XmlElement("gem1")]
+        [DataMember(Name = "gem1")]        
         public int Gem1 { get; set; }
+        
         [XmlElement("gem2")]
+        [DataMember(Name = "gem2")]        
         public int Gem2 { get; set; }
+        
         [XmlElement("gem3")]
+        [DataMember(Name = "gem3")]        
         public int Gem3 { get; set; }
+        
         [XmlElement("extraSocket")]
+        [DataMember(Name = "extraSocket")]        
         public bool ExtraSocket { get; set; }
+        
         [XmlElement("enchant")]
+        [DataMember(Name = "enchant")]
+        
         public int Enchant { get; set; }
+        
         [XmlElement("reforge")]
+        [DataMember(Name = "reforge")]        
         public int Reforge { get; set; }
+        
         [XmlArray("set")]
         [XmlArrayItem("item")]
+        [DataMember(Name = "set")]
         public List<int> Set { get; set; }
         
         /// <summary>        
@@ -475,6 +580,7 @@ Roster = members
         /// This is the spell id of the effect..
         /// </summary>
         [XmlElement("tinker")]
+        [DataMember(Name = "tinker")]
         public int Tinker { get; set; }
     }
 

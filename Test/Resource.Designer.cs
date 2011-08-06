@@ -61,16 +61,6 @@ namespace Test {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {&quot;realm&quot;: &quot;Medivh&quot;, &quot;name&quot;: &quot;Uther&quot;, &quot;level&quot;: 85, &quot;lastModified&quot;: 1307596000000, &quot;thumbnail&quot;: &quot;medivh/1/1-avatar.jpg&quot;,
-        ///&quot;race&quot;: 1, &quot;achievementPoints&quot;: 9745, &quot;gender&quot;: 0, &quot;class&quot;: 2}.
-        /// </summary>
-        internal static string char1 {
-            get {
-                return ResourceManager.GetString("char1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to {
         ///  &quot;classes&quot;:[
         ///    {

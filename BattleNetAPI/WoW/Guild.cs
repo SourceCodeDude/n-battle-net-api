@@ -13,16 +13,44 @@ namespace BattleNet.API.WoW
     {
         #region Basic Fields
 
-        [XmlElement("lastModified")]public UnixTimestamp LastModified { get; set; }
-        [XmlElement("name")]        public string Name { get; set; }
-        [XmlElement("realm")]       public string Realm { get; set; }
-        [XmlElement("level")]       public int Level { get; set; }
+        [XmlElement("lastModified")]            
+        public UnixTimestamp LastModified { get; set; }
+
+        [DataMember(Name = "lastModified")] 
+        internal long lastModified
+        {
+            get
+            {
+                return LastModified.ToMsec();
+            }
+            set
+            {
+                LastModified = new UnixTimestamp(value);
+            }
+        }
+        [XmlElement("name")]
+        [DataMember(Name = "name")]
+        public string Name { get; set; }
+
+        [XmlElement("realm")]
+        [DataMember(Name = "realm")]
+        public string Realm { get; set; }
+        
+        [XmlElement("level")]
+        [DataMember(Name = "level")]
+        public int Level { get; set; }
+
         /// <summary>
         /// 0 = alliance
         /// 1 = horde
         /// </summary>
-        [XmlElement("side")]                public int Side { get; set; }
-        [XmlElement("achievementPoints")]   public int AchievementPoints { get; set; }
+        [XmlElement("side")]
+        [DataMember(Name = "side")]
+        public int Side { get; set; }
+
+        [XmlElement("achievementPoints")]
+        [DataMember(Name = "achievementPoints")]
+        public int AchievementPoints { get; set; }
         #endregion
 
         /////////////////////////////////////////////////        
@@ -36,7 +64,9 @@ namespace BattleNet.API.WoW
         [DataMember(Name="members")]
         public List<Member> Members { get; set; }
 
-        [XmlElement("achievements", IsNullable = true)] public Achievements Achievements { get; set; }
+        [XmlElement("achievements", IsNullable = true)]
+        [DataMember(Name = "achievements")]
+        public Achievements Achievements { get; set; }
         
         #endregion
     }
@@ -47,6 +77,7 @@ namespace BattleNet.API.WoW
         [XmlElement("character")]
         [DataMember(Name = "character")]
         public Character Character { get; set; }
+
         [XmlElement("rank")]
         [DataMember(Name = "rank")]
         public int Rank { get; set; }

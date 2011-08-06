@@ -36,7 +36,7 @@ namespace Test
         [Test]
         public void TestBasicData()
         {
-            string test = Test.Resource.char1;
+            string test = ReadData("data/character/char1.json");
 
             JsonParser.UseJson = false;
             Character rc = JsonParser.Parse<Character>(test);
@@ -81,10 +81,10 @@ namespace Test
             Assert.IsNotNull(rc.Titles);
             Assert.AreEqual(2,rc.Titles.Count);
 
-            Assert.AreEqual(81, rc.Titles[0].id);
-            Assert.AreEqual("%s the Seeker", rc.Titles[0].name);
-            Assert.AreEqual(74, rc.Titles[1].id);
-            Assert.AreEqual("Elder %s", rc.Titles[1].name);
+            Assert.AreEqual(81, rc.Titles[0].Id);
+            Assert.AreEqual("%s the Seeker", rc.Titles[0].Name);
+            Assert.AreEqual(74, rc.Titles[1].Id);
+            Assert.AreEqual("Elder %s", rc.Titles[1].Name);
         }
 
         [Test]
@@ -100,10 +100,10 @@ namespace Test
             Assert.IsNotNull(rc.Achievements);
             Assert.AreEqual(5, rc.Achievements.achievementsCompleted.Count);
             Assert.AreEqual(5, rc.Achievements.AchievementsCompletedTimestamp.Count);
-            Assert.AreEqual(5, rc.Achievements.criteria.Count);
-            Assert.AreEqual(5, rc.Achievements.criteriaQuantity.Count);
-            Assert.AreEqual(5, rc.Achievements.criteriaTimestamp.Count);
-            Assert.AreEqual(5, rc.Achievements.criteriaCreated.Count);
+            Assert.AreEqual(5, rc.Achievements.Criteria.Count);
+            Assert.AreEqual(5, rc.Achievements.CriteriaQuantity.Count);
+            Assert.AreEqual(5, rc.Achievements.CriteriaTimestamp.Count);
+            Assert.AreEqual(5, rc.Achievements.CriteriaCreated.Count);
         }
 
 

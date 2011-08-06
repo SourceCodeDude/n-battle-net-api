@@ -34,9 +34,9 @@ namespace BattleNet.API.WoW
         /// </summary>
         public event ParseErrorDelegate ParseError;
 
-        Cache dataCache;
-        Cache iconCache;
-        Cache thumbNailCache;
+        ICache dataCache;
+        ICache iconCache;
+        ICache thumbNailCache;
 
         Uri baseUri;
         Uri iconUri;
@@ -83,10 +83,12 @@ namespace BattleNet.API.WoW
         /// <param name="loc">Current Culture</param>
         /// <param name="publicKey">public key for authentication</param>
         /// <param name="privateKey">private key for authentication</param>
+        /// <param name="cache">Use a </param>
         public BattleNetClient(Region r, 
             System.Globalization.CultureInfo loc, 
             string publicKey = null, 
-            string privateKey = null)
+            string privateKey = null,
+            bool cache=true)
 
         {
             // both must be specified
@@ -116,13 +118,16 @@ namespace BattleNet.API.WoW
                 );
 
             UseCache = true;
-
+            if (cache)
+            {
+                dataCache = new Cache("./cache");
+                iconCache = new Cache("./icons");
+                thumbNailCache = new Cache("./thumb");
+            }
             // default to current culture
             Locale = loc;
 
-            dataCache = new Cache("./cache");
-            iconCache = new Cache("./icons");
-            thumbNailCache = new Cache("./thumb");
+            
             
             switch (r)
             {
@@ -182,6 +187,37 @@ namespace BattleNet.API.WoW
 
         #endregion
 
+        public ICache DataCache
+        {
+            get
+            {
+                return dataCache;
+            }
+            set
+            {
+                dataCache = value;
+            }
+        }
+
+        public ICache IconCache
+        {
+            get
+            {
+                return iconCache;
+            }
+            set
+            {
+                iconCache = value;
+            }
+        }
+        public ICache ThumbNailCache
+        {
+            get { return thumbNailCache; }
+            set
+            {
+                thumbNailCache = value;
+            }
+        }
 #if SILVERLIGHT
 
         public System.Windows.Media.Imaging.BitmapImage GetThumbnail(string path)
@@ -251,19 +287,19 @@ namespace BattleNet.API.WoW
         }
 #endif
 
-        public Stream GetUrl(string url, Cache cache)
+        public Stream GetUrl(string url, ICache cache)
         {
             return GetUrl(new Uri(baseUri, url), cache);
         }
 
-        private Stream GetUrl(Uri url, Cache cache)
+        private Stream GetUrl(Uri url, ICache cache)
         {
             HttpWebRequest req = (HttpWebRequest) WebRequest.Create(url);
             string key = url.ToString();
 
             CacheItem ci = null;
             
-            if(UseCache) ci = cache.GetItem(key);            
+            if(UseCache && cache!=null) ci = cache.GetItem(key);            
 
             // item was already cache?
             // see if the server has a newer copy by sending
@@ -290,7 +326,7 @@ namespace BattleNet.API.WoW
                 {
                     IAsyncResult ia = req.BeginGetResponse(null, null);
                     res = req.EndGetResponse(ia);
-                    if (UseCache)
+                    if (UseCache && cache!=null)
                     {
                         ci = cache.Insert(key, res.GetResponseStream());
 
@@ -331,7 +367,7 @@ namespace BattleNet.API.WoW
                 //Console.WriteLine("HIT");                
             }
 
-            if (UseCache)
+            if (UseCache && ci!=null)
             {
                 return ci.Value;
             }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
-
+using System.Runtime.Serialization;
 using System.ComponentModel;
 namespace BattleNet.API.WoW
 {
@@ -23,7 +23,7 @@ namespace BattleNet.API.WoW
         }
 
 
-        string Translate(string k)
+        public static string Translate(string k)
         {
             switch (k)
             {
@@ -38,20 +38,33 @@ namespace BattleNet.API.WoW
     }
 
     [TypeConverter(typeof(PowerTypeConverter))]
+    [DataContract]
     public enum PowerType
     {
-        [XmlEnum("focus")] Focus,
-        [XmlEnum("rage")] Rage,
-        [XmlEnum("mana")] Mana,
-        [XmlEnum("energy")] Energy,
-        [XmlEnum("runic-power")] RunicPower,
+        [XmlEnum("focus")] 
+        [EnumMember(Value="focus")]
+        Focus,
+        [XmlEnum("rage")]
+        [EnumMember(Value = "rage")]
+        Rage,
+        [XmlEnum("mana")]
+        [EnumMember(Value = "mana")]
+        Mana,
+        [XmlEnum("energy")]
+        [EnumMember(Value = "energy")]
+        Energy,
+        [XmlEnum("runic-power")]
+        [EnumMember(Value = "runic-power")]
+        RunicPower,
     }
     
+    [DataContract]
     public class ClassCollection : ResponseRoot //,IList<Class>, IXmlSerializable
     {
         List<Class> _ = null;
         [XmlArray("classes")]
-        [XmlArrayItem("item")]                
+        [XmlArrayItem("item")]   
+        [DataMember(Name="classes")]
         public List<Class> Classes 
         { 
             get{ return _;}
@@ -148,15 +161,33 @@ namespace BattleNet.API.WoW
  */
     }
 
+    [DataContract]
     public class Class : IComparable<Class>
     {
         [XmlElement("id")]
+        [DataMember(Name = "id")]
         public int Id { get; set; }
+
         [XmlElement("mask")]
+        [DataMember(Name = "mask")]
         public int Mask { get; set; }
-        [XmlElement("powerType")]
+
+        [XmlElement("powerType")]        
         public PowerType PowerType{get;set;}
+
+        [DataMember(Name = "powerType")]
+        private string powerType
+        {
+            get { 
+            return PowerType.ToString();
+            }
+            set{
+                PowerType = (WoW.PowerType)Enum.Parse(typeof(PowerType),PowerTypeConverter.Translate(value), true );
+            }
+        }
+
         [XmlElement("name")]
+        [DataMember(Name = "name")]
         public string Name{get;set;}
 
 

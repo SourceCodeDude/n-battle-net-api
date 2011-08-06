@@ -50,13 +50,14 @@ namespace BattleNet.API
 
     }
     
-    [TypeConverter(typeof(UnixTimestampClassConverter))]
+    [TypeConverter(typeof(UnixTimestampClassConverter))]     
     public class UnixTimestamp : IXmlSerializable
     {
         private static DateTimeOffset origin = new DateTimeOffset(1970, 1, 1, 0, 0, 0, 0, TimeSpan.Zero);
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         DateTimeOffset time;
+        
 
         public UnixTimestamp()
         {
@@ -68,6 +69,14 @@ namespace BattleNet.API
             FromMsec(msec);
         }
 
+        public static explicit operator string(UnixTimestamp val)
+        {
+            return "----";
+        }
+        public static explicit operator UnixTimestamp(string val)
+        {
+            return new UnixTimestamp();
+        }
         public static implicit operator UnixTimestamp(long msec)
         {
             return new UnixTimestamp(msec);
@@ -83,12 +92,13 @@ namespace BattleNet.API
         {
             time = origin.AddSeconds(msec / 1000.0);            
         }
-        #region IXmlSerializable Members
 
         public long ToMsec()
         {
-            return (long)(time - origin).TotalMilliseconds;
+            return (long)(time.UtcDateTime - origin).TotalMilliseconds;
         }
+
+        #region IXmlSerializable Members
         public System.Xml.Schema.XmlSchema GetSchema()
         {
             // there is no schema.. yet
@@ -103,7 +113,7 @@ namespace BattleNet.API
 
         public void WriteXml(System.Xml.XmlWriter writer)
         {
-            throw new NotImplementedException();
+            writer.WriteString(""+ToMsec());            
         }
 
         #endregion

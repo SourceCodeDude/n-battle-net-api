@@ -18,7 +18,7 @@ namespace BattleNet.API.WoW
         public List<int> achievementsCompleted { get; set; }
 
         [XmlArray("achievementsCompletedTimestamp")]
-        [XmlArrayItem("item")]        
+        [XmlArrayItem("item")]    
         public List<UnixTimestamp> AchievementsCompletedTimestamp { get; set; }
         
         [DataMember(Name = "achievementsCompletedTimestamp")]
@@ -40,18 +40,49 @@ namespace BattleNet.API.WoW
 
         [XmlArray("criteria")]
         [XmlArrayItem("item")]
-        public List<int> criteria { get; set; }
+        [DataMember(Name = "criteria")]
+        public List<int> Criteria { get; set; }
 
         [XmlArray("criteriaQuantity")]
         [XmlArrayItem("item")]
-        public List<long> criteriaQuantity { get; set; }
+        [DataMember(Name = "criteriaQuantity")]
+        public List<long> CriteriaQuantity { get; set; }
 
         [XmlArray("criteriaTimestamp")]
         [XmlArrayItem("item")]
-        public List<UnixTimestamp> criteriaTimestamp { get; set; }
+        public List<UnixTimestamp> CriteriaTimestamp { get; set; }
+
+        [DataMember(Name="criteriaTimestamp")]
+        internal List<long> criteriaTimestamp 
+        {
+            get { return null; }
+            set
+            {
+                List<UnixTimestamp> r = new List<UnixTimestamp>();
+                foreach (long l in value)
+                {
+                    r.Add(new UnixTimestamp(l));
+                }
+                CriteriaTimestamp = r;
+            }
+        }
 
         [XmlArray("criteriaCreated")]
         [XmlArrayItem("item")]
-        public List<UnixTimestamp> criteriaCreated { get; set; }
+        public List<UnixTimestamp> CriteriaCreated { get; set; }
+
+        [DataMember(Name = "criteriaCreated")]
+        private List<long> criteriaCreated {
+            get { return null; }
+            set
+            {
+                List<UnixTimestamp> r = new List<UnixTimestamp>();
+                foreach (long l in value)
+                {
+                    r.Add(new UnixTimestamp(l));
+                }
+                CriteriaCreated = r;
+            }
+        }
     }
 }

@@ -29,6 +29,7 @@ namespace BattleNet.API
         {
             Type t = typeof(T);
             byte[] b = System.Text.UTF8Encoding.UTF8.GetBytes(json);
+            
             /*
             System.Runtime.Serialization.Json.DataContractJsonSerializer s = new DataContractJsonSerializer(t);
             T ret = (T)s.ReadObject(new MemoryStream(b));
@@ -37,6 +38,7 @@ namespace BattleNet.API
             XmlReader rd = JsonReaderWriterFactory.CreateJsonReader(b, new XmlDictionaryReaderQuotas());
             XmlSerializer s = new XmlSerializer(t, new XmlRootAttribute("root"));
             return (T)s.Deserialize(rd);
+             
             
         }
 
@@ -101,16 +103,16 @@ namespace BattleNet.API
         /// <returns></returns>
         static public T Parse<T>(string json, ParseErrorDelegate onError)
         {
-            try
+            //try
             {
                 parser.Error = onError;
                 return (T)parser.Deserialize<T>(json);
             }
-            catch (Exception ex)
+            //catch (Exception ex)
             {
                 if (onError != null)
                 {
-                    onError(ex.Message);
+                    //onError(ex.Message);
                 }
                 return default(T);
             }

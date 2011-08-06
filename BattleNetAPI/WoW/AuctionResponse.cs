@@ -3,32 +3,51 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using System.Runtime.Serialization;
 using System.Xml.Serialization;
 using System.Net;
 using System.IO;
 
 namespace BattleNet.API.WoW
 {
+    [DataContract]
     public class AuctionResponse
     {
         [XmlArray("files")]
         [XmlArrayItem("items")]
+        [DataMember(Name="files")]
         public List<AuctionFile> Files { get; set; }
     }
 
+    [DataContract]
     public class AuctionFile
     {
         [XmlIgnore]
         public BattleNetClient Client { set; protected get; }
 
         [XmlElement("url")]
+        [DataMember(Name = "url")]
         public string Url { get; set; }
 
         [XmlElement("lastModified")]
         public UnixTimestamp LastModified { get; set; }
 
+        [DataMember(Name = "lastModified")]
+        internal long lastModified
+        {
+            get{ return LastModified.ToMsec(); }
+            set
+            {
+                LastModified = new UnixTimestamp(value);
+            }
+        }
+
         AuctionData data = null;
-        [XmlIgnore]
+
+        /// <summary>
+        /// The actual auction data loaded from the URL
+        /// </summary>
+        [XmlIgnore]        
         public AuctionData Data
         {
             get
@@ -65,50 +84,75 @@ namespace BattleNet.API.WoW
         }
     }
 
-    
+    [DataContract]
     public class AuctionData
     {
         [XmlElement("realm")]
+        [DataMember(Name="realm")]
         public Realm Realm { get; set; }
+
         [XmlElement("horde")]
+        [DataMember(Name = "horde")]
         public AuctionCollection Horde { get; set; }
 
         [XmlElement("neutral")]
+        [DataMember(Name = "neutral")]
         public AuctionCollection Neutral { get; set; }
 
         [XmlElement("alliance")]
+        [DataMember(Name = "alliance")]
         public AuctionCollection Alliance { get; set; }
     }
 
+    [DataContract]
     public class AuctionCollection
     {
         [XmlArray("auctions")]
         [XmlArrayItem("items")]
+        [DataMember(Name="auctions")]
         public List<Auction> Auctions { get; set; }
     }
 
    
-
+    [DataContract]
     public class Auction
     {
+        /// <summary>
+        /// Auction ID
+        /// </summary>
         [XmlElement("auc")]
+        [DataMember(Name = "auc")]
         public int Auc { get; set; }
 
+        /// <summary>
+        /// ID of item
+        /// </summary>
         [XmlElement("item")]
+        [DataMember(Name="item")]
         public int Item { get; set;}
 
+        /// <summary>
+        /// Name of auction owner
+        /// </summary>
         [XmlElement("owner")]
+        [DataMember(Name="owner")]
         // TODO: whats a good way to link back to the owner?
         public string Owner { get; set; }
 
+        /// <summary>
+        /// Bid ammount in copper
+        /// </summary>
         [XmlElement("bid")]
+        [DataMember(Name = "bid")]
         // TODO: turn this into a custom type with Gold, Silver, Copper?
         public long Bid { get; set; }
 
         [XmlElement("buyout")]
+        [DataMember(Name = "buyout")]
         public long Buyout { get; set; }
 
         [XmlElement("quantity")]
+        [DataMember(Name = "quantity")]
         public int Quantity { get; set; }
     }
 }

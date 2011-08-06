@@ -45,6 +45,7 @@ namespace BattleNet.API.WoW
         public bool UseCache{get;set;}
 
         byte[] privateKey = null;
+
         public string PrivateKey
         {
             get
@@ -52,8 +53,16 @@ namespace BattleNet.API.WoW
                 return Encoding.UTF8.GetString(privateKey,0, privateKey.Length);                
             }
             set
-            {                
-                privateKey = Encoding.UTF8.GetBytes(value);
+            {
+                if (value == null)
+                {
+                    privateKey = null;
+                }
+                else
+                {
+                    privateKey = Encoding.UTF8.GetBytes(value);
+                    
+                }
             }
         }
         public string PublicKey { get; set; }
@@ -64,8 +73,45 @@ namespace BattleNet.API.WoW
         {        
         }
 
-        public BattleNetClient(Region r,System.Globalization.CultureInfo loc)
+        /// <summary>
+        /// Create a new client
+        /// </summary>
+        /// <param name="r">Region</param>
+        /// <param name="loc">Current Culture</param>
+        /// <param name="publicKey">public key for authentication</param>
+        /// <param name="privateKey">private key for authentication</param>
+        public BattleNetClient(Region r = Region.US, 
+            System.Globalization.CultureInfo loc, 
+            string publicKey = null, 
+            string privateKey = null)
+
         {
+            // both must be specified
+            if (publicKey != null && privateKey != null)
+            {
+                this.PublicKey = publicKey;
+                this.PrivateKey = privateKey;
+            }
+            else
+            {
+                if (privateKey == null && publicKey != null)
+                {
+                    throw new ArgumentNullException("Private key required if public key set");
+                }
+                if (publicKey == null && privateKey != null)
+                {
+                    throw new ArgumentNullException("Public key required if private key set");
+                }
+            }
+            
+
+            //Change SSL checks so that all checks pass
+            ServicePointManager.ServerCertificateValidationCallback =
+                new System.Net.Security.RemoteCertificateValidationCallback(
+                    delegate
+                    { return true; }
+                );
+
             UseCache = true;
 
             // default to current culture
@@ -78,31 +124,31 @@ namespace BattleNet.API.WoW
             switch (r)
             {
                 case Region.EU:
-                    baseUri = new Uri("http://eu.battle.net/api/wow/");
-                    iconUri = new Uri("http://eu.media.blizzard.com/wow/icons/");
-                    thumbnailUri = new Uri("http://eu.battle.net/static-render/eu/");
+                    baseUri = new Uri("https://eu.battle.net/api/wow/");
+                    iconUri = new Uri("https://eu.media.blizzard.com/wow/icons/");
+                    thumbnailUri = new Uri("https://eu.battle.net/static-render/eu/");
                     break;
                 case Region.KR:
-                    baseUri = new Uri("http://kr.battle.net/api/wow/");
-                    iconUri = new Uri("http://kr.media.blizzard.com/wow/icons/");
-                    thumbnailUri = new Uri("http://kr.battle.net/static-render/kr/");
+                    baseUri = new Uri("https://kr.battle.net/api/wow/");
+                    iconUri = new Uri("https://kr.media.blizzard.com/wow/icons/");
+                    thumbnailUri = new Uri("https://kr.battle.net/static-render/kr/");
                     break;
                 case Region.TW:
-                    baseUri = new Uri("http://tw.battle.net/api/wow/");
-                    iconUri = new Uri("http://tw.media.blizzard.com/wow/icons/");
-                    thumbnailUri = new Uri("http://tw.battle.net/static-render/tw/");
+                    baseUri = new Uri("https://tw.battle.net/api/wow/");
+                    iconUri = new Uri("https://tw.media.blizzard.com/wow/icons/");
+                    thumbnailUri = new Uri("https://tw.battle.net/static-render/tw/");
                     break;
                 case Region.CN:
-                    baseUri = new Uri("http://cn.battle.net/api/wow/");
+                    baseUri = new Uri("httsp://cn.battle.net/api/wow/");
                     // FIXME: what is the path for this.. this isnt correct..
-                    iconUri = new Uri("http://cn.media.battle.net/wow/icons/");
-                    thumbnailUri = new Uri("http://us.battle.net/static-render/us/");
+                    iconUri = new Uri("https://cn.media.battle.net/wow/icons/");
+                    thumbnailUri = new Uri("https://us.battle.net/static-render/us/");
                     break;
                 case Region.US:
                 default:    // fallback to the US region
-                    baseUri = new Uri("http://us.battle.net/api/wow/");
-                    iconUri = new Uri("http://us.media.blizzard.com/wow/icons/");
-                    thumbnailUri = new Uri("http://us.battle.net/static-render/us/");
+                    baseUri = new Uri("https://us.battle.net/api/wow/");
+                    iconUri = new Uri("https://us.media.blizzard.com/wow/icons/");
+                    thumbnailUri = new Uri("https://us.battle.net/static-render/us/");
                     break;
             }
         }
@@ -503,7 +549,6 @@ namespace BattleNet.API.WoW
             // this is .net v4.0 only
             //req.Date = DateTime.Now;
             
-
             string dateStr = date.ToString("r");
             string stringToSign = req.Method + "\n" +
                 dateStr + "\n" +

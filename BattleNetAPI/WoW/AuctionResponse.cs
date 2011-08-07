@@ -14,7 +14,7 @@ namespace BattleNet.API.WoW
     public class AuctionResponse : ResponseRoot
     {
         [XmlArray("files")]
-        [XmlArrayItem("items")]
+        [XmlArrayItem("item")]
         [DataMember(Name="files")]
         public List<AuctionFile> Files { get; set; }
     }
@@ -108,7 +108,7 @@ namespace BattleNet.API.WoW
     public class AuctionCollection
     {
         [XmlArray("auctions")]
-        [XmlArrayItem("items")]
+        [XmlArrayItem("item")]
         [DataMember(Name="auctions")]
         public List<Auction> Auctions { get; set; }
     }

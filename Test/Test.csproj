@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuctionTest.cs" />
     <Compile Include="BattleNetClientTest.cs" />
     <Compile Include="CharacterTest.cs" />
     <Compile Include="GuildQueryTest.cs" />
@@ -115,6 +116,11 @@
       <Project>{E4697D43-4D45-40A5-9C6B-9EFB84C2CFDF}</Project>
       <Name>BattleNetApi</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\auction.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

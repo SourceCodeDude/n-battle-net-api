@@ -12,11 +12,24 @@ namespace BattleNet.API.Converter
 
     public class WowAPIConverter : JavaScriptConverter
     {
-        static MethodInfo method = typeof(JavaScriptSerializer).GetMethod("ConvertToType");
-        public override object Deserialize(IDictionary<string, object> dictionary, Type type, JavaScriptSerializer serializer)
-        {
+        static MethodInfo method;
+        static WowAPIConverter()
+        {            
+            MethodInfo match = typeof(JavaScriptSerializer).GetMethod(
+                "ConvertToType",
+                new Type[] { typeof(object) },
+                new ParameterModifier[] { new ParameterModifier(1) });
+            method = match;
             
-
+            /**
+             * in 3.5 there is only one ConvertToType method..  ConvertToType<T>(Object)
+             * in 4.0 there is two.  ConvertToType<T> and ConverToType(Object,Type)
+             * 
+             * we one the single parameter one
+             */            
+        }
+        public override object Deserialize(IDictionary<string, object> dictionary, Type type, JavaScriptSerializer serializer)
+        {            
             object obj = Activator.CreateInstance(type);
             foreach (KeyValuePair<string, object> kvp in dictionary)
             {

@@ -73,7 +73,7 @@ namespace Test
         /// Memory leak
         /// </summary>
         [Test]
-        public void Issue10()
+        public void Issue12()
         {
             BattleNetClient client = new BattleNetClient(BattleNet.API.WoW.Region.US);
 

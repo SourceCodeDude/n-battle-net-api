@@ -40,7 +40,11 @@ namespace Test
             }            
         }
 
-        [Test]
+        /// <summary>
+        /// Timeouts and unable to connect should correctly throw an exception instead of
+        /// returning null
+        /// </summary>
+        [Test]        
         public void Issue9()
         {
             // setup a invalid proxy to cause request to timeout
@@ -64,5 +68,39 @@ namespace Test
             System.Net.WebRequest.DefaultWebProxy = oldProxy;
 
         }
-    }
+
+        /// <summary>
+        /// Memory leak
+        /// </summary>
+        [Test]
+        public void Issue10()
+        {
+            BattleNetClient client = new BattleNetClient(BattleNet.API.WoW.Region.US);
+
+            Guild g = client.GetGuild("burning-blade", "rival city", GuildFields.Members);
+            Character _c = client.GetCharacter("burning-blade","Fairy");
+            
+            // current number of assemblies loades
+            int loaded = AppDomain.CurrentDomain.GetAssemblies().Length;            
+
+            foreach (Member gm in g.Members)
+            {
+
+                try
+                {
+                    Character c = client.GetCharacter("burning-blade", gm.Character.Name);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+                int newLoaded = AppDomain.CurrentDomain.GetAssemblies().Length;
+                    
+                Assert.AreEqual(loaded,newLoaded, "Extra assemblies being loaded.. and not unloaded");
+
+                // we only need to load one character
+                break;
+            }
+        }
+    }            
 }

@@ -362,20 +362,29 @@ namespace BattleNet.API.WoW
 
                 // no response.. probably not able to make connection
                 if (h == null) throw ex;
-
+                ResponseRoot r;
+                string txt;
                 switch(h.StatusCode)
                 {
-                    case HttpStatusCode.NotFound:                        
-                        throw ex;                
                     case HttpStatusCode.NotModified:
                         // should only get to this line if CI was set...
-                        return ci.Value;                        
+                        return ci.Value;
+                    case HttpStatusCode.NotFound:
                     default:
-                        string txt = new StreamReader( h.GetResponseStream() ).ReadToEnd();
-                        ResponseRoot r = JsonParser.Parse<ResponseRoot>(txt);
-                        throw new ResponseException(r.Status, r.Reason);
+                        // images can return 404. In that case we should just throw
+                        // the web exception..
+                        // if we are in the API path, we need to parse the json..
+                        if (url.LocalPath.StartsWith("/api/wow"))
+                        {
+                            txt = new StreamReader(h.GetResponseStream()).ReadToEnd();
+                            r = JsonParser.Parse<ResponseRoot>(txt);
+                            throw new ResponseException(r.Status, r.Reason);
+                        }
+                        else
+                        {
+                            throw ex;
+                        }
                 }
-                //Console.WriteLine("HIT");                
             }
 
             if (UseCache && ci!=null)

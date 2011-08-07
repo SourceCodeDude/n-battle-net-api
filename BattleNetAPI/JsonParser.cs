@@ -20,10 +20,21 @@ namespace BattleNet.API
 
     public class XmlJsonParser : IJsonParser
     {
-
+        static Dictionary<Type, XmlSerializer> serializers = new Dictionary<Type, XmlSerializer>();
         #region IJsonParser Members
 
         public ParseErrorDelegate Error { get; set; }
+
+        static XmlSerializer GetSer(Type t)
+        {
+            XmlSerializer ser = null;
+            if (!serializers.TryGetValue(t, out ser))
+            {
+                ser = new XmlSerializer(t, new XmlRootAttribute("root"));
+                serializers[t] = ser;
+            }
+            return ser;
+        }
 
         public T Deserialize<T>(string json)
         {
@@ -36,10 +47,8 @@ namespace BattleNet.API
             return ret;
             */
             XmlReader rd = JsonReaderWriterFactory.CreateJsonReader(b, new XmlDictionaryReaderQuotas());
-            XmlSerializer s = new XmlSerializer(t, new XmlRootAttribute("root"));
-            return (T)s.Deserialize(rd);
-             
-            
+            XmlSerializer s = GetSer(t);
+            return (T)s.Deserialize(rd);                         
         }
 
         #endregion

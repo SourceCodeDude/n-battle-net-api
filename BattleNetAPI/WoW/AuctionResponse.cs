@@ -11,7 +11,7 @@ using System.IO;
 namespace BattleNet.API.WoW
 {
     [DataContract]
-    public class AuctionResponse
+    public class AuctionResponse : ResponseRoot
     {
         [XmlArray("files")]
         [XmlArrayItem("items")]

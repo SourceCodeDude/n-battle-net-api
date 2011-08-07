@@ -13,7 +13,7 @@ namespace Test
     class TestIssues
     {
         [Test]
-        public void Issue7Test()
+        public void Issue7()
         {            
             using (BattleNetClient client = new BattleNetClient(BattleNet.API.WoW.Region.US))
             {
@@ -29,7 +29,7 @@ namespace Test
 
 
             try
-            {
+            {                
                 DateTimeOffset time = new DateTimeOffset(DateTime.MinValue, TimeSpan.FromHours(+2));
 
                 Assert.Fail("Shouldnt have gotten here");
@@ -37,8 +37,31 @@ namespace Test
             catch (Exception ex)
             {
 
+            }            
+        }
+
+        [Test]
+        public void Issue9()
+        {
+            // setup a invalid proxy to cause request to timeout
+            System.Net.IWebProxy oldProxy = System.Net.WebRequest.DefaultWebProxy;
+            System.Net.WebRequest.DefaultWebProxy = new System.Net.WebProxy("127.0.0.1", false);
+
+            BattleNetClient client = new BattleNetClient(BattleNet.API.WoW.Region.US);
+
+            try
+            {
+                object status = client.RealmStatus();
+
+                Assert.Fail("Should have got a WebException but didn't");
             }
-            
+            catch (System.Net.WebException ex)
+            {
+                Assert.AreEqual(System.Net.WebExceptionStatus.ConnectFailure, ex.Status);
+
+            }
+            // restore original proxy
+            System.Net.WebRequest.DefaultWebProxy = oldProxy;
 
         }
     }

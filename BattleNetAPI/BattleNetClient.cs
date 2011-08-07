@@ -302,6 +302,7 @@ namespace BattleNet.API.WoW
         private Stream GetUrl(Uri url, ICache cache)
         {
             HttpWebRequest req = (HttpWebRequest) WebRequest.Create(url);
+            
             string key = url.ToString();
 
             CacheItem ci = null;
@@ -359,6 +360,9 @@ namespace BattleNet.API.WoW
             {                
                 HttpWebResponse h = ex.Response as HttpWebResponse;
 
+                // no response.. probably not able to make connection
+                if (h == null) throw ex;
+
                 switch(h.StatusCode)
                 {
                     case HttpStatusCode.NotFound:                        
@@ -405,6 +409,12 @@ namespace BattleNet.API.WoW
         public IList<AuctionFile> GetAuctions(string realm)
         {
             AuctionResponse resp = GetObject<AuctionResponse>("auction/data/" + HttpUtility.UrlPathEncode(realm));
+            if (resp == null) return null;
+            if (resp.Status != Status.Ok)
+            {
+                throw new ResponseException(resp);
+            }
+
             foreach (AuctionFile f in resp.Files)
             {
                 f.Client = this;
@@ -418,6 +428,13 @@ namespace BattleNet.API.WoW
             {
                 RacesQuery q = new RacesQuery();
                 RaceCollection o = GetObject<RaceCollection>(q.ToString());
+
+                if (o == null) return null;
+                if (o.Status != Status.Ok)
+                {
+                    throw new ResponseException(o);
+                }
+
                 // sort by id
                 o.Races.Sort();
                 return o;               
@@ -430,6 +447,13 @@ namespace BattleNet.API.WoW
             {
                 ClassesQuery q = new ClassesQuery();
                 ClassCollection o = GetObject<ClassCollection>(q.ToString());
+
+                if (o == null) return null;
+                if (o.Status != Status.Ok)
+                {
+                    throw new ResponseException(o);
+                }
+
                 // sort by id
                 o.Classes.Sort();
                 return o;
@@ -446,7 +470,15 @@ namespace BattleNet.API.WoW
 
         public Item GetItem(ItemQuery query)
         {
-            return GetObject<Item>(query.ToString());
+            Item o = GetObject<Item>(query.ToString());
+
+            if (o == null) return null;
+            if (o.Status != Status.Ok)
+            {
+                throw new ResponseException(o);
+            }
+
+            return o;
         }
 
         public List<GuildReward> GuildRewards
@@ -455,6 +487,13 @@ namespace BattleNet.API.WoW
             {
                 GuildRewardsQuery q = new GuildRewardsQuery();
                 GuildRewardCollection o = GetObject<GuildRewardCollection>(q.ToString());
+
+                if (o == null) return null;
+                if (o.Status != Status.Ok)
+                {
+                    throw new ResponseException(o);
+                }
+
                 return o.Rewards;
             }
         }
@@ -465,6 +504,13 @@ namespace BattleNet.API.WoW
             {
                 GuildPerksQuery q = new GuildPerksQuery();
                 GuildPerkCollection o = GetObject<GuildPerkCollection>(q.ToString());
+
+                if (o == null) return null;
+                if (o.Status != Status.Ok)
+                {
+                    throw new ResponseException(o);
+                }
+
                 return o.Perks;
             }
         }
@@ -529,14 +575,16 @@ namespace BattleNet.API.WoW
             
             Guild g = GetObject<Guild>(url);
 
-            if (g.Status == Status.Ok)
+            if (g!= null)
             {
-                return g;
+                if (g.Status == Status.Ok)
+                    return g;
+                else
+                {
+                    throw new ResponseException(g.Status, g.Reason);
+                }
             }
-            else
-            {
-                throw new ResponseException(g.Status, g.Reason);
-            }
+            return null;
         }
 
         /// <summary>
@@ -563,14 +611,15 @@ namespace BattleNet.API.WoW
 
             Character r = GetObject<Character>(url);
             
-            if (r!=null && r.Status == Status.Ok)
+            if (r!=null)
             {
-                return r;
+                if(r.Status == Status.Ok)
+                    return r;
+                else
+                    throw new ResponseException(r.Status, r.Reason);               
             }
-            else
-            {
-                throw new ResponseException(r.Status, r.Reason);               
-            }
+
+            return null;
         }
 
 

@@ -14,6 +14,13 @@ namespace BattleNet.API
         {
             Status = s;            
         }
+
+        public ResponseException(ResponseRoot r)
+            : base(r.Reason)
+        {
+            Status = r.Status;
+        }
+        
     }
 
  

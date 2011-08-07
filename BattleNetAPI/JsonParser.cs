@@ -103,28 +103,25 @@ namespace BattleNet.API
         /// <returns></returns>
         static public T Parse<T>(string json, ParseErrorDelegate onError)
         {
-            //try
+            try
             {
                 parser.Error = onError;
                 return (T)parser.Deserialize<T>(json);
             }
-            //catch (Exception ex)
+            catch (Exception ex)
             {
                 if (onError != null)
                 {
-                    //onError(ex.Message);
+                    onError(ex.Message);
+                    return default(T);
                 }
-                return default(T);
+                else
+                {
+                    // rethrow exception if no handler was defined
+                    throw ex;
+                    
+                }
             }
-            /*
-            StringBuilder sb = new StringBuilder();
-            while (rd.Read())
-            {
-               sb.Append( rd.ReadOuterXml() );
-            }
-
-            return default(T);
-            */
         }
     }
 }

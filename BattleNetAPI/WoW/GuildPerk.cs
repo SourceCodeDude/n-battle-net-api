@@ -8,7 +8,7 @@ using System.Runtime.Serialization;
 namespace BattleNet.API.WoW
 {
     [DataContract]
-    public class GuildPerkCollection
+    public class GuildPerkCollection : ResponseRoot
     {
         [XmlArray("perks")]
         [XmlArrayItem("item")]

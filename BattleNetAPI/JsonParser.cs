@@ -78,7 +78,7 @@ namespace BattleNet.API
                         // To remove dependancy on the System.Web.Extensions dll we make an extra assembly for json parsing.                    
                         // if it exists we can use it.. if not.. we fall back to xml
                         //
-                        Assembly asm = Assembly.Load("BattleNet.API.Json, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null");
+                        Assembly asm = Assembly.Load("BattleNet.API.Json, Version=1.0.0.1, Culture=neutral, PublicKeyToken=null");
                         Type t = asm.GetType("BattleNet.API.MyJavaScriptSerializer");
                         object o = Activator.CreateInstance(t);
                         parser = (IJsonParser)o;

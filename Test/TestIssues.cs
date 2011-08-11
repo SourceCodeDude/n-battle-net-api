@@ -102,5 +102,18 @@ namespace Test
                 break;
             }
         }
+
+        [Test]
+        public void Issue14()
+        {
+            using (BattleNetClient client = new BattleNetClient(BattleNet.API.WoW.Region.EU))
+            {
+                client.UseCache = true;
+                object o1 = client.RealmStatus();
+                // second call threw an exception about the Cache file still being open
+                object o2 = client.RealmStatus();
+            }
+
+        }
     }            
 }

@@ -371,19 +371,12 @@ namespace BattleNet.API.WoW
                         return ci.Value;
                     case HttpStatusCode.NotFound:
                     default:
-                        // images can return 404. In that case we should just throw
-                        // the web exception..
-                        // if we are in the API path, we need to parse the json..
-                        if (url.LocalPath.StartsWith("/api/wow"))
-                        {
-                            txt = new StreamReader(h.GetResponseStream()).ReadToEnd();
-                            r = JsonParser.Parse<ResponseRoot>(txt);
-                            throw new ResponseException(r.Status, r.Reason);
-                        }
-                        else
-                        {
-                            throw ex;
-                        }
+                        txt = new StreamReader(h.GetResponseStream()).ReadToEnd();
+                        r = JsonParser.Parse<ResponseRoot>(txt);
+                        // if we didn't get a JSON respose.. all we can do
+                        // is throw the original exception
+                        if (r == null) throw ex;
+                        throw new ResponseException(r.Status, r.Reason);
                 }
             }
 
@@ -399,9 +392,11 @@ namespace BattleNet.API.WoW
 
         internal T GetObject<T>(string url)
         {
-            Stream st = GetUrl(url, dataCache);
-            string json = new StreamReader(st).ReadToEnd();
-            return JsonParser.Parse<T>(json, Parse_Error);            
+            using (Stream st = GetUrl(url, dataCache))
+            {
+                string json = new StreamReader(st).ReadToEnd();
+                return JsonParser.Parse<T>(json, Parse_Error);
+            }
         }
 
         private void Parse_Error(string msg)

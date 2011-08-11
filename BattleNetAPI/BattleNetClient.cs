@@ -157,10 +157,10 @@ namespace BattleNet.API.WoW
                     thumbnailUri = new Uri("https://tw.battle.net/static-render/tw/");
                     break;
                 case Region.CN:
-                    baseUri = new Uri("httsp://cn.battle.net/api/wow/");
+                    baseUri = new Uri("https://cn.battle.net/api/wow/");
                     // FIXME: what is the path for this.. this isnt correct..
                     iconUri = new Uri("https://cn.media.battle.net/wow/icons/");
-                    thumbnailUri = new Uri("https://us.battle.net/static-render/us/");
+                    thumbnailUri = new Uri("https://cn.battle.net/static-render/cn/");
                     break;
                 case Region.US:
                 default:    // fallback to the US region

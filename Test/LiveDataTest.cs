@@ -75,6 +75,18 @@ namespace Test
                 Assert.NotNull(d.Neutral);
             }            
         }
+
+        [Test]
+        public void BattleNtCN()
+        {
+            BattleNetClient cn = new BattleNetClient(Region.CN);
+            Character c=cn.GetCharacter("法拉希姆","风之神仙");
+            Assert.NotNull(c);
+            System.Drawing.Image img = cn.GetThumbnail(c.Thumbnail);
+            Assert.NotNull(img);
+
+        }
+
         void client_ParseError(string message)
         {
             Assert.Fail(message);            

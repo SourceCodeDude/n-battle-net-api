@@ -25,13 +25,13 @@ namespace Test
             Assert.AreEqual(3,          rc.Races[0].Id);
             Assert.AreEqual(4,          rc.Races[0].Mask);
             Assert.AreEqual("Dwarf",    rc.Races[0].Name);
-            Assert.AreEqual("alliance", rc.Races[0].Side);
+            Assert.AreEqual( Side.Alliance, rc.Races[0].Side);
 
 
             Assert.AreEqual(6,          rc.Races[1].Id);
             Assert.AreEqual(32,         rc.Races[1].Mask);
             Assert.AreEqual("Tauren",   rc.Races[1].Name);
-            Assert.AreEqual("horde",    rc.Races[1].Side);
+            Assert.AreEqual( Side.Horde,    rc.Races[1].Side);
         }
 
         [Test]

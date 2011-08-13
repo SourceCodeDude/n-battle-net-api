@@ -46,7 +46,24 @@ namespace BattleNet.API.WoW
         /// </summary>
         [XmlElement("side")]
         [DataMember(Name = "side")]
-        public int Side { get; set; }
+        public int _side
+        {
+            get
+            {
+                if (Side == WoW.Side.Alliance) return 0;
+                if (Side == WoW.Side.Horde) return 1;
+                // unknown
+                return -1;
+            }
+            set
+            {
+                if (value == 0) Side = WoW.Side.Alliance;
+                if (value == 1) Side = WoW.Side.Horde;
+            }
+        }
+
+        [XmlIgnore]
+        public Side Side { get; set; }
 
         [XmlElement("achievementPoints")]
         [DataMember(Name = "achievementPoints")]

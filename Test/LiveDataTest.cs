@@ -87,6 +87,13 @@ namespace Test
 
         }
 
+        [Test]
+        public void TestArena()
+        {
+            ArenaTeam at = client.GetArenaTeam("BoneChewer", TeamSize.Team2v2, "Samurai Jack");
+
+            Assert.NotNull(at);
+        }
         void client_ParseError(string message)
         {
             Assert.Fail(message);            

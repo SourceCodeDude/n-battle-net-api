@@ -56,6 +56,7 @@ namespace BattleNet.API.WoW
             cacheCollection["icons"] = new Cache("./icons");
             cacheCollection["thumb"] = new Cache("./thumb");
         }
+
         [Obsolete("Please set in consturctor")]
         public string PrivateKey
         {
@@ -635,6 +636,31 @@ namespace BattleNet.API.WoW
             return null;
         }
 
+        public ArenaTeam GetArenaTeam(string realm, TeamSize size, string name)
+        {
+            return GetArenaTeam( new ArenaTeamQuery(){
+                Realm=realm,
+                TeamSize=size,
+                Name=name}
+                );
+        }
+
+        public ArenaTeam GetArenaTeam(ArenaTeamQuery query)
+        {
+            string url = query.ToString();
+
+            ArenaTeam r = GetObject<ArenaTeam>(url);
+
+            if (r != null)
+            {
+                if (r.Status == Status.Ok)
+                    return r;
+                else
+                    throw new ResponseException(r.Status, r.Reason);
+            }
+
+            return null;
+        }
 
         public void Authenticate(HttpWebRequest req)
         {

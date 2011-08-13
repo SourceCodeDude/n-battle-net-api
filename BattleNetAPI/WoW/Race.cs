@@ -120,10 +120,28 @@ namespace BattleNet.API.WoW
 
         [XmlElement("side")]
         [DataMember(Name = "side")]
-        public string Side { get; set; }
+        public Side Side { get; set; }
 
         [XmlElement("name")]
         [DataMember(Name = "name")]
         public string Name { get; set; }
+    }
+
+    [DataContract]
+    public enum Side
+    {
+        Unknown,
+
+        [XmlEnum("horde")]
+        [EnumMember(Value = "horde")]
+        Horde,
+
+        [XmlEnum("alliance")]
+        [EnumMember(Value = "Alliance")]
+        Alliance,
+
+        // probably wont see this one
+        [XmlEnum("neutral")]
+        Neutral
     }
 }

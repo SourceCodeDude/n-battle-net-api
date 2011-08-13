@@ -59,6 +59,8 @@
   <ItemGroup>
     <Compile Include="ICache.cs" />
     <Compile Include="WoW\Achievements.cs" />
+    <Compile Include="WoW\ArenaTeam.cs" />
+    <Compile Include="WoW\ArenaTeamQuery.cs" />
     <Compile Include="WoW\AuctionResponse.cs" />
     <Compile Include="WoW\DataQueryClasses.cs" />
     <Compile Include="BattleNetClient.cs" />

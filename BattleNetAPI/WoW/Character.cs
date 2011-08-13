@@ -273,9 +273,9 @@ Roster = members
     }
     public class Pet
     {
-        [XmlElement("Name")]        public string Name { get; set; }
-        [XmlElement("Creature")]    public int Creature { get; set; }
-        [XmlElement("Slot")]        public int Slot { get; set; }
+        [XmlElement("name")]        public string Name { get; set; }
+        [XmlElement("creature")]    public int Creature { get; set; }
+        [XmlElement("slot")]        public int Slot { get; set; }
 
 
     }

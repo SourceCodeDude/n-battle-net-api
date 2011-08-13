@@ -62,10 +62,10 @@ namespace Test
             Assert.AreEqual(850, rc.Guild.AchievementPoints);
             Assert.IsNotNull(rc.Guild.Emblem);
             Assert.AreEqual(166,rc.Guild.Emblem.Icon);
-            Assert.AreEqual("ffffff00", rc.Guild.Emblem.IconColor);
+            Assert.AreEqual( System.Drawing.Color.FromArgb(255,255,255,0), rc.Guild.Emblem.IconColor);
             Assert.AreEqual(-1, rc.Guild.Emblem.Border);
-            Assert.AreEqual("ffffff00", rc.Guild.Emblem.BorderColor);
-            Assert.AreEqual("ffffff64", rc.Guild.Emblem.BackgroundColor);
+            Assert.AreEqual(System.Drawing.Color.FromArgb(255, 255, 255, 0), rc.Guild.Emblem.BorderColor);
+            Assert.AreEqual(System.Drawing.Color.FromArgb(255, 255, 255, 0x64), rc.Guild.Emblem.BackgroundColor);
         }
 
         [Test]

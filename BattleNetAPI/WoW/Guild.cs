@@ -62,6 +62,10 @@ namespace BattleNet.API.WoW
             }
         }
 
+        [XmlElement("emblem")]
+        [DataMember(Name = "emblem")]
+        public Emblem Emblem { get; set; }
+
         [XmlIgnore]
         public Side Side { get; set; }
 

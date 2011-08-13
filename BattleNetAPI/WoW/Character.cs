@@ -5,6 +5,8 @@ using System.Text;
 
 using System.Xml.Serialization;
 using System.Runtime.Serialization;
+using System.Drawing;
+
 namespace BattleNet.API.WoW
 {
     /*
@@ -169,9 +171,27 @@ namespace BattleNet.API.WoW
         [DataMember(Name="icon")]
         public int Icon { get; set; }
 
+
         [XmlElement("iconColor")]
         [DataMember(Name = "iconColor")]
-        public string IconColor { get; set; }
+        public string iconColor
+        {
+            get
+            {
+                return IconColor.ToArgb().ToString("X08");
+            }
+            set
+            {
+                IconColor = Color.FromArgb(int.Parse(value, System.Globalization.NumberStyles.HexNumber));
+            }
+        }
+
+        [XmlIgnore]
+        public Color IconColor
+        {
+            get;
+            set;
+        }
 
         [XmlElement("border")]
         [DataMember(Name = "border")]
@@ -179,11 +199,36 @@ namespace BattleNet.API.WoW
 
         [XmlElement("borderColor")]
         [DataMember(Name = "borderColor")]
-        public string BorderColor { get; set; }
+        public string borderColor
+        {
+            get
+            {
+                return BorderColor.ToArgb().ToString("X08");
+            }
+            set
+            {
+                BorderColor = Color.FromArgb(int.Parse(value, System.Globalization.NumberStyles.HexNumber));
+            }
+        }
+
+        [XmlIgnore]
+        public Color BorderColor { get; set; }
 
         [XmlElement("backgroundColor")]
         [DataMember(Name = "backgroundColor")]
-        public string BackgroundColor { get; set; }
+        public string backgroundColor
+        {
+            get
+            {
+                return BackgroundColor.ToArgb().ToString("X08");
+            }
+            set
+            {
+                BackgroundColor = Color.FromArgb(int.Parse(value, System.Globalization.NumberStyles.HexNumber));
+            }
+        }
+
+        public Color BackgroundColor { get; set; }
     }
 
     /*

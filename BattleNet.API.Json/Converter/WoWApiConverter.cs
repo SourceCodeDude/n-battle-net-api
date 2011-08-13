@@ -108,6 +108,15 @@ namespace BattleNet.API.Converter
                         return key;
                 }
             }
+            else if (typeof(ItemSpell) == t)
+            {
+                switch(key)
+                {
+                    case "nCharges": return "Charges";
+                    default:
+                        return key;
+                }
+            }
             else
             {
                 return key;
@@ -142,7 +151,7 @@ namespace BattleNet.API.Converter
                         typeof(CharacterItems),
                         typeof(Title),
                         typeof(ItemToolTip),   
-                     
+                        typeof(ItemSpell),
                         typeof(ClassCollection),
                         typeof(Class),
                         typeof(PowerType),

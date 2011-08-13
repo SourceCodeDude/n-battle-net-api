@@ -46,8 +46,14 @@ namespace BattleNet.API
             T ret = (T)s.ReadObject(new MemoryStream(b));
             return ret;
             */
-            XmlReader rd = JsonReaderWriterFactory.CreateJsonReader(b, new XmlDictionaryReaderQuotas());
-            XmlSerializer s = GetSer(t);
+            XmlReader rd;
+            /*
+            rd = JsonReaderWriterFactory.CreateJsonReader(b, new XmlDictionaryReaderQuotas());
+            rd.Read();
+            Console.WriteLine(rd.ReadInnerXml());
+            */
+            rd = JsonReaderWriterFactory.CreateJsonReader(b, new XmlDictionaryReaderQuotas());
+            XmlSerializer s = GetSer(t);            
             return (T)s.Deserialize(rd);                         
         }
 

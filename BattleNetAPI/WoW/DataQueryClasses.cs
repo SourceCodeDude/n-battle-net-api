@@ -54,7 +54,7 @@ namespace BattleNet.API.WoW
         {
             if (ItemId <= 0) throw new ArgumentException("ItemId must be a positive number");
 
-            return "data/item/" + ItemId + base.ToString();
+            return "item/" + ItemId + base.ToString();
         }
     }
 

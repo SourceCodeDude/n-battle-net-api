@@ -77,7 +77,7 @@ namespace Test
             Assert.AreEqual(65360, rc.Rewards[0].Achievement.RewardItem.Id);
             Assert.AreEqual("Cloak of Coordination", rc.Rewards[0].Achievement.RewardItem.Name);
             Assert.AreEqual("inv_guild_cloak_alliance_c", rc.Rewards[0].Achievement.RewardItem.Icon);
-            Assert.AreEqual(4, rc.Rewards[0].Achievement.RewardItem.Quality);
+            Assert.AreEqual(Quality.Epic, rc.Rewards[0].Achievement.RewardItem.Quality);
             Assert.IsNotNull(rc.Rewards[0].Achievement.RewardItem.TooltipParams);
 
 
@@ -85,7 +85,7 @@ namespace Test
             Assert.AreEqual(65274, rc.Rewards[0].Item.Id);
             Assert.AreEqual("Cloak of Coordination", rc.Rewards[0].Item.Name);
             Assert.AreEqual("inv_guild_cloak_horde_c", rc.Rewards[0].Item.Icon);
-            Assert.AreEqual(4, rc.Rewards[0].Item.Quality);
+            Assert.AreEqual(Quality.Epic, rc.Rewards[0].Item.Quality);
             Assert.IsNotNull(rc.Rewards[0].Item.TooltipParams);
         }
 

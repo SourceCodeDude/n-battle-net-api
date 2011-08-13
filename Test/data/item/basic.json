@@ -1,0 +1,84 @@
+﻿{
+  "id":38268,
+  "description":"Give to a Friend",
+  "name":"Spare Hand",
+  "icon":"inv_gauntlets_09",
+  "stackable":1,
+  "itemBind":0,
+  "bonusStats":[
+    {
+      "stat":35,
+      "amount":11,
+      "reforged":false
+    },
+    {
+      "stat":32,
+      "amount":16,
+      "reforged":false
+    },
+    {
+      "stat":38,
+      "amount":34,
+      "reforged":false
+    },
+    {
+      "stat":31,
+      "amount":10,
+      "reforged":false
+    },
+    {
+      "stat":7,
+      "amount":24,
+      "reforged":false
+    }
+  ],
+  "itemSpells":[
+    {
+      "spellId":434,
+      "spell":{
+        "id":434,
+        "name":"Food",
+        "icon":"inv_misc_fork&knife",
+        "description":"Restores 232 health over 21 sec.  Must remain seated while eating.",
+        "castTime":"Instant cast",
+        "cooldown":"1 min cooldown"
+      },
+      "nCharges":1,
+      "consumable":true,
+      "categoryId":11
+    }
+  ],
+  "buyPrice":12,
+  "itemClass":2,
+  "itemSubClass":14,
+  "containerSlots":0,
+  "weaponInfo":{
+    "damage":[
+      {
+        "minDamage":1,
+        "maxDamage":2
+      }
+    ],
+    "weaponSpeed":2.5,
+    "dps":0.6
+  },
+  "inventoryType":13,
+  "equippable":true,
+  "itemLevel":1,
+  "maxCount":0,
+  "maxDurability":16,
+  "minFactionId":0,
+  "minReputation":0,
+  "quality":0,
+  "sellPrice":2,
+  "requiredSkill":0,
+  "requiredLevel":70,
+  "requiredSkillRank":0,
+  "itemSource":{
+    "sourceId":0,
+    "sourceType":"NONE"
+  },
+  "baseArmor":0,
+  "hasSockets":false,
+  "isAuctionable":true
+}

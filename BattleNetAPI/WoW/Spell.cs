@@ -36,7 +36,7 @@ namespace BattleNet.API.WoW
         
         [XmlElement("castTime")]
         [DataMember(Name = "castTime")]
-        public int CastTime { get; set; }
+        public string CastTime { get; set; }
         
         [XmlElement("cooldown")]
         [DataMember(Name = "cooldown")]

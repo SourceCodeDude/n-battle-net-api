@@ -445,6 +445,15 @@ namespace BattleNet.API.WoW
             }
         }
 
+        public List<Item.Class> ItemClasses
+        {
+            get
+            {
+                ItemClassCollection icc = GetObject<ItemClassCollection>("data/item/classes");
+
+                return icc.Classes;
+            }
+        }
         public ClassCollection Classes
         {
             get

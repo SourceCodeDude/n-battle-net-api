@@ -22,9 +22,12 @@ namespace BattleNet.API.WoW
         Achievements,
         Progression,
         Guild,
+        PVP,
+        Quests,
 
-        All = Guild | Progression | Achievements | Pets | Mounts | Companions |
-              Appearance | Professions | Titles | Reputation | Items | Talents | Stats,
+        All = Guild | Progression | Achievements | Pets | Mounts | Companions | PVP |
+              Appearance | Professions | Titles | Reputation | Items | Talents | Stats|
+              Quests,
     }
 
     public class CharacterQuery : QueryBase
@@ -58,6 +61,9 @@ namespace BattleNet.API.WoW
             if ((Fields & CharacterFields.Talents) == CharacterFields.Talents) args.Add("talents");
             if ((Fields & CharacterFields.Titles) == CharacterFields.Titles) args.Add("titles");
             if ((Fields & CharacterFields.Guild) == CharacterFields.Guild) args.Add("guild");
+            if ((Fields & CharacterFields.PVP) == CharacterFields.Guild) args.Add("pvp");
+            if ((Fields & CharacterFields.Quests) == CharacterFields.Quests) args.Add("quests");
+            
 
             string _f = string.Join(",", args.ToArray());
 

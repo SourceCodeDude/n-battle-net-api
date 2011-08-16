@@ -120,13 +120,15 @@ namespace BattleNet.API.WoW
                 }
             }
             
-
+            // need a workaround for this in silverlight
+#if !SILVERLIGHT
             //Change SSL checks so that all checks pass
             ServicePointManager.ServerCertificateValidationCallback =
                 new System.Net.Security.RemoteCertificateValidationCallback(
                     delegate
                     { return true; }
                 );
+#endif
 
             UseCache = true;
             if (cache)

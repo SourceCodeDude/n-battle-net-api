@@ -7,7 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleNetApi", "BattleNetAP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleNet.API.Json", "BattleNet.API.Json\BattleNet.API.Json.csproj", "{4E710B3F-744E-48DF-A0BE-F5936A6CE236}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhoneClassLibrary1", "BattleNetAPI\PhoneClassLibrary1.csproj", "{26077A2F-8C7F-4C4C-8A79-FCC1429750BA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleNetApiSL", "BattleNetAPI\BattleNetApiSL.csproj", "{26077A2F-8C7F-4C4C-8A79-FCC1429750BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSL", "TestSL\TestSL.csproj", "{D334EA18-27BF-4398-9EB5-BB715498611A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSL.Web", "TestSL.Web\TestSL.Web.csproj", "{2A5DD671-1CD5-4537-BD0E-01399D9FBB58}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +33,14 @@ Global
 		{4E710B3F-744E-48DF-A0BE-F5936A6CE236}.Release|Any CPU.Build.0 = Release|Any CPU
 		{26077A2F-8C7F-4C4C-8A79-FCC1429750BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{26077A2F-8C7F-4C4C-8A79-FCC1429750BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D334EA18-27BF-4398-9EB5-BB715498611A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D334EA18-27BF-4398-9EB5-BB715498611A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D334EA18-27BF-4398-9EB5-BB715498611A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D334EA18-27BF-4398-9EB5-BB715498611A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A5DD671-1CD5-4537-BD0E-01399D9FBB58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A5DD671-1CD5-4537-BD0E-01399D9FBB58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A5DD671-1CD5-4537-BD0E-01399D9FBB58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A5DD671-1CD5-4537-BD0E-01399D9FBB58}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

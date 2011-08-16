@@ -166,6 +166,7 @@ namespace Test
         {
             string test = ReadData("data/character/all.json");
 
+            JsonParser.UseJson = true;
             Character rc = JsonParser.Parse<Character>(test);
 
             //VerifyBasicData(rc);
@@ -192,6 +193,15 @@ namespace Test
             Assert.IsNotNull(a.Trinket1);
             Assert.IsNotNull(a.Trinket2);
             Assert.IsNotNull(a.Waist);
+
+            // verify PvP
+            Assert.NotNull(rc.PvP);
+            Assert.AreEqual(1338, rc.PvP.TotalHonorableKills);
+            Assert.NotNull(rc.PvP.RatedBattlegrounds);
+            Assert.AreEqual(1234, rc.PvP.RatedBattlegrounds.PersonalRating);
+            Assert.NotNull(rc.PvP.ArenaTeams);
+
+            Assert.AreEqual(5, rc.PvP.ArenaTeams[0].TeamSize);
         }
     }
 }

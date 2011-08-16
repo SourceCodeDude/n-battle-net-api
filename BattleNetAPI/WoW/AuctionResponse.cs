@@ -154,5 +154,16 @@ namespace BattleNet.API.WoW
         [XmlElement("quantity")]
         [DataMember(Name = "quantity")]
         public int Quantity { get; set; }
+
+        /// <summary>
+        /// Amount of time left on the auction
+        /// VERY_LONG  24+
+        /// LONG       2 - 24 hours 
+        /// MEDIUM     30min - 2 hours
+        /// SHORT      less than 30min        
+        /// </summary>
+        [XmlElement("timeLeft")]
+        [DataMember(Name = "timeLeft")]
+        public string TimeLeft { get; set; }
     }
 }

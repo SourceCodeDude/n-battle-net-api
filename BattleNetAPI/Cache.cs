@@ -47,7 +47,9 @@ namespace BattleNet.API
         /// <param name="storePath"></param>
         public Cache(string storePath)
         {
+#if !SILVERLIGHT
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(CurrentDomain_ProcessExit);
+#endif
             cachePath = storePath;
             Prime();
         }

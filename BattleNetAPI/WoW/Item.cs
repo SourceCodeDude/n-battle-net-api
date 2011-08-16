@@ -188,10 +188,23 @@ namespace BattleNet.API.WoW
     {
         [XmlElement("sourceId")]
         [DataMember(Name = "sourceId")]
-        public int SourceId { get; set; }        
-        [XmlElement("sourceType")]
-        [DataMember(Name = "sourceType")]
+        public int SourceId { get; set; }    
+    
+        [XmlElement("sourceType")]        
         public SourceType SourceType { get; set; }
+
+        [DataMember(Name = "sourceType")]
+        private string sourceType
+        {
+            get
+            {
+                return SourceType.ToString().ToUpper();
+            }
+            set
+            {
+                SourceType = (SourceType)Enum.Parse(typeof(SourceType), value, true);
+            }
+        }
     }
 
     [DataContract]

@@ -19,7 +19,7 @@ namespace BattleNet.API.WoW
         [DataMember(Name = "ranking")]
         public int Ranking { get; set; }
 
-        [XmlElement("rating")]
+        [XmlElement("rating")]        
         [DataMember(Name = "rating")]
         public int Rating { get; set; }
 
@@ -76,9 +76,19 @@ namespace BattleNet.API.WoW
         [DataMember(Name = "lastSessionRanking")]
         public int LastSessionRanking { get; set; }
 
-        [XmlElement("side")]
-        [DataMember(Name="side")]
+        [XmlElement("side")]        
         public Side Side { get; set; }
+
+        [DataMember(Name = "side")]
+        private string side{ 
+            get
+            {
+                return Side.ToString().ToLower();
+            }
+            set{
+                Side = (Side)Enum.Parse(typeof(Side), value, true);
+            }
+        }
 
         [XmlElement("currentWeekRanking")]
         [DataMember(Name = "currentWeekRanking")]

@@ -20,11 +20,13 @@ namespace BattleNet.API
 
     public class XmlJsonParser : IJsonParser
     {
-        static Dictionary<Type, XmlSerializer> serializers = new Dictionary<Type, XmlSerializer>();
         #region IJsonParser Members
 
         public ParseErrorDelegate Error { get; set; }
 
+#if SILVERLIGHT
+#else
+        static Dictionary<Type, XmlSerializer> serializers = new Dictionary<Type, XmlSerializer>();
         static XmlSerializer GetSer(Type t)
         {
             XmlSerializer ser = null;
@@ -35,26 +37,30 @@ namespace BattleNet.API
             }
             return ser;
         }
+#endif
 
         public T Deserialize<T>(string json)
         {
             Type t = typeof(T);
             byte[] b = System.Text.UTF8Encoding.UTF8.GetBytes(json);
             
-            /*
+
             System.Runtime.Serialization.Json.DataContractJsonSerializer s = new DataContractJsonSerializer(t);
             T ret = (T)s.ReadObject(new MemoryStream(b));
             return ret;
-            */
+
+
             XmlReader rd;
             /*
             rd = JsonReaderWriterFactory.CreateJsonReader(b, new XmlDictionaryReaderQuotas());
             rd.Read();
             Console.WriteLine(rd.ReadInnerXml());
             */
+            /*
             rd = JsonReaderWriterFactory.CreateJsonReader(b, new XmlDictionaryReaderQuotas());
             XmlSerializer s = GetSer(t);            
             return (T)s.Deserialize(rd);                         
+            */
         }
 
         #endregion

@@ -118,9 +118,21 @@ namespace BattleNet.API.WoW
         [DataMember(Name = "mask")]
         public int Mask { get; set; }
 
-        [XmlElement("side")]
-        [DataMember(Name = "side")]
+        [XmlElement("side")]        
         public Side Side { get; set; }
+
+        [DataMember(Name = "side")]
+        private string side
+        {
+            get
+            {
+                return Side.ToString().ToLower();
+            }
+            set
+            {
+                Side = (Side)Enum.Parse(typeof(Side), value, true);
+            }
+        }
 
         [XmlElement("name")]
         [DataMember(Name = "name")]

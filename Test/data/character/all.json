@@ -1796,5 +1796,52 @@
         ]
       }
     ]
+  },
+
+  "pvp":{
+    "ratedBattlegrounds":{
+      "personalRating":1234,
+      "battlegrounds":[
+        {
+          "name":"Arathi Basin",
+          "played":0,
+          "won":0
+        },
+        {
+          "name":"The Battle for Gilneas",
+          "played":0,
+          "won":0
+        },
+        {
+          "name":"Eye of the Storm",
+          "played":0,
+          "won":0
+        },
+        {
+          "name":"Strand of the Ancients",
+          "played":0,
+          "won":0
+        },
+        {
+          "name":"Twin Peaks",
+          "played":0,
+          "won":0
+        },
+        {
+          "name":"Warsong Gulch",
+          "played":0,
+          "won":0
+        }
+      ]
+    },
+    "arenaTeams":[
+      {
+        "name":"PvPers of Chaos",
+        "personalRating":1,
+        "teamRating":2,
+        "size":"5v5"
+      }
+    ],
+    "totalHonorableKills":1338
   }
 }

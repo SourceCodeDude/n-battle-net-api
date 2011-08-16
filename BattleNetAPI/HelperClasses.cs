@@ -125,7 +125,7 @@ namespace BattleNet.API
 
     }
 
-    class ToHex
+    static class ToHex
     {
         public static string ToHexString(byte[] data)
         {
@@ -136,5 +136,28 @@ namespace BattleNet.API
 
             return hex.ToString();
         }
+#if SILVERLIGHT
+
+        public static int ToArgb(this System.Windows.Media.Color c)
+        {
+            return (c.A << 24) + (c.R << 16) + (c.G << 8) + (c.B);
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Small helper to convert from copper to Gold, Silver, and Copper amounts
+    /// </summary>
+    public class WowCurrency
+    {
+        long copper;
+        WowCurrency(long copper)
+        {
+            this.copper = copper;
+        }
+
+        public int Gold { get { return (int)((copper / 1000000)%1000); } }
+        public int Silver { get { return (int)((copper / 1000) % 1000); } }
+        public int Copper { get { return (int)(copper % 1000); } }
     }
 }

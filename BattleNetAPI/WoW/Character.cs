@@ -5,7 +5,12 @@ using System.Text;
 
 using System.Xml.Serialization;
 using System.Runtime.Serialization;
+#if SILVERLIGHT
+using System.Windows.Media;
+#else
 using System.Drawing;
+#endif
+
 
 namespace BattleNet.API.WoW
 {
@@ -21,7 +26,7 @@ namespace BattleNet.API.WoW
         public UnixTimestamp LastModified { get; set; }
         
         [DataMember(Name = "lastModified")]
-        internal long lastModified
+        private long lastModified
         {
             get { return LastModified.ToMsec(); }
             set{
@@ -86,6 +91,11 @@ namespace BattleNet.API.WoW
         [DataMember(Name = "titles")]
         public List<Title> Titles { get; set; }
 
+        [XmlArray("quests", IsNullable = true)]
+        [XmlArrayItem("item")]
+        [DataMember(Name = "quests")]
+        public List<int> Quests { get; set; }
+
         // professions
         [XmlElement("professions", IsNullable = true)]
         [DataMember(Name = "professions")]
@@ -129,6 +139,60 @@ namespace BattleNet.API.WoW
         [DataMember(Name = "guild")] 
         public GuildInfo Guild { get; set; }
 
+        [XmlElement("pvp", IsNullable = true)]
+        [DataMember(Name = "pvp")]
+        public CharacterPvP PvP { get; set; }
+    }
+
+    [DataContract]
+    public class CharacterPvP
+    {
+        [XmlElement("ratedBattlegrounds")]
+        [DataMember(Name = "ratedBattlegrounds")]
+        public RatedBattlegrounds RatedBattlegrounds { get; set; }
+
+        [XmlArray("arenaTeams")]
+        [XmlArrayItem("item")]
+        [DataMember(Name = "arenaTeams")]
+        public List<CharacterArenaTeam> ArenaTeams { get; set; }
+
+        [XmlElement("totalHonorableKills")]
+        [DataMember(Name = "totalHonorableKills")]
+        public int TotalHonorableKills { get; set; }
+    }
+
+    [DataContract]
+    public class CharacterArenaTeam : ResponseRoot
+    {
+
+        [XmlElement("teamRating")]
+        [DataMember(Name = "teamRating")]
+        public int TeamRating { get; set; }
+
+        [XmlElement("personalRating")]
+        [DataMember(Name = "personalRating")]
+        public int PersonalRating { get; set; }
+
+        [XmlElement("size")]
+        [DataMember(Name = "size")]
+        public string teamSize
+        {
+            get
+            {
+                return TeamSize + "v" + TeamSize;
+            }
+            set
+            {
+                TeamSize = int.Parse(""+value[0]);
+            }
+        }
+
+        [XmlIgnore]
+        public int TeamSize { get; set; }
+
+        [XmlElement("name")]
+        [DataMember(Name = "name")]
+        public string Name { get; set; }
     }
 
     /// <summary>
@@ -182,7 +246,13 @@ namespace BattleNet.API.WoW
             }
             set
             {
-                IconColor = Color.FromArgb(int.Parse(value, System.Globalization.NumberStyles.HexNumber));
+                int argb = int.Parse(value, System.Globalization.NumberStyles.HexNumber);
+                IconColor = Color.FromArgb(
+                    (byte)(argb>>24),
+                    (byte)(argb >> 16),
+                    (byte)(argb >> 8),
+                    (byte)(argb >> 0)
+                    );
             }
         }
 
@@ -207,7 +277,14 @@ namespace BattleNet.API.WoW
             }
             set
             {
-                BorderColor = Color.FromArgb(int.Parse(value, System.Globalization.NumberStyles.HexNumber));
+                int argb = int.Parse(value, System.Globalization.NumberStyles.HexNumber);
+                BorderColor = Color.FromArgb(
+                    (byte)(argb >> 24),
+                    (byte)(argb >> 16),
+                    (byte)(argb >> 8),
+                    (byte)(argb >> 0)
+                    );
+                
             }
         }
 
@@ -224,54 +301,53 @@ namespace BattleNet.API.WoW
             }
             set
             {
-                BackgroundColor = Color.FromArgb(int.Parse(value, System.Globalization.NumberStyles.HexNumber));
+                int argb = int.Parse(value, System.Globalization.NumberStyles.HexNumber);
+                BackgroundColor = Color.FromArgb(
+                    (byte)(argb >> 24),
+                    (byte)(argb >> 16),
+                    (byte)(argb >> 8),
+                    (byte)(argb >> 0)
+                    );
             }
         }
 
         public Color BackgroundColor { get; set; }
     }
 
-    /*
-     * Base stats = stats
-Equipped Items = items
-Reputation = reputation
-Talents = talents
-Titles = titles
-Mounts = mounts
-Companions = companions
-Hunter Pets = pets (one thing of note is that these provide just the creature id, not what class they are so it will list the pet as creature: 41166 but will not say that it is a core hound pet)
-Achievements = achievements
-Professions = professions
-appearance = appearance
-
-
- Guild:
-Roster = members
-Achievements = achievements
-
-PvP:
-Roster = members
-     */
-
+    [DataContract]
     public enum Standing
     {
+        [EnumMember(Value="0")]
         Hated = 0,
+        [EnumMember(Value = "1")]
         Hostile = 1,
+        [EnumMember(Value = "2")]
         Unfriendly = 2,
+        [EnumMember(Value = "3")]
         Neutural = 3,
+        [EnumMember(Value = "4")]
         Friendly = 4,
+        [EnumMember(Value = "5")]
         Honored = 5,
+        [EnumMember(Value = "6")]
         Revered = 6,
+        [EnumMember(Value = "7")]
         Exalted = 7,
-
-
     }
 
+    [DataContract]
     public class Reputation
     {
-        [XmlElement("id")]      public int Id { get; set; }
-        [XmlElement("name")]    public string Name { get; set; }        
-        [XmlIgnore]             public Standing Standing { get; set; }
+        [XmlElement("id")]     
+        [DataMember(Name="id")]
+        public int Id { get; set; }
+        [XmlElement("name")]
+        [DataMember(Name = "name")]
+        public string Name { get; set; }
+
+        [XmlIgnore]
+        [DataMember(Name = "standing")]
+        public Standing Standing { get; set; }
 
         [XmlElement("standing")]
         //[EditorBrowsable(EditorBrowsableState.Never), Browsable(false)]
@@ -286,66 +362,123 @@ Roster = members
                 Standing = (Standing)value;
             }
         }
-        [XmlElement("value")]   public int Value { get; set; }
-        [XmlElement("max")]     public int Max { get; set; }
+        [XmlElement("value")]
+        [DataMember(Name = "value")]
+        public int Value { get; set; }
+
+        [XmlElement("max")]
+        [DataMember(Name = "max")]
+        public int Max { get; set; }
     }
 
-
+    [DataContract]
     public class Progression
     {
         [XmlArray("raids")]
         [XmlArrayItem("item")]
+        [DataMember(Name="raids")]
         public List<RaidProgression> raids { get; set; }
     }
 
+    [DataContract]
     public class RaidProgression
     {
-        [XmlElement("name")]    public string Name { get; set; }
-        [XmlElement("normal")]  public int Normal { get; set; }
-        [XmlElement("heroic")]  public int Heroic { get; set; }
-        [XmlElement("id")]      public int Id { get; set; }
+        [XmlElement("name")]
+        [DataMember(Name = "name")]
+        public string Name { get; set; }
+
+        [XmlElement("normal")]
+        [DataMember(Name = "normal")]
+        public int Normal { get; set; }
+
+        [XmlElement("heroic")]
+        [DataMember(Name = "heroic")]
+        public int Heroic { get; set; }
+
+        [XmlElement("id")]
+        [DataMember(Name = "id")]
+        public int Id { get; set; }
+        
         [XmlArray("bosses")]
         [XmlArrayItem("item")]
+        [DataMember(Name = "bosses")]
         public List<BossProgression> bosses { get; set; }
     }
 
+    [DataContract]
     public class BossProgression
     {
-        [XmlElement("name")]        public string Name { get; set; }
-        [XmlElement("normalKills")] public int NormalKills { get; set; }
-        [XmlElement("heroicKills")] public int HeroicKills { get; set; }
-        [XmlElement("id")]          public int Id { get; set; }
+        [XmlElement("name")]
+        [DataMember(Name = "name")]
+        public string Name { get; set; }
+
+        [XmlElement("normalKills")]
+        [DataMember(Name = "normalKills")]
+        public int NormalKills { get; set; }
+
+        [XmlElement("heroicKills")]
+        [DataMember(Name = "heroicKills")]
+        public int HeroicKills { get; set; }
+
+        [XmlElement("id")]
+        [DataMember(Name = "id")]
+        public int Id { get; set; }
     }
+
+    [DataContract]
     public class Pet
     {
-        [XmlElement("name")]        public string Name { get; set; }
-        [XmlElement("creature")]    public int Creature { get; set; }
-        [XmlElement("slot")]        public int Slot { get; set; }
+        [XmlElement("name")]
+        [DataMember(Name = "name")]
+        public string Name { get; set; }
+
+        [XmlElement("creature")]
+        [DataMember(Name = "creature")]
+        public int Creature { get; set; }
+
+        [XmlElement("slot")]
+        [DataMember(Name = "slot")]
+        public int Slot { get; set; }
 
 
     }
 
+    [DataContract]
     public class Professions
     {
         [XmlArray("primary")]
         [XmlArrayItem("item")]
+        [DataMember(Name = "primary")]
         public List<Profession> Primary { get; set; }
 
         [XmlArray("secondary")]
         [XmlArrayItem("item")]
+        [DataMember(Name = "secondary")]
         public List<Profession> Secondary { get; set; }
     }
 
+    [DataContract]
     public class Profession
     {
-        [XmlElement("id")]      public int Id { get; set; }
-        [XmlElement("name")]    public string Name { get; set; }
-        [XmlElement("icon")]    public string Icon { get; set; }
-        [XmlElement("rank")]    public int Rank { get; set; }
-        [XmlElement("max")]     public int Max { get; set; }
+        [XmlElement("id")]
+        [DataMember(Name = "id")]
+        public int Id { get; set; }
+        [XmlElement("name")]
+        [DataMember(Name = "name")]
+        public string Name { get; set; }
+        [XmlElement("icon")]
+        [DataMember(Name = "icon")]
+        public string Icon { get; set; }
+        [XmlElement("rank")]
+        [DataMember(Name = "rank")]
+        public int Rank { get; set; }
+        [XmlElement("max")]
+        [DataMember(Name = "max")]
+        public int Max { get; set; }
         
         [XmlArray("recipes")]
         [XmlArrayItem("item")]
+        [DataMember(Name = "recipes")]
         public List<int> Recipes { get; set; }
 
     }
@@ -382,105 +515,304 @@ Roster = members
         public bool ShowCloak { get; set; }
     }
 
+    [DataContract]
     public class Stats
     {
-        [XmlElement("health")]      public int Health { get; set; }
-        [XmlElement("power")]       public int Power  { get; set; }
-        [XmlElement("powerType")]   public PowerType PowerType { get; set; }
-        [XmlElement("str")]         public int Strength { get; set; }
-        [XmlElement("agi")]         public int Agility { get; set; }
-        [XmlElement("sta")]         public int Stamina { get; set; }
-        [XmlElement("int")]         public int Intelect { get; set; }
-        [XmlElement("spr")]         public int Spirit { get; set; }
-        [XmlElement("attackPower")] public int AttackPower { get; set; }
-        [XmlElement("rangedAttackPower")]public int RangedAttackPower { get; set; }
-        [XmlElement("mastery")]     public float Mastery { get; set; }
-        [XmlElement("masteryRating")]public int MasteryRating { get; set; }
-        [XmlElement("crit")]        public float CritPercent { get; set; }
-        [XmlElement("critRating")]  public int CritRating { get; set; }
-        [XmlElement("hitPercent")]  public float HitPercent { get; set; }
-        [XmlElement("hitRating")]   public int HitRating { get; set; }
-        [XmlElement("hasteRating")] public int HasteRating { get; set; }
-        [XmlElement("expertiseRating")] public int ExpertiseRating { get; set; }
-        [XmlElement("spellPower")]  public int SpellPower { get; set; }
-        [XmlElement("spellPen")]    public int SpellPen { get; set; }
-        [XmlElement("spellCrit")]   public float SpellCrit { get; set; }
-        [XmlElement("spellCritRating")] public int SpellCritRating { get; set; }
-        [XmlElement("spellHitPercent")] public float SpellHitPercent { get; set; }
-        [XmlElement("spellHitRating")]  public int SpellHitRating { get; set; }
-        [XmlElement("mana5")]       public float Mana5 { get; set; }
-        [XmlElement("mana5Combat")] public float Mana5Combat { get; set; }
-        [XmlElement("armor")]       public int Armor { get; set; }
-        [XmlElement("dodge")]       public float Dodge { get; set; }
-        [XmlElement("dodgeRating")] public int DodgeRating { get; set; }
-        [XmlElement("parry")]       public float Parry { get; set; }
-        [XmlElement("parryRating")] public int ParryRating { get; set; }
-        [XmlElement("block")]       public float Block { get; set; }
-        [XmlElement("blockRating")] public int BlockRating { get; set; }
-        [XmlElement("resil")]       public int Resil { get; set; }
-        [XmlElement("mainHandDmgMin")] public float MainHandDamageMin { get; set; }
-        [XmlElement("mainHandDmgMax")] public float MainHandDamageMax { get; set; }
-        [XmlElement("mainHandSpeed")] public float MainHandSpeed { get; set; }
-        [XmlElement("mainHandDps")] public float MainHandDps { get; set; }
-        [XmlElement("mainHandExpertise")]public int MainHandExpertise { get; set; }
-        [XmlElement("offHandDmgMin")]   public float OffHandDamageMin { get; set; }
-        [XmlElement("offHandDmgMax")]   public float OffHandDamageMax { get; set; }
-        [XmlElement("offHandSpeed")]    public float OffHandSpeed { get; set; }
-        [XmlElement("offHandDps")]      public float OffHandDps { get; set; }
-        [XmlElement("offHandExpertise")] public int OffHandExpertise { get; set; }
-        [XmlElement("rangedDmgMin")]    public float RangedDamageMin { get; set; }
-        [XmlElement("rangedDmgMax")]    public float RangedDamageMax { get; set; }
-        [XmlElement("rangedSpeed")]     public float RangedSpeed { get; set; }
-        [XmlElement("rangedDps")]       public float RangedDps { get; set; }
-        [XmlElement("rangedCrit")]      public float RangedCrit { get; set; }
-        [XmlElement("rangedCritRating")]public int RangedCritRating { get; set; }
-        [XmlElement("rangedHitPercent")]public float RangedHitPercent { get; set; }
-        [XmlElement("rangedHitRating")] public int RangedHitRating { get; set; }
+        [XmlElement("health")]
+        [DataMember(Name = "health")]
+        public int Health { get; set; }
+
+        [XmlElement("power")]
+        [DataMember(Name = "power")]
+        public int Power { get; set; }
+
+        [XmlElement("powerType")]        
+        public PowerType PowerType { get; set; }
+
+        [DataMember(Name = "powerType")]
+        private string powerType
+        {
+            get { return PowerType.ToString(); }
+            set
+            {
+                string v = PowerTypeConverter.Translate(value);
+                PowerType = (PowerType)Enum.Parse(typeof(PowerType), v, true);
+            }
+        }
+        [XmlElement("str")]
+        [DataMember(Name = "str")]
+        public int Strength { get; set; }
+
+        [XmlElement("agi")]
+        [DataMember(Name = "agi")]
+        public int Agility { get; set; }
+
+        [XmlElement("sta")]
+        [DataMember(Name = "sta")]
+        public int Stamina { get; set; }
+
+        [XmlElement("int")]
+        [DataMember(Name = "int")]
+        public int Intelect { get; set; }
+
+        [XmlElement("spr")]
+        [DataMember(Name = "spr")]
+        public int Spirit { get; set; }
+
+        [XmlElement("attackPower")]
+        [DataMember(Name = "attackPower")]
+        public int AttackPower { get; set; }
+
+        [XmlElement("rangedAttackPower")]
+        [DataMember(Name = "rangedAttackPower")]
+        public int RangedAttackPower { get; set; }
+
+        [XmlElement("mastery")]
+        [DataMember(Name = "mastery")]
+        public float Mastery { get; set; }
+
+        [XmlElement("masteryRating")]
+        [DataMember(Name = "masteryRating")]
+        public int MasteryRating { get; set; }
+
+        [XmlElement("crit")]
+        [DataMember(Name = "crit")]
+        public float CritPercent { get; set; }
+
+        [XmlElement("critRating")]
+        [DataMember(Name = "critRating")]
+        public int CritRating { get; set; }
+
+        [XmlElement("hitPercent")]
+        [DataMember(Name = "hitPercent")]
+        public float HitPercent { get; set; }
+
+        [XmlElement("hitRating")]
+        [DataMember(Name = "hitRating")]
+        public int HitRating { get; set; }
+
+        [XmlElement("hasteRating")]
+        [DataMember(Name = "hasteRating")]
+        public int HasteRating { get; set; }
+
+        [XmlElement("expertiseRating")]
+        [DataMember(Name = "expertiseRating")]
+        public int ExpertiseRating { get; set; }
+
+        [XmlElement("spellPower")]
+        [DataMember(Name = "spellPower")]
+        public int SpellPower { get; set; }
+
+        [XmlElement("spellPen")]
+        [DataMember(Name = "spellPen")]
+        public int SpellPen { get; set; }
+
+        [XmlElement("spellCrit")]
+        [DataMember(Name = "spellCrit")]
+        public float SpellCrit { get; set; }
+
+        [XmlElement("spellCritRating")]
+        [DataMember(Name = "spellCritRating")]
+        public int SpellCritRating { get; set; }
+
+        [XmlElement("spellHitPercent")]
+        [DataMember(Name = "spellHitPercent")]
+        public float SpellHitPercent { get; set; }
+
+        [XmlElement("spellHitRating")]
+        [DataMember(Name = "spellHitRating")]
+        public int SpellHitRating { get; set; }
+
+        [XmlElement("mana5")]
+        [DataMember(Name = "mana5")]
+        public float Mana5 { get; set; }
+
+        [XmlElement("mana5Combat")]
+        [DataMember(Name = "mana5Combat")]
+        public float Mana5Combat { get; set; }
+
+        [XmlElement("armor")]
+        [DataMember(Name = "armor")]
+        public int Armor { get; set; }
+
+        [XmlElement("dodge")]
+        [DataMember(Name = "dodge")]
+        public float Dodge { get; set; }
+
+        [XmlElement("dodgeRating")]
+        [DataMember(Name = "dodgeRating")]
+        public int DodgeRating { get; set; }
+
+        [XmlElement("parry")]
+        [DataMember(Name = "parry")]
+        public float Parry { get; set; }
+
+        [XmlElement("parryRating")]
+        [DataMember(Name = "parryRating")]
+        public int ParryRating { get; set; }
+
+        [XmlElement("block")]
+        [DataMember(Name = "block")]
+        public float Block { get; set; }
+
+        [XmlElement("blockRating")]
+        [DataMember(Name = "blockRating")]
+        public int BlockRating { get; set; }
+
+        [XmlElement("resil")]
+        [DataMember(Name = "resil")]
+        public int Resil { get; set; }
+
+        [XmlElement("mainHandDmgMin")]
+        [DataMember(Name = "mainHandDmgMin")]
+        public float MainHandDamageMin { get; set; }
+
+        [XmlElement("mainHandDmgMax")]
+        [DataMember(Name = "mainHandDmgMax")]
+        public float MainHandDamageMax { get; set; }
+
+        [XmlElement("mainHandSpeed")]
+        [DataMember(Name = "mainHandSpeed")]
+        public float MainHandSpeed { get; set; }
+
+        [XmlElement("mainHandDps")]
+        [DataMember(Name = "mainHandDps")]
+        public float MainHandDps { get; set; }
+        
+        [XmlElement("mainHandExpertise")]
+        [DataMember(Name = "mainHandExpertise")]
+        public int MainHandExpertise { get; set; }
+
+        [XmlElement("offHandDmgMin")]
+        [DataMember(Name = "offHandDmgMin")]
+        public float OffHandDamageMin { get; set; }
+
+        [XmlElement("offHandDmgMax")]
+        [DataMember(Name = "offHandDmgMax")]
+        public float OffHandDamageMax { get; set; }
+
+        [XmlElement("offHandSpeed")]
+        [DataMember(Name = "offHandSpeed")]
+        public float OffHandSpeed { get; set; }
+
+        [XmlElement("offHandDps")]
+        [DataMember(Name = "offHandDps")]
+        public float OffHandDps { get; set; }
+
+        [XmlElement("offHandExpertise")]
+        [DataMember(Name = "offHandExpertise")]
+        public int OffHandExpertise { get; set; }
+
+        [XmlElement("rangedDmgMin")]
+        [DataMember(Name = "rangedDmgMin")]
+        public float RangedDamageMin { get; set; }
+
+        [XmlElement("rangedDmgMax")]
+        [DataMember(Name = "rangedDmgMax")]
+        public float RangedDamageMax { get; set; }
+
+        [XmlElement("rangedSpeed")]
+        [DataMember(Name = "rangedSpeed")]
+        public float RangedSpeed { get; set; }
+
+        [XmlElement("rangedDps")]
+        [DataMember(Name = "rangedDps")]
+        public float RangedDps { get; set; }
+
+        [XmlElement("rangedCrit")]
+        [DataMember(Name = "rangedCrit")]
+        public float RangedCrit { get; set; }
+
+        [XmlElement("rangedCritRating")]
+        [DataMember(Name = "rangedCritRating")]
+        public int RangedCritRating { get; set; }
+
+        [XmlElement("rangedHitPercent")]
+        [DataMember(Name = "rangedHitPercent")]
+        public float RangedHitPercent { get; set; }
+        
+        [XmlElement("rangedHitRating")]
+        [DataMember(Name = "rangedHitRating")]
+        public int RangedHitRating { get; set; }
     }
 
+    [DataContract]
     public class Talent
     {
         [XmlElement("selected")]
+        [DataMember(Name="selected")]
         public bool Selected { get; set; }
+
         [XmlElement("name")]
+        [DataMember(Name = "name")]
         public string Name { get; set; }
+
         [XmlElement("icon")]
+        [DataMember(Name = "icon")]
         public string Icon { get; set; }
+
         [XmlElement("build")]
+        [DataMember(Name = "build")]
         public string Build { get; set; }
+
         [XmlElement("trees")]
+        [DataMember(Name = "trees")]
         public List<Tree> Trees { get; set; }
+
         [XmlElement("glyphs")]
+        [DataMember(Name = "glyphs")]
         public Glyphs Glyphs { get; set; }
     }
 
+    [DataContract]
     public class Tree
     {
-        public string points { get; set; }
-        public int total { get; set; }
+        [XmlElement("points")]
+        [DataMember(Name="points")]
+        public string Points { get; set; }
+
+        [XmlElement("total")]
+        [DataMember(Name = "total")]
+        public int Total { get; set; }
     }
 
+    [DataContract]
     public class Glyphs
     {
         [XmlArray("prime")]
         [XmlArrayItem("item")]
+        [DataMember(Name = "prime")]
         public List<Glyph> Prime { get; set; }
 
         [XmlArray("major")]
         [XmlArrayItem("item")]
+        [DataMember(Name = "major")]
         public List<Glyph> Major { get; set; }
 
         [XmlArray("minor")]
         [XmlArrayItem("item")]
+        [DataMember(Name = "minor")]
         public List<Glyph> Minor { get; set; }
     }
 
+    [DataContract]
     public class Glyph
     {
-        [XmlElement("glyph")]   public int Id { get; set; }
-        [XmlElement("item")]    public int ItemId { get; set; }
-        [XmlElement("name")]    public string Name { get; set; }
-        [XmlElement("icon")]    public string Icon { get; set; }
+        [XmlElement("glyph")]
+        [DataMember(Name = "glyph")]
+        public int Id { get; set; }
+
+        [XmlElement("item")]
+        [DataMember(Name = "item")]
+        public int ItemId { get; set; }
+
+        [XmlElement("name")]
+        [DataMember(Name = "name")]
+        public string Name { get; set; }
+
+        [XmlElement("icon")]
+        [DataMember(Name = "icon")]
+        public string Icon { get; set; }
 
     }
 
@@ -488,7 +820,7 @@ Roster = members
     public class CharacterItems
     {
         [XmlElement("averageItemLevel")]
-        [DataMember(Name = "averageItemLevel")]
+        [DataMember(Name = "averageItemLevel")]        
         public int AverageItemLevel { get; set; }
         
         [XmlElement("averageItemLevelEquipped")]
@@ -627,6 +959,36 @@ Roster = members
         [XmlElement("tinker")]
         [DataMember(Name = "tinker")]
         public int Tinker { get; set; }
+    }
+
+
+    [DataContract]
+    public class RatedBattlegrounds
+    {
+        [XmlElement("personalRating")]
+        [DataMember(Name = "personalRating")]
+        public int PersonalRating { get; set; }
+
+        [XmlElement("battlegrounds")]
+        [DataMember(Name = "battlegrounds")]
+        public List<Battleground> Battlegrounds { get; set; }
+    }
+
+    [DataContract]
+    public class Battleground
+    {
+        [XmlElement("name")]
+        [DataMember(Name = "name")]
+        public string Name{get;set;}
+
+        [XmlElement("played")]
+        [DataMember(Name = "played")]
+        public int Played { get; set; }
+
+        [XmlElement("won")]
+        [DataMember(Name = "won")]
+        public int Won { get; set; }
+
     }
 
 }

@@ -117,6 +117,16 @@ namespace BattleNet.API.Converter
                         return key;
                 }
             }
+            else if (typeof(CharacterArenaTeam)==t)
+            {
+                switch (key)
+                {
+                    case "size":
+                        return "TeamSize";
+                    default:
+                        return key;
+                }
+            }
             else
             {
                 return key;
@@ -155,6 +165,8 @@ namespace BattleNet.API.Converter
                         typeof(ClassCollection),
                         typeof(Class),
                         typeof(PowerType),
+                        typeof(CharacterPvP),
+                        typeof(CharacterArenaTeam),
                     }));
             }
         }

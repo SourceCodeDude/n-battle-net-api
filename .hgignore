@@ -5,3 +5,5 @@ syntax: glob
 Debug\
 Release\
 *.vs10x
+bin\
+ClientBin\

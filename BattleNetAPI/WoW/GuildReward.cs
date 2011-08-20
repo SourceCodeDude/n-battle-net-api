@@ -43,33 +43,5 @@ namespace BattleNet.API.WoW
         [XmlElement("item")]
         [DataMember(Name="item")]
         public Item Item { get; set; }
-    }
-
-    [DataContract]
-    public class Achievement
-    {
-        [XmlElement("id")]
-        [DataMember(Name="id")]
-        public int Id { get; set; }
-        
-        [XmlElement("title")]
-        [DataMember(Name="title")]
-        public string Title { get; set; }
-        
-        [XmlElement("points")]
-        [DataMember(Name="points")]
-        public int Points { get; set; }
-        
-        [XmlElement("description")]
-        [DataMember(Name="description")]
-        public string Description { get; set; }
-        
-        [XmlElement("reward")]
-        [DataMember(Name="reward")]
-        public string Reward { get; set; }
-        
-        [XmlElement("rewardItem")]
-        [DataMember(Name="rewardItem")]
-        public Item RewardItem { get; set; }
-    }
+    }    
 }

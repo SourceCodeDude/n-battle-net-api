@@ -50,9 +50,39 @@ namespace BattleNet.API
     [DataContract]
     public class ResponseRoot
     {
-        [XmlElement("status")]
+        [XmlElement("status")]        
         public Status Status { get; set; }
+
+        [DataMember(Name = "status")]
+        private string status
+        {
+            get
+            {
+                switch (Status)
+                {
+                    case API.Status.NotOk: return "nok";
+                    case API.Status.Ok: return "ok";
+                    default:
+                        return Status.ToString();
+                }
+            }
+            set
+            {
+                switch (value)
+                {
+                    case "nok":
+                        Status = API.Status.NotOk;
+                        break;
+                    case "ok":
+                        Status = API.Status.Ok;
+                        break;
+                    default:
+                        throw new NotImplementedException("Unknown status : " + value);
+                }
+            }
+        }
         [XmlElement("reason", IsNullable = true)]
+        [DataMember(Name = "reason")]
         public string Reason { get; set; }
 
     }

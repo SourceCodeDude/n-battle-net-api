@@ -8,6 +8,8 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Net;
+using System.Threading;
+using System.Globalization;
 
 #if SILVERLIGHT
 #else
@@ -138,9 +140,7 @@ namespace BattleNet.API.WoW
                 thumbNailCache = cacheCollection["thumb"];
             }
             // default to current culture
-            Locale = loc;
-
-            
+            Locale = loc;            
             
             switch (r)
             {
@@ -335,8 +335,17 @@ namespace BattleNet.API.WoW
                 // item or not
                 if (ci == null || ci.Expire < DateTime.UtcNow)
                 {
-                    IAsyncResult ia = req.BeginGetResponse(null, null);
+                    ManualResetEvent mre = new ManualResetEvent(false);
+
+                    IAsyncResult ia = req.BeginGetResponse(RespCallback, mre);
+                    
+                    // this line implements the timeout, if there is a timeout, 
+                    // the callback fires and the request becomes aborted
+                    ThreadPool.RegisterWaitForSingleObject(
+                        ia.AsyncWaitHandle, new WaitOrTimerCallback(TimeoutCallback), req, req.Timeout, true);
+                    
                     res = req.EndGetResponse(ia);
+
                     if (UseCache && cache!=null)
                     {
                         ci = cache.Insert(key, res.GetResponseStream());
@@ -375,6 +384,8 @@ namespace BattleNet.API.WoW
                     case HttpStatusCode.NotFound:
                     default:
                         txt = new StreamReader(h.GetResponseStream()).ReadToEnd();
+                        if (txt == "") throw ex;
+
                         r = JsonParser.Parse<ResponseRoot>(txt);
                         // if we didn't get a JSON respose.. all we can do
                         // is throw the original exception
@@ -433,7 +444,7 @@ namespace BattleNet.API.WoW
         {
             get
             {
-                RacesQuery q = new RacesQuery();
+                RacesQuery q = new RacesQuery() { Locale = Locale };
                 RaceCollection o = GetObject<RaceCollection>(q.ToString());
 
                 if (o == null) return null;
@@ -452,7 +463,8 @@ namespace BattleNet.API.WoW
         {
             get
             {
-                ItemClassCollection icc = GetObject<ItemClassCollection>("data/item/classes");
+                ItemClassQuery q = new ItemClassQuery() { Locale = Locale };
+                ItemClassCollection icc = GetObject<ItemClassCollection>(q.ToString());
 
                 return icc.Classes;
             }
@@ -461,7 +473,7 @@ namespace BattleNet.API.WoW
         {
             get
             {
-                ClassesQuery q = new ClassesQuery();
+                ClassesQuery q = new ClassesQuery() { Locale = Locale };
                 ClassCollection o = GetObject<ClassCollection>(q.ToString());
 
                 if (o == null) return null;
@@ -476,11 +488,34 @@ namespace BattleNet.API.WoW
             }
         }
 
+        public Quest GetQuest(int id)
+        {
+            return GetQuest( new QuestQuery(){
+                Id = id,
+                Locale =this.Locale,
+            });
+        }
+
+        public Quest GetQuest(QuestQuery q)
+        {
+            Quest o = GetObject<Quest>(q.ToString());
+
+            if (o == null) return null;
+            if (o.Status != Status.Ok)
+            {
+                throw new ResponseException(o);
+            }
+
+            // sort by id            
+            return o;            
+        }
+
         public Item GetItem(int id)
         {
             return GetItem(new ItemQuery()
             {
-                ItemId = id
+                ItemId = id,
+                Locale = this.Locale,
             });
         }
 
@@ -501,7 +536,7 @@ namespace BattleNet.API.WoW
         {
             get
             {
-                GuildRewardsQuery q = new GuildRewardsQuery();
+                GuildRewardsQuery q = new GuildRewardsQuery() { Locale = this.Locale };
                 GuildRewardCollection o = GetObject<GuildRewardCollection>(q.ToString());
 
                 if (o == null) return null;
@@ -514,11 +549,49 @@ namespace BattleNet.API.WoW
             }
         }
 
+        public AchievementCollection GuildAchievements
+        {
+            get
+            {
+                GuildAchievementsQuery q = new GuildAchievementsQuery()
+                {
+                    Locale = this.Locale,
+                };
+                AchievementCollection o = GetObject<AchievementCollection>(q.ToString());
+                if (o == null) return null;
+                if (o.Status != Status.Ok)
+                {
+                    throw new ResponseException(o);
+                }
+
+                return o;
+            }
+        }
+        public AchievementCollection CharacterAchievements
+        {
+            get
+            {
+                CharacterAchievementsQuery q = new CharacterAchievementsQuery()
+                {
+                    Locale = Locale,
+                };
+
+                AchievementCollection o = GetObject<AchievementCollection>(q.ToString());
+                if (o == null) return null;
+                if (o.Status != Status.Ok)
+                {
+                    throw new ResponseException(o);
+                }
+
+                return o;
+            }
+        }
         public List<GuildPerk> GuildPerks
         {
             get
             {
-                GuildPerksQuery q = new GuildPerksQuery();
+                GuildPerksQuery q = new GuildPerksQuery() { Locale = this.Locale };
+
                 GuildPerkCollection o = GetObject<GuildPerkCollection>(q.ToString());
 
                 if (o == null) return null;
@@ -580,8 +653,8 @@ namespace BattleNet.API.WoW
             return GetGuild( new GuildQuery(){
                 Realm = realm,
                 Name = name,
-                Fields = fields,
-                Locale = Locale
+                Fields = fields,    
+                Locale = Locale,
             });
         }
 
@@ -643,8 +716,9 @@ namespace BattleNet.API.WoW
             return GetArenaTeam( new ArenaTeamQuery(){
                 Realm=realm,
                 TeamSize=size,
-                Name=name}
-                );
+                Name=name,
+                Locale = Locale,
+                });
         }
 
         public ArenaTeam GetArenaTeam(ArenaTeamQuery query)
@@ -700,6 +774,26 @@ namespace BattleNet.API.WoW
 
             req.Headers["Authorization"] = auth;            
         }
+
+        private void RespCallback(IAsyncResult asynchronousResult)
+        {
+            ManualResetEvent mre = (ManualResetEvent)asynchronousResult.AsyncState;
+            mre.Set();
+        }
+
+        // Abort the request if the timer fires.
+        private void TimeoutCallback(object state, bool timedOut)
+        {
+            if (timedOut)
+            {
+                HttpWebRequest request = state as HttpWebRequest;                
+                if (request != null)
+                {
+                    request.Abort();
+                }
+            }
+        }
+
     }
 
     

@@ -94,6 +94,28 @@ namespace Test
 
             Assert.NotNull(at);
         }
+
+        [Test]
+        public void TestGuildAchiev()
+        {
+            AchievementCollection a = client.GuildAchievements;
+            Assert.NotNull(a);
+        }
+
+        [Test]
+        public void TestCharacterdAchiev()
+        {
+            AchievementCollection a = client.CharacterAchievements;
+            Assert.NotNull(a);
+        }
+
+
+        [Test]
+        public void TestQuest()
+        {
+            Quest q = client.GetQuest(new QuestQuery() { Id = 123 });
+            Assert.NotNull(q);
+        }
         void client_ParseError(string message)
         {
             Assert.Fail(message);            

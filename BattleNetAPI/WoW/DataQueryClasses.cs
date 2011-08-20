@@ -20,7 +20,7 @@ namespace BattleNet.API.WoW
     {
         public override string ToString()
         {
-            return "data/character/races" + base.ToString();
+            return "data/character/races?" + base.ToString();
         }
     }
 
@@ -28,7 +28,7 @@ namespace BattleNet.API.WoW
     {
         public override string ToString()
         {
-            return "data/character/classes" + base.ToString();
+            return "data/character/classes?" + base.ToString();
         }
     }
 
@@ -36,14 +36,14 @@ namespace BattleNet.API.WoW
     {
         public override string ToString()
         {
-            return "data/guild/rewards" + base.ToString();
+            return "data/guild/rewards?" + base.ToString();
         }
     }
     public class GuildPerksQuery : QueryBase
     {
         public override string ToString()
         {
-            return "data/guild/perks" + base.ToString();
+            return "data/guild/perks?" + base.ToString();
         }
     }
 
@@ -54,7 +54,31 @@ namespace BattleNet.API.WoW
         {
             if (ItemId <= 0) throw new ArgumentException("ItemId must be a positive number");
 
-            return "item/" + ItemId + base.ToString();
+            return "item/" + ItemId +"?"+ base.ToString();
+        }
+    }
+
+    public class CharacterAchievementsQuery : QueryBase
+    {
+        public override string ToString()
+        {
+            return "data/character/achievements?" + base.ToString();
+        }
+    }
+
+    public class GuildAchievementsQuery : QueryBase
+    {
+        public override string ToString()
+        {
+            return "data/guild/achievements?" + base.ToString();
+        }
+    }
+
+    public class ItemClassQuery : QueryBase
+    {
+        public override string ToString()
+        {
+            return "data/item/classes?" + base.ToString();
         }
     }
 

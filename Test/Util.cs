@@ -9,8 +9,11 @@ namespace Test
 	class Util
 	{
 		public static string ReadData(string file)
-		{
-			return new StreamReader(File.Open(file, FileMode.Open)).ReadToEnd();
+		{            
+			using(StreamReader sr = new StreamReader(File.Open(file, FileMode.Open)))
+            {
+                return sr.ReadToEnd();
+            }
 		}
 	}
 }

@@ -87,7 +87,7 @@ namespace BattleNet.API.WoW
 
         [XmlElement("achievements", IsNullable = true)]
         [DataMember(Name = "achievements")]
-        public Achievements Achievements { get; set; }
+        public AchievementProgression Achievements { get; set; }
         
         #endregion
     }

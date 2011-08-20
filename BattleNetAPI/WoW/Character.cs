@@ -129,7 +129,7 @@ namespace BattleNet.API.WoW
         // achievements        
         [XmlElement("achievements", IsNullable = true)]
         [DataMember(Name = "achievements")]        
-        public Achievements Achievements { get; set; }
+        public AchievementProgression Achievements { get; set; }
 
         [XmlElement("progression", IsNullable = true)]
         [DataMember(Name = "progression")] 

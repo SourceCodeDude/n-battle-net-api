@@ -7,10 +7,9 @@ using System.Xml.Serialization;
 
 namespace BattleNet.API.WoW
 {
-    // TODO: need to rename this. Shouldnt be any
-    // pluralized class names
+    // TODO: need to rename this. Shouldnt be any pluralized class names
     [DataContract]
-    public class Achievements
+    public class AchievementProgression
     {
         [XmlArray("achievementsCompleted")]
         [XmlArrayItem("item")]

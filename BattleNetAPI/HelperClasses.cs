@@ -151,13 +151,13 @@ namespace BattleNet.API
     public class WowCurrency
     {
         long copper;
-        WowCurrency(long copper)
+        public WowCurrency(long copper)
         {
             this.copper = copper;
         }
 
-        public int Gold { get { return (int)((copper / 1000000)%1000); } }
-        public int Silver { get { return (int)((copper / 1000) % 1000); } }
-        public int Copper { get { return (int)(copper % 1000); } }
+        public int Gold { get { return (int)((copper / 10000)); } }
+        public int Silver { get { return (int)((copper / 100) % 100); } }
+        public int Copper { get { return (int)(copper % 100); } }
     }
 }

@@ -83,6 +83,9 @@ namespace BattleNet.API
             get { return useJson;  }
             set
             {
+                // disable Json dll
+                value = false;
+
                 if (value)
                 {
                     try

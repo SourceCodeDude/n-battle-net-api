@@ -180,7 +180,14 @@ namespace BattleNet.API.WoW
         GAME_OBJECT_DROP,
         CREATED_BY_SPELL,
         REWARD_FOR_QUEST,
-        // TODO: complete this list when blizzard does
+        WORLD_DROP,
+        CREATURE_DROP,
+        CREATURE_SKIN,
+        CONTAINED_IN_ITEM,
+        CREATURE_PICKPOCKET,
+        CREATURE_MINE,
+        PROFESSION,
+        EVENT,
     }
 
     [DataContract]

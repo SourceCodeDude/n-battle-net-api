@@ -29,6 +29,7 @@ namespace BattleNet.API
             }
         }
     }
+
     /// <summary>
     /// Simple cache to store retrieved data
     /// </summary>
@@ -36,6 +37,13 @@ namespace BattleNet.API
     {
         string cachePath;
         Dictionary<string, CacheItem> cache = new Dictionary<string, CacheItem>();
+        int maxItems=10000;   // max number of items to keep in the cache
+
+        public int MaxItems { get { return maxItems; }
+            set { maxItems = value; }
+        }
+        // ordered by access time
+        LinkedList<CacheItem> accessList = new LinkedList<CacheItem>();
 
         public string CachePath
         {
@@ -67,6 +75,50 @@ namespace BattleNet.API
         public void Clear()
         {
             cache.Clear();
+            CleanData();
+        }
+
+        /// <summary>
+        /// Remove any unknown files from cache directory
+        /// </summary>
+        private void CleanData()
+        {
+            Dictionary<string, string> files = new Dictionary<string, string>();
+            
+            foreach (string file in Directory.GetFiles(cachePath))
+            {
+                string f = Path.GetFileName(file);
+                files.Add(f,f);
+            }
+            // remove spcial files
+            files.Remove("cache.index");
+
+            LinkedList<CacheItem> badItems = new LinkedList<CacheItem>();
+            // remove known cache files
+            foreach(KeyValuePair<string, CacheItem> kvp in cache)
+            {
+                if (files.ContainsKey(kvp.Value.HashedName))
+                {
+                    files.Remove(kvp.Value.HashedName);
+                }
+                else
+                {
+                    // cache item has no data file.. remove it from the cache
+                    badItems.AddFirst(kvp.Value);
+                }
+            }
+
+            foreach (CacheItem ci in badItems)
+            {
+                cache.Remove(ci.Key);
+            }
+
+            // anything left is not used
+            foreach (string f in files.Values)
+            {
+                string path = Path.Combine(cachePath, f);
+                File.Delete( path );
+            }
         }
 
         /// <summary>
@@ -112,16 +164,29 @@ namespace BattleNet.API
                     // TODO: remove all old files also
                 }
             }
-        }
 
+            CleanData();
+        }
+        
         private void ParseV100(Stream st)
         {
+            LinkedList<CacheItem> items = new LinkedList<CacheItem>();
             while (st.Position != st.Length)
             {
                 CacheItem c = CacheItem.Create(st, this);
                 cache.Add(c.Key, c);
+                items.AddLast(c);
             }
+
+            // insert in sorted order
+            foreach (CacheItem c in items.OrderBy(c => c.LastAccessed))
+            {
+                accessList.AddLast(c);
+            }
+
+            items = null;
         }
+
         public void Flush()
         {
             Console.WriteLine("Flushing " + cachePath);
@@ -143,11 +208,13 @@ namespace BattleNet.API
 
         public CacheItem Insert(string key, Stream val)
         {
-            return Insert(key, val, DateTime.UtcNow);
+            return Insert(key, val, DateTime.UtcNow, DateTime.UtcNow);
         }
 
-        public CacheItem Insert(string key, Stream val, DateTime created)
+        public CacheItem Insert(string key, Stream val, DateTime created, DateTime expire)
         {
+            Prune();
+
             CacheItem ci = null;
             if (cache.TryGetValue(key, out ci))
             {
@@ -163,9 +230,48 @@ namespace BattleNet.API
                 cache[key] = ci;
             }
 
+            ci.Expire = expire;
+
+            accessList.AddLast(ci);
+            
             return ci;
         }
 
+        /// <summary>
+        /// Remove expired items and oldest (stale) over the max count
+        /// </summary>
+        private void Prune()
+        {
+            // no need to prune
+            if( cache.Count < maxItems ) return;
+
+            DateTime now = DateTime.Now;
+            List<CacheItem> toRemove = new List<CacheItem>();
+
+            foreach (CacheItem ci in cache.Values)
+            {
+                if (ci.Expire < now)
+                {
+                    toRemove.Add(ci);
+                }                
+            }
+
+            // remove items over max
+            while ( (cache.Count - toRemove.Count) >= maxItems)
+            {
+                CacheItem oldest = accessList.First.Value;
+                accessList.RemoveFirst();
+                toRemove.Add(oldest);
+            }
+            
+            foreach (CacheItem ci in toRemove)
+            {
+                cache.Remove(ci.Key);
+                accessList.Remove(ci);
+                string path = Path.Combine(cachePath, ci.HashedName);
+                File.Delete(path);
+            }
+        }
 
         public CacheItem GetItem(string key)
         {
@@ -173,7 +279,13 @@ namespace BattleNet.API
             if (cache.TryGetValue(key, out ci))
             {
                 ci.LastAccessed = DateTime.UtcNow;
+
+                // move to end of access list
+                LinkedListNode<CacheItem> n = accessList.Find(ci);
+                accessList.Remove(n);
+                accessList.AddLast(n);
             }
+
             return ci;
         }
     }
@@ -299,6 +411,15 @@ namespace BattleNet.API
         public DateTime LastAccessed { get; set; }
 
         public DateTime LastUpdated { get; set; }
+
+        public string HashedName
+        {
+            get
+            {
+                return hashedFileName;
+            }
+        }
+
         public Stream Value{
             get
             {

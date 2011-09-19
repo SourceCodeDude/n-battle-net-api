@@ -320,6 +320,10 @@ namespace BattleNet.API.WoW
 #if SILVERLIGHT
                 // silverlight doesnt support this
 #else
+                if (ci.LastUpdated + TimeSpan.FromHours(1) > DateTime.UtcNow)
+                {
+                    return ci.Value;
+                }
                 req.IfModifiedSince = ci.LastUpdated;
 #endif
             }
@@ -348,15 +352,17 @@ namespace BattleNet.API.WoW
 
                     if (UseCache && cache!=null)
                     {
-                        ci = cache.Insert(key, res.GetResponseStream());
 
                         // response had a cache expires header, so lets use it
                         // this usualy happens for the DATA APIs
                         string exp = res.Headers["Expires"];
+                        DateTime expire = DateTime.UtcNow;
                         if (exp != null)
                         {
-                            ci.Expire = DateTime.Parse(exp).ToUniversalTime();
+                            expire = DateTime.Parse(exp).ToUniversalTime();
                         }
+
+                        ci = cache.Insert(key, res.GetResponseStream(), DateTime.UtcNow, expire);
                     }
                     else
                     {
@@ -419,6 +425,10 @@ namespace BattleNet.API.WoW
             if (pe != null)
             {
                 pe(msg);
+            }
+            else
+            {
+                throw new Exception(msg);
             }
         }
 
@@ -760,9 +770,11 @@ namespace BattleNet.API.WoW
             //req.Date = DateTime.Now;
             
             string dateStr = date.ToString("r");
+            string enc = req.RequestUri.AbsolutePath; // HttpUtility.UrlPathEncode(req.RequestUri.LocalPath)
+
             string stringToSign = req.Method + "\n" +
                 dateStr + "\n" +
-                HttpUtility.UrlPathEncode(req.RequestUri.LocalPath) +"\n";
+                enc +"\n";
             
             byte[] key= new byte[32];
             byte[] buffer = Encoding.UTF8.GetBytes(stringToSign);

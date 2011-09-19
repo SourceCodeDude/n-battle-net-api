@@ -46,6 +46,7 @@
     <Compile Include="ArenaTest.cs" />
     <Compile Include="AuctionTest.cs" />
     <Compile Include="BattleNetClientTest.cs" />
+    <Compile Include="CacheTest.cs" />
     <Compile Include="CharacterTest.cs" />
     <Compile Include="GuildQueryTest.cs" />
     <Compile Include="GuildTest.cs" />

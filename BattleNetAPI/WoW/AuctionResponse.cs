@@ -165,5 +165,20 @@ namespace BattleNet.API.WoW
         [XmlElement("timeLeft")]
         [DataMember(Name = "timeLeft")]
         public string TimeLeft { get; set; }
+
+        public double BuyoutPerItem
+        {
+            get
+            {
+                return 1.0*Buyout / this.Quantity;
+            }
+        }
+        public double BidPerItem
+        {
+            get
+            {
+                return 1.0 * Bid / this.Quantity;
+            }
+        }
     }
 }

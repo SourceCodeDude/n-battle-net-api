@@ -31,11 +31,12 @@ namespace Test
         {
             client.PublicKey = "123PUBLIC456";
             client.PrivateKey = "987PRIVATE65";
-            Stream st = client.GetUrl("http://everynothing.net/bnetauthtest.php?test=1", null);
+            Stream st = client.GetUrl("http://everynothing.net/bnetauthtest.php/法拉希姆?test=1", null);
             TextReader r = new StreamReader(st);
             string txt = r.ReadToEnd();
         }
         */
+        
 
         [Test]
         public void CharacterTest()

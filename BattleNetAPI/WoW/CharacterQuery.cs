@@ -61,7 +61,7 @@ namespace BattleNet.API.WoW
             if ((Fields & CharacterFields.Talents) == CharacterFields.Talents) args.Add("talents");
             if ((Fields & CharacterFields.Titles) == CharacterFields.Titles) args.Add("titles");
             if ((Fields & CharacterFields.Guild) == CharacterFields.Guild) args.Add("guild");
-            if ((Fields & CharacterFields.PVP) == CharacterFields.Guild) args.Add("pvp");
+            if ((Fields & CharacterFields.PVP) == CharacterFields.PVP) args.Add("pvp");
             if ((Fields & CharacterFields.Quests) == CharacterFields.Quests) args.Add("quests");
             
 

@@ -28,6 +28,7 @@ namespace BattleNet.API.WoW
                 LastModified = new UnixTimestamp(value);
             }
         }
+
         [XmlElement("name")]
         [DataMember(Name = "name")]
         public string Name { get; set; }
@@ -88,9 +89,92 @@ namespace BattleNet.API.WoW
         [XmlElement("achievements", IsNullable = true)]
         [DataMember(Name = "achievements")]
         public AchievementProgression Achievements { get; set; }
-        
+
+        [DataMember(Name = "News")]
+        public List<GuildEvent> News { get; set; }
+
         #endregion
     }
+
+    [DataContract]
+    public abstract class GuildEvent
+    {
+        [DataMember(Name="type")]
+        public string Type { get; set; }
+
+        [XmlElement("timestamp")]
+        public UnixTimestamp Timestamp { get; set; }
+
+        [DataMember(Name = "timestamp")]
+        internal long timestamp
+        {
+            get
+            {
+                return Timestamp.ToMsec();
+            }
+            set
+            {
+                Timestamp = new UnixTimestamp(value);
+            }
+        }
+
+    }
+
+    [DataContract]
+    public class GuildCreatedEvent : GuildEvent
+    {
+    };
+
+    [DataContract]
+    public class ItemLootedEvent : GuildEvent
+    {
+        [DataMember(Name = "character")]
+        public string Character { get; set; }
+
+        [DataMember(Name = "itemId")]
+        public int ItemId { get; set; }
+    };
+
+    [DataContract]
+    public class ItemPurchasedEvent : GuildEvent
+    {
+        [DataMember(Name = "character")]
+        public string Character { get; set; }
+
+        [DataMember(Name = "itemId")]
+        public int ItemId { get; set; }
+    };
+
+    [DataContract]
+    public class GuildLevelNews : GuildEvent
+    {
+        [DataMember(Name = "levelUp")]
+        public int LevelUp { get; set; }
+    };
+
+    [DataContract]
+    public class GuildAchievementNews : GuildEvent
+    {
+        /// <summary>
+        /// Though there is a Character field here, it isn't used on the
+        /// Armory site,  it just says "The guild earned the achievement..."
+        /// </summary>
+        [DataMember(Name = "character")]
+        public string Character { get; set; }
+
+        [DataMember(Name = "achievement")]
+        public Achievement Achievement { get; set; }
+    };
+
+    [DataContract]
+    public class PlayerdAchievementNews : GuildEvent
+    {
+        [DataMember(Name = "character")]
+        public string Character { get; set; }
+
+        [DataMember(Name = "achievement")]
+        public Achievement Achievement { get; set; }
+    };
 
     [DataContract]
     public class Member

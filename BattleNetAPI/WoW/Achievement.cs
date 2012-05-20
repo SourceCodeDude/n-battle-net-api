@@ -149,13 +149,30 @@ namespace BattleNet.API.WoW
         [DataMember(Name = "reward")]
         public string Reward { get; set; }
 
-        [XmlElement("rewardItem")]
-        [DataMember(Name = "rewardItem")]
-        public Item RewardItem { get; set; }
+        [XmlElement("rewardItems")]
+        [DataMember(Name = "rewardItems")]
+        public List<Item> RewardItems { get; set; }
+
+        [DataMember(Name = "icon")]
+        public string Icon { get; set; } 
+
+        [DataMember(Name="criteria")]
+        public List<Criteria> Criteria { get; set; } 
 
         public override string ToString()
         {
             return this.Title + ": " + this.Description;
         }
+    }
+
+    [DataContract]
+    public class Criteria
+    {
+        [DataMember(Name="id")]
+        public int Id { get; set; }
+
+        [DataMember(Name="description")]
+        public string Description { get; set; }
+
     }
 }

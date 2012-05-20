@@ -33,10 +33,7 @@ namespace Test
             for (int i = 0; i < 110; i++)
             {
                 CacheItem ci  = cache.GetItem("" + i);
-                if (i < 10)
-                    Assert.IsNull(ci);
-                else
-                    Assert.IsNotNull(ci);
+                Assert.IsNotNull(ci);
 
                 //Console.WriteLine("Item "+i+" was: " + ci);
             }

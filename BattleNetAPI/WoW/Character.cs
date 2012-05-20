@@ -57,6 +57,10 @@ namespace BattleNet.API.WoW
         [DataMember(Name = "achievementPoints")]
         public int AchievementPoints { get; set; }
 
+        [XmlArray("feed")]
+        [XmlArrayItem("item")]
+        [DataMember(Name="feed")]
+        public List<FeedEvent> Feed { get;set; }
         // Add http://us.battle.net/static-render/us/ infront to get image
         [XmlElement("thumbnail")]
         [DataMember(Name = "thumbnail")]
@@ -142,6 +146,60 @@ namespace BattleNet.API.WoW
         [XmlElement("pvp", IsNullable = true)]
         [DataMember(Name = "pvp")]
         public CharacterPvP PvP { get; set; }
+    }
+
+    [DataContract]
+    public abstract class FeedEvent
+    {
+
+        [DataMember(Name="type")]
+        public string Type { get; set; }
+        [XmlElement("timestamp")]
+        public UnixTimestamp Timestamp { get; set; }
+
+        [DataMember(Name = "timestamp")]
+        private long timestamp
+        {
+            get { return Timestamp.ToMsec(); }
+            set
+            {
+                Timestamp = new UnixTimestamp(value);
+            }
+        }
+    }
+
+    [DataContract]
+    public class AchievementFeedEvent : FeedEvent
+    {
+        [DataMember(Name="featOfStrength")]
+        public bool FeatOfStrenth { get; set; }
+
+        [DataMember(Name="achievement")]
+        public Achievement Achievement { get; set; }
+    }
+
+    [DataContract]
+    public class LootFeedEvent : FeedEvent
+    {
+        [DataMember(Name = "itemID")]
+        public string ItemId { get; set; }
+    }
+
+    [DataContract]
+    public class CriteriaFeedEvent : AchievementFeedEvent
+    {
+        [DataMember(Name = "criteria")]
+        public Criteria Criteria { get; set; }
+    }
+
+    [DataContract]
+    public class BosskillFeedEvent : CriteriaFeedEvent
+    {
+        [DataMember(Name = "quantity")]
+        public int Quantity { get; set; }
+
+        [DataMember(Name="name")]
+        public string Name { get; set; }
     }
 
     [DataContract]

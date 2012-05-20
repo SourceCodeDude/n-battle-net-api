@@ -29,11 +29,6 @@ namespace Test
             string txt = Util.ReadData("data/item/basic.json");
             Item itm;
 
-            JsonParser.UseJson = false;
-            itm = JsonParser.Parse<Item>(txt);
-            CheckItem(itm);
-
-            JsonParser.UseJson = true;
             itm = JsonParser.Parse<Item>(txt);
             CheckItem(itm);
 

@@ -31,7 +31,6 @@ namespace Test
             string test = ReadData("data/guild/utf8.json");
             Guild g;
             
-            JsonParser.UseJson = true;
             // From the EU guild "Гордунни", "Аструм"
             g = JsonParser.Parse<Guild>(test);
 
@@ -41,18 +40,7 @@ namespace Test
             Assert.AreEqual("Гордунни", g.Realm);
             Assert.AreEqual("Аструм", g.Name);
             Assert.AreEqual("Корвин", g.Members[0].Character.Name);
-
-            // try alternate parser
-
-            JsonParser.UseJson = false;            
-            g = JsonParser.Parse<Guild>(test);
-
-            Assert.NotNull(g);
-            Assert.NotNull(g.Members);
-            Assert.AreEqual(224, g.Members.Count);
-            Assert.AreEqual("Гордунни", g.Realm);
-            Assert.AreEqual("Аструм", g.Name);
-            Assert.AreEqual("Корвин", g.Members[0].Character.Name);
+            
         }
     }
 }

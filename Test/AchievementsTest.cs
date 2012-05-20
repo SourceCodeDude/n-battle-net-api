@@ -9,23 +9,31 @@ using BattleNet.API;
 
 namespace Test
 {
-
     [TestFixture]
     class AchievementsTest
     {
+
+        [Test]
+        public void TestSingleParse()
+        {
+            string json = Util.ReadData("data/achievement/2144.json");
+            Achievement t;
+
+            t = JsonParser.Parse<Achievement>(json);
+            Assert.NotNull(t);
+
+        }
+
+
         [Test]
         public void TestParse()
         {
             string json = Util.ReadData("data/achievements.json");
             AchievementCollection t;
-            JsonParser.UseJson = true;
 
             t = JsonParser.Parse<AchievementCollection>(json);
             Assert.NotNull(t);
 
-            JsonParser.UseJson = false;
-            t = JsonParser.Parse<AchievementCollection>(json);
-            Assert.NotNull(t);
         }
 
         [Test]
@@ -33,7 +41,6 @@ namespace Test
         {
             string json = Util.ReadData("data/achievements.json");
             AchievementCollection t;
-            JsonParser.UseJson = true;
 
             t = JsonParser.Parse<AchievementCollection>(json);
             Assert.NotNull(t);

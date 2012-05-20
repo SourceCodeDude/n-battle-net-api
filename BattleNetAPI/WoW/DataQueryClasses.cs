@@ -82,4 +82,15 @@ namespace BattleNet.API.WoW
         }
     }
 
+
+    public class AchievementQuery : QueryBase
+    {
+        public int Id { get; set; }
+
+        public override string ToString()
+        {
+            return "achievement/"+this.Id+"?" + base.ToString();
+        }
+    }
+
 }

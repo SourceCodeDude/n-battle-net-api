@@ -24,10 +24,11 @@ namespace BattleNet.API.WoW
         Guild,
         PVP,
         Quests,
+        Feed,
 
         All = Guild | Progression | Achievements | Pets | Mounts | Companions | PVP |
               Appearance | Professions | Titles | Reputation | Items | Talents | Stats|
-              Quests,
+              Quests | Feed,
     }
 
     public class CharacterQuery : QueryBase
@@ -63,6 +64,7 @@ namespace BattleNet.API.WoW
             if ((Fields & CharacterFields.Guild) == CharacterFields.Guild) args.Add("guild");
             if ((Fields & CharacterFields.PVP) == CharacterFields.PVP) args.Add("pvp");
             if ((Fields & CharacterFields.Quests) == CharacterFields.Quests) args.Add("quests");
+            if ((Fields & CharacterFields.Feed) == CharacterFields.Feed) args.Add("feed");
             
 
             string _f = string.Join(",", args.ToArray());

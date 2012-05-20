@@ -8,6 +8,10 @@ using System.Xml.Serialization;
 using System.IO;
 using BattleNet.API.WoW;
 using System.Reflection;
+
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
 namespace BattleNet.API
 {
     public delegate void ParseErrorDelegate(string message);
@@ -18,100 +22,83 @@ namespace BattleNet.API
         ParseErrorDelegate Error { get; set; }
     }
 
-    public class XmlJsonParser : IJsonParser
+    class EventConverter : JsonConverter
     {
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(FeedEvent);                
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            JObject obj = JObject.Load(reader);
+            switch(obj["type"].ToString())
+            {
+                case "LOOT":
+                    return serializer.Deserialize<LootFeedEvent>(obj.CreateReader());
+                case "ACHIEVEMENT":
+                    return serializer.Deserialize<AchievementFeedEvent>(obj.CreateReader());
+                case "CRITERIA":
+                    return serializer.Deserialize<CriteriaFeedEvent>(obj.CreateReader());
+                case "BOSSKILL":
+                    return serializer.Deserialize<BosskillFeedEvent>(obj.CreateReader());
+            }
+
+            throw new InvalidOperationException("Unknown feed type " + obj["type"].ToString());
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public class JsonNetParser : IJsonParser
+    {
+        JsonConverter convert;
+        public JsonNetParser()
+        {
+            convert = new EventConverter();
+        }
+
         #region IJsonParser Members
 
-        public ParseErrorDelegate Error { get; set; }
-
-#if SILVERLIGHT
-#else
-        static Dictionary<Type, XmlSerializer> serializers = new Dictionary<Type, XmlSerializer>();
-        static XmlSerializer GetSer(Type t)
+        public T Deserialize<T>(string txt)
         {
-            XmlSerializer ser = null;
-            if (!serializers.TryGetValue(t, out ser))
+            try
             {
-                ser = new XmlSerializer(t, new XmlRootAttribute("root"));
-                serializers[t] = ser;
+                return JsonConvert.DeserializeObject<T>(txt, convert);
             }
-            return ser;
+            catch (Exception ex)
+            {
+                if (Error == null)
+                {
+                    throw ex;
+                }
+                else
+                {
+                    Error(ex.Message);
+                    return default(T);
+                }
+            }
         }
-#endif
 
-        public T Deserialize<T>(string json)
+        public ParseErrorDelegate Error
         {
-            Type t = typeof(T);
-            byte[] b = System.Text.UTF8Encoding.UTF8.GetBytes(json);
-            
-
-            System.Runtime.Serialization.Json.DataContractJsonSerializer s = new DataContractJsonSerializer(t);
-            T ret = (T)s.ReadObject(new MemoryStream(b));
-            return ret;
-
-
-            XmlReader rd;
-            /*
-            rd = JsonReaderWriterFactory.CreateJsonReader(b, new XmlDictionaryReaderQuotas());
-            rd.Read();
-            Console.WriteLine(rd.ReadInnerXml());
-            */
-            /*
-            rd = JsonReaderWriterFactory.CreateJsonReader(b, new XmlDictionaryReaderQuotas());
-            XmlSerializer s = GetSer(t);            
-            return (T)s.Deserialize(rd);                         
-            */
+            get;
+            set;
         }
 
         #endregion
     }
+
     public class JsonParser
     {
              
         static JsonParser()
         {
-            UseJson = true;
+            parser = new JsonNetParser();
         }
 
-
-        private static bool useJson;
-        /// <summary>
-        /// Parse as json, or convert to XML first.  Using Json is faster.  XML is tolerant to errors, but slow
-        /// </summary>
-        static public bool UseJson
-        {
-            get { return useJson;  }
-            set
-            {
-                // disable Json dll
-                value = false;
-
-                if (value)
-                {
-                    try
-                    {
-                        // To remove dependancy on the System.Web.Extensions dll we make an extra assembly for json parsing.                    
-                        // if it exists we can use it.. if not.. we fall back to xml
-                        //
-                        Assembly asm = Assembly.Load("BattleNet.API.Json, Version=1.0.0.1, Culture=neutral, PublicKeyToken=null");
-                        Type t = asm.GetType("BattleNet.API.MyJavaScriptSerializer");
-                        object o = Activator.CreateInstance(t);
-                        parser = (IJsonParser)o;
-                    }
-                    catch (Exception)
-                    {
-                        // fall back to xml
-                        parser = new XmlJsonParser();
-                        value = false;
-                    }
-                }
-                else
-                {
-                    parser = new XmlJsonParser();
-                }
-                useJson = value;
-            }
-        }
         static public T Parse<T>(string json)
         {
             return Parse<T>(json, null);
@@ -130,7 +117,7 @@ namespace BattleNet.API
             try
             {
                 parser.Error = onError;
-                return (T)parser.Deserialize<T>(json);
+                return parser.Deserialize<T>(json);
             }
             catch (Exception ex)
             {

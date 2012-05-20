@@ -60,32 +60,32 @@ namespace Test
 
             Assert.IsNotNull(rc);
             Assert.IsNotNull(rc.Rewards);
-            Assert.AreEqual(2, rc.Rewards.Count);
+            Assert.AreEqual(42, rc.Rewards.Count);
 
             Assert.AreEqual(0, rc.Rewards[0].MinGuildLevel);
-            Assert.AreEqual(6, rc.Rewards[0].MinGuildRepLevel);
+            Assert.AreEqual(5, rc.Rewards[0].MinGuildRepLevel);
             Assert.AreEqual(6, rc.Rewards[0].Races.Count);
             Assert.IsNotNull(rc.Rewards[0].Achievement);
 
-            Assert.AreEqual(5035, rc.Rewards[0].Achievement.Id);
-            Assert.AreEqual("Master Crafter", rc.Rewards[0].Achievement.Title);
+            Assert.AreEqual(4860, rc.Rewards[0].Achievement.Id);
+            Assert.AreEqual("Working as a Team", rc.Rewards[0].Achievement.Title);
             Assert.AreEqual(10, rc.Rewards[0].Achievement.Points);
-            Assert.AreEqual("Craft 500 Epic items with an item level of at least 359.", rc.Rewards[0].Achievement.Description);
-            Assert.AreEqual("Reward: Cloak of Coordination", rc.Rewards[0].Achievement.Reward);
-            Assert.IsNotNull(rc.Rewards[0].Achievement.RewardItem);
+            Assert.AreEqual("Obtain 525 skill points in all professions and secondary professions.", rc.Rewards[0].Achievement.Description);
+            Assert.AreEqual("Reward: Banner of Cooperation", rc.Rewards[0].Achievement.Reward);
+            Assert.IsNotNull(rc.Rewards[0].Achievement.RewardItems);
 
-            Assert.AreEqual(65360, rc.Rewards[0].Achievement.RewardItem.Id);
-            Assert.AreEqual("Cloak of Coordination", rc.Rewards[0].Achievement.RewardItem.Name);
-            Assert.AreEqual("inv_guild_cloak_alliance_c", rc.Rewards[0].Achievement.RewardItem.Icon);
-            Assert.AreEqual(Quality.Epic, rc.Rewards[0].Achievement.RewardItem.Quality);
-            Assert.IsNotNull(rc.Rewards[0].Achievement.RewardItem.TooltipParams);
+            Assert.AreEqual(63359, rc.Rewards[0].Achievement.RewardItems[0].Id);
+            Assert.AreEqual("Banner of Cooperation", rc.Rewards[0].Achievement.RewardItems[0].Name);
+            Assert.AreEqual("inv_guild_standard_alliance_a", rc.Rewards[0].Achievement.RewardItems[0].Icon);
+            Assert.AreEqual(Quality.Uncommon, rc.Rewards[0].Achievement.RewardItems[0].Quality);
+            Assert.IsNotNull(rc.Rewards[0].Achievement.RewardItems[0].TooltipParams);
 
 
             Assert.IsNotNull(rc.Rewards[0].Item);
-            Assert.AreEqual(65274, rc.Rewards[0].Item.Id);
-            Assert.AreEqual("Cloak of Coordination", rc.Rewards[0].Item.Name);
-            Assert.AreEqual("inv_guild_cloak_horde_c", rc.Rewards[0].Item.Icon);
-            Assert.AreEqual(Quality.Epic, rc.Rewards[0].Item.Quality);
+            Assert.AreEqual(63359, rc.Rewards[0].Item.Id);
+            Assert.AreEqual("Banner of Cooperation", rc.Rewards[0].Item.Name);
+            Assert.AreEqual("inv_guild_standard_alliance_a", rc.Rewards[0].Item.Icon);
+            Assert.AreEqual(Quality.Uncommon, rc.Rewards[0].Item.Quality);
             Assert.IsNotNull(rc.Rewards[0].Item.TooltipParams);
         }
 

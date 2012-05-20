@@ -559,6 +559,18 @@ namespace BattleNet.API.WoW
             }
         }
 
+        public Achievement GetAchievement(int id)
+        {
+            AchievementQuery q = new AchievementQuery()
+            {
+                Locale = this.Locale
+            };
+
+            Achievement o =  GetObject<Achievement>(q.ToString());
+
+            return o;
+        }
+
         public AchievementCollection GuildAchievements
         {
             get

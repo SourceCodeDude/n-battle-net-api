@@ -54,6 +54,55 @@ namespace BattleNet.API.WoW
         [XmlElement("slug")]
         [DataMember(Name = "slug")]
         public string Slug { get; set; }
+
+        [DataMember(Name = "wintergrasp")]
+        public PvPAreaStatus WinterGrasp { get; set; }
+
+        [DataMember(Name = "tol-barad")]
+        public PvPAreaStatus TolBarad { get; set; }
+
+    }
+
+    [DataContract]
+    public class PvPAreaStatus
+    {
+        [DataMember(Name = "area")]
+        public int Area { get; set; }
+
+        [DataMember(Name = "controlling-faction")]
+        public Side ControllingFaction { get; set; }
+
+        [DataMember(Name = "status")]
+        public PvPZoneStatus Status { get; set; }
+
+        /// <summary>
+        /// Time of the next battle
+        /// </summary>
+        [XmlElement("next")]
+        public UnixTimestamp Next { get; set; }
+
+        [DataMember(Name = "next")]
+        internal long next
+        {
+            get
+            {
+                return Next.ToMsec();
+            }
+            set
+            {
+                Next = new UnixTimestamp(value);
+            }
+        }
+    }
+
+    [DataContract]
+    public enum PvPZoneStatus
+    {
+        Unknown = -1,
+        Idle = 0,
+        Populating = 1,
+        Active = 2,
+        Concluded = 3,
     }
 
     [DataContract]

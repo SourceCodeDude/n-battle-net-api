@@ -34,11 +34,20 @@ namespace Test
         }
 
         [Test]
+        public void TestFeed()
+        {
+            string test = ReadData("data/character/feed.json");
+
+            Character rc = JsonParser.Parse<Character>(test);
+            VerifyBasicData(rc);
+
+            // TODO: verify Feed items
+        }
+        [Test]
         public void TestBasicData()
         {
             string test = ReadData("data/character/char1.json");
 
-            JsonParser.UseJson = false;
             Character rc = JsonParser.Parse<Character>(test);
             VerifyBasicData(rc);
 
@@ -166,7 +175,6 @@ namespace Test
         {
             string test = ReadData("data/character/all.json");
 
-            JsonParser.UseJson = true;
             Character rc = JsonParser.Parse<Character>(test);
 
             //VerifyBasicData(rc);

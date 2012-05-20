@@ -142,18 +142,18 @@ namespace BattleNet.API.WoW
     [DataContract]
     public enum Side
     {
-        Unknown,
+        Unknown=-1,
 
         [XmlEnum("horde")]
-        [EnumMember(Value = "horde")]
-        Horde,
+        [EnumMember(Value = "horde")]        
+        Horde=0,
 
         [XmlEnum("alliance")]
         [EnumMember(Value = "Alliance")]
-        Alliance,
+        Alliance=1,
 
         // probably wont see this one
         [XmlEnum("neutral")]
-        Neutral
+        Neutral=2
     }
 }

@@ -8,7 +8,6 @@ using BattleNet.API.WoW;
 using BattleNet.API;
 
 using System.IO;
-using System.Runtime.Serialization.Json;
 
 namespace Test
 {

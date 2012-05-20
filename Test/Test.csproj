@@ -21,6 +21,8 @@
   </PropertyGroup>
   <PropertyGroup>
     <ProjectGuid>{E081E5BE-7C0E-4135-B1C3-EE8BE0CE92DF}</ProjectGuid>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup>
     <RootNamespace>Test</RootNamespace>

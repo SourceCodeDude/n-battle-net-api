@@ -742,6 +742,25 @@ namespace BattleNet.API.WoW
                 });
         }
 
+        public ArenaTeamLadder GetArenaLadder(ArenaTeamLadderQuery query)
+        {
+            string url = query.ToString();
+
+            ArenaTeamLadder r = GetObject<ArenaTeamLadder>(url);
+
+            return r;
+
+        }
+
+        public BattlegroundLadder GetBattlegroundLadder(BattlegroundLadderQuery query)
+        {
+            string url = query.ToString();
+
+            BattlegroundLadder r = GetObject<BattlegroundLadder>(url);
+
+            return r;
+        }
+
         public ArenaTeam GetArenaTeam(ArenaTeamQuery query)
         {
             string url = query.ToString();

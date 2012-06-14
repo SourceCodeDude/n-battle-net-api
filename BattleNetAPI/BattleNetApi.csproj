@@ -60,6 +60,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ICache.cs" />
+    <Compile Include="WoW\ArenaTeamLadder.cs" />
+    <Compile Include="WoW\ArenaTeamLadderQuery.cs" />
+    <Compile Include="WoW\BattlegroundLadder.cs" />
     <Compile Include="WoW\Quest.cs" />
     <Compile Include="WoW\QuestQuery.cs" />
     <Compile Include="WoW\Achievement.cs" />

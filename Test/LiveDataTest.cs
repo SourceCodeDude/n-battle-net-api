@@ -36,7 +36,30 @@ namespace Test
             string txt = r.ReadToEnd();
         }
         */
-        
+
+        [Test]
+        public void ArenaLadderTest()
+        {
+
+            ArenaTeamLadderQuery q = new ArenaTeamLadderQuery();
+            q.BattleGroup = "ruin";
+            q.TeamSize = TeamSize.Team2v2;
+
+            ArenaTeamLadder ch = client.GetArenaLadder(q);
+
+            Assert.NotNull(ch);
+        }
+
+        [Test]
+        public void BattlegroundLadderTedy()
+        {
+
+            BattlegroundLadderQuery q = new BattlegroundLadderQuery();
+
+            BattlegroundLadder ch = client.GetBattlegroundLadder(q);
+
+            Assert.NotNull(ch);
+        }
 
         [Test]
         public void CharacterTest()

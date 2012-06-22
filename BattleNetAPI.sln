@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{E081E5BE-7C0E-4135-B1C3-EE8BE0CE92DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleNetApi", "BattleNetAPI\BattleNetApi.csproj", "{E4697D43-4D45-40A5-9C6B-9EFB84C2CFDF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleNetApi35", "BattleNetAPI\BattleNetApi35.csproj", "{E4697D43-4D45-40A5-9C6B-9EFB84C2CFDF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleNetApiSL", "BattleNetAPI\BattleNetApiSL.csproj", "{26077A2F-8C7F-4C4C-8A79-FCC1429750BA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSL", "TestSL\TestSL.csproj", "{D334EA18-27BF-4398-9EB5-BB715498611A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSL.Web", "TestSL.Web\TestSL.Web.csproj", "{2A5DD671-1CD5-4537-BD0E-01399D9FBB58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleNetApi40", "BattleNetAPI\BattleNetApi40.csproj", "{6F17DECD-D2D7-47EC-8334-F06F5E274717}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{2A5DD671-1CD5-4537-BD0E-01399D9FBB58}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A5DD671-1CD5-4537-BD0E-01399D9FBB58}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A5DD671-1CD5-4537-BD0E-01399D9FBB58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F17DECD-D2D7-47EC-8334-F06F5E274717}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F17DECD-D2D7-47EC-8334-F06F5E274717}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F17DECD-D2D7-47EC-8334-F06F5E274717}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F17DECD-D2D7-47EC-8334-F06F5E274717}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

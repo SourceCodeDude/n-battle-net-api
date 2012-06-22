@@ -133,9 +133,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BattleNetAPI\BattleNetApi.csproj">
+    <ProjectReference Include="..\BattleNetAPI\BattleNetApi35.csproj">
       <Project>{E4697D43-4D45-40A5-9C6B-9EFB84C2CFDF}</Project>
-      <Name>BattleNetApi</Name>
+      <Name>BattleNetApi35</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

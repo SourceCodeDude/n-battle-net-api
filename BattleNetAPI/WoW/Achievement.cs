@@ -86,8 +86,8 @@ namespace BattleNet.API.WoW
         public Achievement this[int id]
         {
             get
-            {
-                Achievement match = Achievements.Find( a => a.Id == id );
+            {                
+                Achievement match = Achievements.First( a => a.Id == id );
                 if (match != null) return match;
 
                 if (Categories!=null)
@@ -110,7 +110,7 @@ namespace BattleNet.API.WoW
         {
             get
             {
-                Achievement match = Achievements.Find(a => a.Title.Contains(title) );
+                Achievement match = Achievements.First(a => a.Title.Contains(title));
 
                 if (match != null) return match;
 

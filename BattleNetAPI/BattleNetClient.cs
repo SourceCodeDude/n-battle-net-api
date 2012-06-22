@@ -57,9 +57,8 @@ namespace BattleNet.API.WoW
             cacheCollection["icons"] = new Cache("./icons");
             cacheCollection["thumb"] = new Cache("./thumb");
         }
-
-        [Obsolete("Please set in consturctor")]
-        public string PrivateKey
+        
+        protected string PrivateKey
         {
             get
             {
@@ -78,9 +77,12 @@ namespace BattleNet.API.WoW
                 }
             }
         }
-
-        [Obsolete("Please set in consturctor")]
-        public string PublicKey { get; set; }
+        
+        protected string PublicKey 
+        {
+            get;
+            set; 
+        }
 
         public System.Globalization.CultureInfo Locale { get; set; }
         public BattleNetClient(Region r = Region.US)
@@ -344,8 +346,14 @@ namespace BattleNet.API.WoW
                     
                     // this line implements the timeout, if there is a timeout, 
                     // the callback fires and the request becomes aborted
+                    
+#if SILVERLIGHT
+                    int timeout = 1000;
+#else
+                    int timeout = req.Timeout;
+#endif
                     ThreadPool.RegisterWaitForSingleObject(
-                        ia.AsyncWaitHandle, new WaitOrTimerCallback(TimeoutCallback), req, req.Timeout, true);
+                        ia.AsyncWaitHandle, new WaitOrTimerCallback(TimeoutCallback), req, timeout, true);
                     
                     res = req.EndGetResponse(ia);
 

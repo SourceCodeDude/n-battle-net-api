@@ -84,8 +84,11 @@ namespace BattleNet.API
         private void CleanData()
         {
             Dictionary<string, string> files = new Dictionary<string, string>();
-            
-            foreach (string file in Directory.GetFiles(cachePath))
+#if SILVERLIGHT            
+            foreach (string file in Directory.EnumerateFiles(cachePath))
+#else
+                foreach (string file in Directory.GetFiles(cachePath))
+#endif
             {
                 string f = Path.GetFileName(file);
                 files.Add(f,f);
